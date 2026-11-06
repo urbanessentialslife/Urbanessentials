@@ -1,5 +1,3 @@
-import crypto from 'crypto';
-
 interface UserData {
   email?: string;
   phone?: string;
@@ -17,16 +15,21 @@ interface MetaEventPayload {
   customData?: Record<string, any>;
 }
 
-function hashValue(value: string): string {
-  return crypto.createHash('sha256').update(value.trim().toLowerCase()).digest('hex');
+// Web-standard SHA-256 hashing compatible with Shopify Oxygen / Cloudflare Workers
+async function hashValue(value: string): Promise<string> {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(value.trim().toLowerCase());
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
 }
 
 export async function sendMetaServerEvent(
-  env: Env,
+  env: any,
   { eventName, eventId, eventSourceUrl, userData, customData = {} }: MetaEventPayload,
 ) {
-  const pixelId = env.PUBLIC_META_PIXEL_ID;
-  const token = env.META_CAPI_ACCESS_TOKEN;
+  const pixelId = env?.PUBLIC_META_PIXEL_ID || '2581550922313854';
+  const token = env?.META_CAPI_ACCESS_TOKEN;
 
   if (!pixelId || !token) {
     console.warn('Meta CAPI: Missing credentials in environment variables.');
@@ -34,15 +37,15 @@ export async function sendMetaServerEvent(
   }
 
   const normalizedUserData: Record<string, any> = {};
-  if (userData.email) normalizedUserData.em = [hashValue(userData.email)];
-  if (userData.phone) normalizedUserData.ph = [hashValue(userData.phone)];
+  if (userData.email) normalizedUserData.em = [await hashValue(userData.email)];
+  if (userData.phone) normalizedUserData.ph = [await hashValue(userData.phone)];
   if (userData.clientIpAddress) normalizedUserData.client_ip_address = userData.clientIpAddress;
   if (userData.clientUserAgent) normalizedUserData.client_user_agent = userData.clientUserAgent;
   if (userData.fbp) normalizedUserData.fbp = userData.fbp;
   if (userData.fbc) normalizedUserData.fbc = userData.fbc;
 
-  const body = {
-    test_event_code: 'TEST53925', // Matches your Test Events tab code
+  const body: Record<string, any> = {
+    test_event_code: 'TEST53925', // Streams events live into your Meta Events Manager test tab
     data: [
       {
         event_name: eventName,
