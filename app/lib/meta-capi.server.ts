@@ -45,7 +45,7 @@ export async function sendMetaServerEvent(
   if (userData.fbc) normalizedUserData.fbc = userData.fbc;
 
   const body: Record<string, any> = {
-    test_event_code: 'TEST53925', // Streams events live into your Meta Events Manager test tab
+  //  test_event_code: 'TEST53925', // Streams events live into your Meta Events Manager test tab
     data: [
       {
         event_name: eventName,
