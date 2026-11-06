@@ -30,5 +30,7 @@ declare global {
     PUBLIC_LINKEDIN_URL?: string;
     /** Shiprocket Fastrr seller domain */
     PUBLIC_SHIPROCKET_SELLER_DOMAIN?: string;
+    /** Shopify Checkout domain for consent management */
+PUBLIC_CHECKOUT_DOMAIN?: string;
   }
 }
