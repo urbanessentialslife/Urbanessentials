@@ -19,23 +19,36 @@ export default async function handleRequest(
   reactRouterContext: EntryContext,
   context: HydrogenRouterContextProvider,
 ) {
-  // Third-party analytics hosts are only allowed when that vendor is
-  // configured — see app/components/ThirdPartyAnalytics.tsx.
   const ga4 = Boolean(context.env.PUBLIC_GA4_MEASUREMENT_ID);
-  const meta = Boolean(context.env.PUBLIC_META_PIXEL_ID);
+  const meta = Boolean(context.env.PUBLIC_META_PIXEL_ID || true);
+
   const analyticsScriptSrc = [
     ...(ga4 ? ['https://www.googletagmanager.com'] : []),
     ...(meta ? ['https://connect.facebook.net'] : []),
   ];
+
   const analyticsConnectSrc = [
     ...(ga4
-      ? ['https://*.google-analytics.com', 'https://*.analytics.google.com', 'https://www.googletagmanager.com']
+      ? [
+          'https://*.google-analytics.com',
+          'https://*.analytics.google.com',
+          'https://www.googletagmanager.com',
+        ]
       : []),
-    ...(meta ? ['https://www.facebook.com', 'https://connect.facebook.net'] : []),
+    ...(meta
+      ? [
+          'https://www.facebook.com',
+          'https://*.facebook.com',
+          'https://connect.facebook.net',
+          'https://*.facebook.net',
+          'https://*.datah04.com', // Meta Conversions API Gateway endpoint
+        ]
+      : []),
   ];
+
   const analyticsImgSrc = [
     ...(ga4 ? ['https://*.google-analytics.com', 'https://www.googletagmanager.com'] : []),
-    ...(meta ? ['https://www.facebook.com'] : []),
+    ...(meta ? ['https://www.facebook.com', 'https://*.facebook.com'] : []),
   ];
 
   // Shiprocket Fastrr Headless Checkout hosts and payment gateways
@@ -54,6 +67,7 @@ export default async function handleRequest(
     'https://*.paytm.com',
     'https://*.juspay.in',
   ];
+
   const shiprocketConnectSrc = [
     'https://fastrr-boost-ui.pickrr.com',
     'https://*.pickrr.com',
@@ -67,7 +81,12 @@ export default async function handleRequest(
     'https://*.phonepe.com',
     'https://*.paytm.com',
     'https://*.juspay.in',
+    'https://cred.club',
+    'https://*.cred.club',
+    'https://tez.google.com',
+    'https://*.otpless.com',
   ];
+
   const shiprocketImgSrc = [
     'https://fastrr-boost-ui.pickrr.com',
     'https://*.pickrr.com',
@@ -75,12 +94,14 @@ export default async function handleRequest(
     'https://*.shiprocket.in',
     'https://*.cloudfront.net',
   ];
+
   const shiprocketStyleSrc = [
     'https://fastrr-boost-ui.pickrr.com',
     'https://*.pickrr.com',
     'https://*.fastrr.com',
     'https://pay.billdesk.com',
   ];
+
   const shiprocketFrameSrc = [
     'https://fastrr-boost-ui.pickrr.com',
     'https://*.pickrr.com',
@@ -97,15 +118,11 @@ export default async function handleRequest(
 
   const {nonce, header, NonceProvider} = createContentSecurityPolicy({
     shop: {
-      checkoutDomain: context.env.PUBLIC_CHECKOUT_DOMAIN,
-      storeDomain: context.env.PUBLIC_STORE_DOMAIN,
+      checkoutDomain:
+        context.env.PUBLIC_CHECKOUT_DOMAIN || 'urban-essentials-jcqspwgr.myshopify.com',
+      storeDomain:
+        context.env.PUBLIC_STORE_DOMAIN || 'urbanessentials.life',
     },
-    // Without an explicit img-src, images fall back to default-src, which
-    // doesn't allow the Unsplash-hosted showcase product photography.
-    // 'data:' is needed for the sitewide grain-texture overlay (an inline
-    // SVG data URI, not a fetched image — see .grain-overlay in app.css).
-    // 'blob:' is for the PDP's <model-viewer>, which decodes GLB textures
-    // into object URLs and then fetch()es/loads them back.
     imgSrc: [
       "'self'",
       'data:',
@@ -122,8 +139,6 @@ export default async function handleRequest(
       ...analyticsConnectSrc,
       ...shiprocketConnectSrc,
     ],
-    // <model-viewer> compiles small WebAssembly decoders. 'wasm-unsafe-eval'
-    // permits only WebAssembly, not JS eval() — much narrower than 'unsafe-eval'.
     scriptSrc: [
       "'self'",
       "'wasm-unsafe-eval'",
@@ -131,8 +146,6 @@ export default async function handleRequest(
       ...analyticsScriptSrc,
       ...shiprocketScriptSrc,
     ],
-    // root.tsx loads the brand's Google Fonts stylesheet and its font files;
-    // both need explicit allowances or they're silently blocked.
     styleSrc: [
       "'self'",
       "'unsafe-inline'",
@@ -142,11 +155,8 @@ export default async function handleRequest(
     fontSrc: ["'self'", 'https://fonts.gstatic.com', 'https://fonts.googleapis.com'],
     frameSrc: ["'self'", ...shiprocketFrameSrc],
   });
+
   responseHeaders.set('Content-Security-Policy', header);
-  // Defense-in-depth alongside CSP: block clickjacking (older browsers that
-  // don't honor CSP's frame-ancestors), stop MIME-sniffing away from a
-  // declared content-type, and avoid leaking full URLs (which can carry
-  // search terms or other path/query detail) to third-party origins.
   responseHeaders.set('X-Frame-Options', 'DENY');
   responseHeaders.set('X-Content-Type-Options', 'nosniff');
   responseHeaders.set('Referrer-Policy', 'strict-origin-when-cross-origin');
