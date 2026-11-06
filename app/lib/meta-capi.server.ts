@@ -42,6 +42,7 @@ export async function sendMetaServerEvent(
   if (userData.fbc) normalizedUserData.fbc = userData.fbc;
 
   const body = {
+    test_event_code: 'TEST53925', // Matches your Test Events tab code
     data: [
       {
         event_name: eventName,
