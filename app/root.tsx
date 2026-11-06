@@ -38,24 +38,9 @@ export const shouldRevalidate: ShouldRevalidateFunction = ({
   // revalidate when manually revalidating via useRevalidator
   if (currentUrl.toString() === nextUrl.toString()) return true;
 
-  // Defaulting to no revalidation for root loader data to improve performance.
-  // When using this feature, you risk your UI getting out of sync with your server.
-  // Use with caution. If you are uncomfortable with this optimization, update the
-  // line below to `return defaultShouldRevalidate` instead.
-  // For more details see: https://remix.run/docs/en/main/route/should-revalidate
   return false;
 };
 
-/**
- * The main and reset stylesheets are added in the Layout component
- * to prevent a bug in development HMR updates.
- *
- * This avoids the "failed to execute 'insertBefore' on 'Node'" error
- * that occurs after editing and navigating to another page.
- *
- * It's a temporary fix until the issue is resolved.
- * https://github.com/remix-run/remix/issues/9242
- */
 export function links() {
   return [
     {
@@ -76,7 +61,6 @@ export function links() {
       crossOrigin: 'anonymous',
     },
     {
-      // Brand system typography: Cormorant Garamond (luxury display) + Manrope (utility)
       rel: 'stylesheet',
       href: 'https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@300;400;500;600;700&display=swap',
     },
@@ -85,9 +69,6 @@ export function links() {
       rel: 'stylesheet',
       href: 'https://fastrr-boost-ui.pickrr.com/assets/styles/shopify.css',
     },
-    // Multi-size set: the .ico covers browsers that request /favicon.ico on
-    // their own, the PNGs are crisp tab/bookmark icons, and the apple-touch
-    // icon is what iOS uses for "Add to Home Screen".
     {rel: 'icon', href: '/favicon.ico', sizes: 'any'},
     {rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon-32.png'},
     {rel: 'icon', type: 'image/png', sizes: '512x512', href: favicon},
@@ -96,10 +77,7 @@ export function links() {
 }
 
 export async function loader(args: Route.LoaderArgs) {
-  // Start fetching non-critical data without blocking time to first byte
   const deferredData = loadDeferredData(args);
-
-  // Await the critical data required to render initial state of the page
   const criticalData = await loadCriticalData(args);
 
   const {storefront, env} = args.context;
@@ -132,7 +110,7 @@ export async function loader(args: Route.LoaderArgs) {
     supportEmail: env.PUBLIC_SUPPORT_EMAIL ?? null,
     whatsappNumber: env.PUBLIC_WHATSAPP_NUMBER ?? null,
     ga4Id: env.PUBLIC_GA4_MEASUREMENT_ID || null,
-    metaPixelId: env.PUBLIC_META_PIXEL_ID || null,
+    metaPixelId: env.PUBLIC_META_PIXEL_ID || '2581550922313854',
     socialLinks: [
       {label: 'Instagram', url: env.PUBLIC_INSTAGRAM_URL},
       {label: 'Pinterest', url: env.PUBLIC_PINTEREST_URL},
@@ -140,23 +118,15 @@ export async function loader(args: Route.LoaderArgs) {
     ].filter((link): link is {label: string; url: string} => Boolean(link.url)),
     shop: shopAnalytics,
     consent: {
-      checkoutDomain: env.PUBLIC_CHECKOUT_DOMAIN,
+      checkoutDomain: env.PUBLIC_CHECKOUT_DOMAIN || 'urban-essentials-jcqspwgr.myshopify.com',
       storefrontAccessToken: env.PUBLIC_STOREFRONT_API_TOKEN,
-      // Shopify's own cookie banner. It only appears for visitors in regions
-      // where Admin → Settings → Customer privacy requires consent (e.g.
-      // EU/UK), so it matters once the shop sells internationally.
       withPrivacyBanner: true,
-      // localize the privacy banner
       country: args.context.storefront.i18n.country,
       language: args.context.storefront.i18n.language,
     },
   };
 }
 
-/**
- * Load data necessary for rendering content above the fold. This is the critical data
- * needed to render the page. Gracefully fall back so showcase renders even without active store credentials.
- */
 async function loadCriticalData({context}: Route.LoaderArgs) {
   const {storefront} = context;
 
@@ -172,10 +142,6 @@ async function loadCriticalData({context}: Route.LoaderArgs) {
         console.warn('Storefront header query fallback:', error?.message);
         return null;
       }),
-    // Real collection names for the nav bar, rather than a generic
-    // "Categories" link — so the nav reflects whatever the admin has
-    // actually organized the catalog into, with zero code changes needed
-    // when a category is added, renamed, or removed.
     storefront
       .query<NavCategoriesQueryResult>(NAV_CATEGORIES_QUERY, {
         cache: storefront.CacheLong(),
@@ -184,8 +150,6 @@ async function loadCriticalData({context}: Route.LoaderArgs) {
         console.warn('Storefront nav categories query fallback:', error?.message);
         return null;
       }),
-    // Countries enabled in Shopify Markets — drives the footer country
-    // selector, which stays hidden while the shop sells to one country only.
     storefront
       .query(LOCALIZATION_QUERY, {cache: storefront.CacheLong()})
       .catch((error: Error) => {
@@ -194,17 +158,12 @@ async function loadCriticalData({context}: Route.LoaderArgs) {
       }),
   ]);
 
-  // handle -> tile image for the nav mega-menu, straight from each
-  // collection's Shopify image so the menu needs no code change when an
-  // admin sets or swaps a collection photo.
   const navCollectionImages: Record<string, string> = {};
   for (const collection of categoriesResult?.collections?.nodes ?? []) {
     if (collection.image?.url) navCollectionImages[collection.handle] = collection.image.url;
   }
 
   const categories = (categoriesResult?.collections?.nodes ?? [])
-    // Shopify's auto-generated "frontpage" collection isn't a real browsable
-    // category — same filter as collections._index.tsx's loader.
     .filter((collection) => collection.handle !== 'frontpage');
 
   return {
@@ -219,8 +178,6 @@ async function loadCriticalData({context}: Route.LoaderArgs) {
     },
     categories,
     navCollectionImages,
-    // Category / sub-category tree from Shopify's `main-menu`; falls back to the
-    // bundled defaults until the menu has nested items.
     navMenus: resolveNavMenus(header?.menu?.items),
     localization: localizationResult?.localization ?? null,
   };
@@ -269,15 +226,9 @@ const NAV_CATEGORIES_QUERY = `#graphql
   }
 ` as const;
 
-/**
- * Load data for rendering content below the fold. This data is deferred and will be
- * fetched after the initial page load. If it's unavailable, the page should still 200.
- * Make sure to not throw any errors here, as it will cause the page to 500.
- */
 function loadDeferredData({context}: Route.LoaderArgs) {
   const {storefront, cart} = context;
 
-  // defer the footer query (below the fold)
   const footer = storefront
     .query(FOOTER_QUERY, {
       cache: storefront.CacheLong(),
@@ -285,16 +236,10 @@ function loadDeferredData({context}: Route.LoaderArgs) {
         footerMenuHandle: 'footer',
       },
     })
-    .catch((error: Error) => {
-      return null;
-    });
+    .catch(() => null);
 
   return {
     cart: cart.get().catch(() => null),
-    // A synchronous check (our own session cookie, not an OAuth round trip)
-    // wrapped as a Promise so existing consumers (ShowcaseHeader's <Await>,
-    // ShowcaseCartContext) that expect isLoggedIn as a deferred value don't
-    // need to change.
     isLoggedIn: Promise.resolve(Boolean(getCustomerAccessToken(context.session))),
     footer,
   };
@@ -315,33 +260,6 @@ export function Layout({children}: {children?: React.ReactNode}) {
         <link rel="stylesheet" href="https://fastrr-boost-ui.pickrr.com/assets/styles/shopify.css" />
         <Meta />
         <Links />
-        {/* Meta Pixel Code */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              !function(f,b,e,v,n,t,s)
-              {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-              n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-              if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-              n.queue=[];t=b.createElement(e);t.async=!0;
-              t.src=v;s=b.getElementsByTagName(e)[0];
-              s.parentNode.insertBefore(t,s)}(window, document,'script',
-              'https://connect.facebook.net/en_US/fbevents.js');
-              fbq('init', '2581550922313854');
-              fbq('track', 'PageView');
-            `,
-          }}
-        />
-        <noscript>
-          <img
-            height="1"
-            width="1"
-            style={{display: 'none'}}
-            src="https://www.facebook.com/tr?id=2581550922313854&ev=PageView&noscript=1"
-            alt=""
-          />
-        </noscript>
-        {/* End Meta Pixel Code */}
       </head>
       <body>
         {/* Shiprocket Fastrr Integration */}
@@ -360,7 +278,6 @@ export default function App() {
   const nonce = useNonce();
 
   useEffect(() => {
-    // Shiprocket Fastrr seller configuration is registered with Shopify store domain
     const el = document.getElementById('sellerDomain') as HTMLInputElement | null;
     if (el) {
       el.value = data?.shiprocketSellerDomain || 'urban-essentials-jcqspwgr.myshopify.com';
@@ -430,10 +347,6 @@ export function ErrorBoundary() {
     errorMessage = error.message;
   }
 
-  // A real error can carry internal detail (a raw exception message, a
-  // GraphQL schema error, a stack fragment) that a customer should never
-  // see in production — only dev mode shows it directly, so debugging
-  // locally still gets the specifics.
   const displayMessage = import.meta.env.DEV
     ? errorMessage
     : errorStatus === 404
@@ -463,9 +376,6 @@ export function ErrorBoundary() {
     </div>
   );
 
-  // The root loader still ran successfully here — only a child route threw
-  // — so the header/footer data it needs is available; falling back to the
-  // bare page only covers the (rare) case where root's own loader failed.
   if (!data) return content;
 
   return <PageLayout {...data}>{content}</PageLayout>;
