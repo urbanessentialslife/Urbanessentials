@@ -2,12 +2,6 @@ import {useEffect} from 'react';
 import {useAnalytics} from '@shopify/hydrogen';
 import {onStorefrontEvent, type StorefrontEventItem} from '~/lib/storefrontEvents';
 
-/**
- * Optional GA4 and Meta Pixel tracking with Conversions API (CAPI) bridging,
- * wired from Hydrogen's analytics bus (page/product/collection/search views)
- * and the cart's own DOM events (add to cart, begin checkout).
- */
-
 type FbqFunction = ((...args: unknown[]) => void) & {
   queue?: unknown[];
   callMethod?: (...args: unknown[]) => void;
@@ -43,14 +37,11 @@ function sendCapiEvent(eventName: string, eventId: string, customData: Record<st
         eventSourceUrl: window.location.href,
         customData,
       }),
-    }).catch((err) => {
-      // Non-blocking catch to prevent client console disruptions
-      if (process.env.NODE_ENV === 'development') {
-        console.warn('Meta CAPI transmission notice:', err);
-      }
+    }).catch(() => {
+      // Non-blocking fail-safe
     });
   } catch {
-    // Silent catch for headless runtime safety
+    // Fail-safe
   }
 }
 
@@ -67,12 +58,10 @@ function ensureGtag(measurementId: string, nonce?: string): NonNullable<Window['
   if (!window.gtag) {
     window.dataLayer = window.dataLayer || [];
     window.gtag = function gtag() {
-      // gtag.js expects the raw `arguments` object, not an array.
       // eslint-disable-next-line prefer-rest-params
       window.dataLayer!.push(arguments);
     };
     window.gtag('js', new Date());
-    // Page views are sent manually on each client-side navigation below.
     window.gtag('config', measurementId, {send_page_view: false});
     loadScript(`https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(measurementId)}`, nonce);
   }
@@ -181,7 +170,6 @@ export function ThirdPartyAnalytics({
 
     ready();
 
-    // Cart and checkout events bridged from custom DOM bus
     const offAdd = onStorefrontEvent('add_to_cart', (detail) => {
       window.gtag?.('event', 'add_to_cart', {currency: detail.currency, value: detail.value, items: gaItems(detail.items)});
 
@@ -194,3 +182,31 @@ export function ThirdPartyAnalytics({
           value: detail.value,
         };
         window.fbq?.('track', 'AddToCart', customData, {eventID: eventId});
+        sendCapiEvent('AddToCart', eventId, customData);
+      }
+    });
+
+    const offCheckout = onStorefrontEvent('begin_checkout', (detail) => {
+      window.gtag?.('event', 'begin_checkout', {currency: detail.currency, value: detail.value, items: gaItems(detail.items)});
+
+      if (metaPixelId) {
+        const eventId = generateEventId();
+        const customData = {
+          content_ids: detail.items.map((i) => i.id),
+          currency: detail.currency,
+          value: detail.value,
+          num_items: detail.items.reduce((n, i) => n + i.quantity, 0),
+        };
+        window.fbq?.('track', 'InitiateCheckout', customData, {eventID: eventId});
+        sendCapiEvent('InitiateCheckout', eventId, customData);
+      }
+    });
+
+    return () => {
+      offAdd();
+      offCheckout();
+    };
+  }, []);
+
+  return null;
+}
