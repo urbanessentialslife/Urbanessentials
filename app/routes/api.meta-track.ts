@@ -1,27 +1,26 @@
-import { type ActionFunctionArgs } from '@shopify/remix-oxygen';
-import { sendMetaServerEvent } from '~/lib/meta-capi.server';
+import {sendMetaServerEvent} from '~/lib/meta-capi.server';
 
-export async function action({ request, context }: ActionFunctionArgs) {
+export async function action({request, context}: {request: Request; context: any}) {
   if (request.method !== 'POST') {
-    return new Response(JSON.stringify({ error: 'Method not allowed' }), {
+    return new Response(JSON.stringify({error: 'Method not allowed'}), {
       status: 405,
-      headers: { 'Content-Type': 'application/json' },
+      headers: {'Content-Type': 'application/json'},
     });
   }
 
-  const { env } = context;
+  const {env} = context;
 
   let payload: any;
   try {
     payload = await request.json();
   } catch (err) {
-    return new Response(JSON.stringify({ error: 'Invalid JSON payload' }), {
+    return new Response(JSON.stringify({error: 'Invalid JSON payload'}), {
       status: 400,
-      headers: { 'Content-Type': 'application/json' },
+      headers: {'Content-Type': 'application/json'},
     });
   }
 
-  // Extract IP address from request headers
+  // Extract client IP address from headers
   const clientIpAddress =
     request.headers.get('x-forwarded-for')?.split(',')[0].trim() ||
     request.headers.get('cf-connecting-ip') ||
@@ -49,8 +48,8 @@ export async function action({ request, context }: ActionFunctionArgs) {
     customData: payload.customData,
   });
 
-  return new Response(JSON.stringify({ success: true, result }), {
+  return new Response(JSON.stringify({success: true, result}), {
     status: 200,
-    headers: { 'Content-Type': 'application/json' },
+    headers: {'Content-Type': 'application/json'},
   });
 }
