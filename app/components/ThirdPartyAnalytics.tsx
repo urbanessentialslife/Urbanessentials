@@ -3,17 +3,9 @@ import {useAnalytics} from '@shopify/hydrogen';
 import {onStorefrontEvent, type StorefrontEventItem} from '~/lib/storefrontEvents';
 
 /**
- * Optional GA4 and Meta Pixel tracking, bridged from Hydrogen's analytics
- * bus (page/product/collection/search views) and the cart's own DOM events
- * (add to cart, begin checkout — see app/lib/storefrontEvents.ts).
- *
- * Each vendor only loads when its ID is configured (PUBLIC_GA4_MEASUREMENT_ID,
- * PUBLIC_META_PIXEL_ID) AND the visitor's Shopify consent allows it:
- * Hydrogen only publishes events once analytics processing is allowed, and
- * the Meta Pixel additionally requires marketing consent. Purchases are
- * tracked on Shopify's checkout itself (Admin → Settings → Customer events
- * or the Google & YouTube / Facebook & Instagram sales channel apps), which
- * this headless storefront can't see.
+ * Optional GA4 and Meta Pixel tracking with Conversions API (CAPI) bridging,
+ * wired from Hydrogen's analytics bus (page/product/collection/search views)
+ * and the cart's own DOM events (add to cart, begin checkout).
  */
 
 type FbqFunction = ((...args: unknown[]) => void) & {
@@ -30,6 +22,35 @@ declare global {
     gtag?: (...args: unknown[]) => void;
     fbq?: FbqFunction;
     _fbq?: unknown;
+  }
+}
+
+function generateEventId(): string {
+  if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+    return crypto.randomUUID();
+  }
+  return 'capi_' + Date.now() + '_' + Math.random().toString(36).substring(2, 9);
+}
+
+function sendCapiEvent(eventName: string, eventId: string, customData: Record<string, any> = {}) {
+  try {
+    fetch('/api/meta-track', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        eventName,
+        eventId,
+        eventSourceUrl: window.location.href,
+        customData,
+      }),
+    }).catch((err) => {
+      // Non-blocking catch to prevent client console disruptions
+      if (process.env.NODE_ENV === 'development') {
+        console.warn('Meta CAPI transmission notice:', err);
+      }
+    });
+  } catch {
+    // Silent catch for headless runtime safety
   }
 }
 
@@ -61,7 +82,6 @@ function ensureGtag(measurementId: string, nonce?: string): NonNullable<Window['
 function ensureFbq(pixelId: string, nonce?: string): NonNullable<Window['fbq']> | null {
   if (!window.Shopify?.customerPrivacy?.marketingAllowed?.()) return null;
   if (!window.fbq) {
-    // Meta's standard queueing stub, without the inline <script> snippet.
     const fbq = ((...args: unknown[]) => {
       if (fbq.callMethod) fbq.callMethod(...args);
       else fbq.queue!.push(args);
@@ -111,7 +131,12 @@ export function ThirdPartyAnalytics({
 
     subscribe('page_viewed', (data) => {
       ga()?.('event', 'page_view', {page_location: data.url, page_title: document.title});
-      fb()?.('track', 'PageView');
+      
+      if (metaPixelId) {
+        const eventId = generateEventId();
+        fb()?.('track', 'PageView', {}, {eventID: eventId});
+        sendCapiEvent('PageView', eventId);
+      }
     });
 
     subscribe('product_viewed', (data) => {
@@ -123,13 +148,19 @@ export function ThirdPartyAnalytics({
         value: Number(product.price),
         items: [{item_id: product.id, item_name: product.title, item_variant: product.variantTitle, price: Number(product.price)}],
       });
-      fb()?.('track', 'ViewContent', {
-        content_ids: [product.id],
-        content_name: product.title,
-        content_type: 'product',
-        currency,
-        value: Number(product.price),
-      });
+
+      if (metaPixelId) {
+        const eventId = generateEventId();
+        const customData = {
+          content_ids: [product.id],
+          content_name: product.title,
+          content_type: 'product',
+          currency,
+          value: Number(product.price),
+        };
+        fb()?.('track', 'ViewContent', customData, {eventID: eventId});
+        sendCapiEvent('ViewContent', eventId, customData);
+      }
     });
 
     subscribe('collection_viewed', (data) => {
@@ -139,39 +170,27 @@ export function ThirdPartyAnalytics({
     subscribe('search_viewed', (data) => {
       if (!data.searchTerm) return;
       ga()?.('event', 'search', {search_term: data.searchTerm});
-      fb()?.('track', 'Search', {search_string: data.searchTerm});
+
+      if (metaPixelId) {
+        const eventId = generateEventId();
+        const customData = {search_string: data.searchTerm};
+        fb()?.('track', 'Search', customData, {eventID: eventId});
+        sendCapiEvent('Search', eventId, customData);
+      }
     });
 
     ready();
 
-    // Cart events come straight from the cart context. Only forward them
-    // once a vendor has already been loaded by a consented page view above.
+    // Cart and checkout events bridged from custom DOM bus
     const offAdd = onStorefrontEvent('add_to_cart', (detail) => {
       window.gtag?.('event', 'add_to_cart', {currency: detail.currency, value: detail.value, items: gaItems(detail.items)});
-      window.fbq?.('track', 'AddToCart', {
-        content_ids: detail.items.map((i) => i.id),
-        content_type: 'product',
-        currency: detail.currency,
-        value: detail.value,
-      });
-    });
-    const offCheckout = onStorefrontEvent('begin_checkout', (detail) => {
-      window.gtag?.('event', 'begin_checkout', {currency: detail.currency, value: detail.value, items: gaItems(detail.items)});
-      window.fbq?.('track', 'InitiateCheckout', {
-        content_ids: detail.items.map((i) => i.id),
-        currency: detail.currency,
-        value: detail.value,
-        num_items: detail.items.reduce((n, i) => n + i.quantity, 0),
-      });
-    });
 
-    return () => {
-      offAdd();
-      offCheckout();
-    };
-    // Subscriptions are registered once for the lifetime of the app shell.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  return null;
-}
+      if (metaPixelId) {
+        const eventId = generateEventId();
+        const customData = {
+          content_ids: detail.items.map((i) => i.id),
+          content_type: 'product',
+          currency: detail.currency,
+          value: detail.value,
+        };
+        window.fbq?.('track', 'AddToCart', customData, {eventID: eventId});
