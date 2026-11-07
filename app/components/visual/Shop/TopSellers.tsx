@@ -44,7 +44,7 @@ export function TopSellers({ products, limit = 4 }: TopSellersProps) {
   // 4. Stanley Shaker Bottle - Bright Red
   // 5. Gold-Tone Decorative Jar Trio (shows only if one above is missing)
   const TARGET_TOP_HANDLES = [
-    'marble-dry-fruit-box-set-with-tray',
+    'marble-finish-dry-fruit-box-set-with-tray-4-jars',
     'ubran-essential-ribbed-water-bottle-with-carry-handle-ivory',
     'ubran-essential-illustrated-water-bottle-pastel-designs',
     'ubran-essential-water-bottle-with-carry-handle-bright-red',

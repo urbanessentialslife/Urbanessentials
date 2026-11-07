@@ -42,7 +42,9 @@ export async function loader({ context }: Route.LoaderArgs) {
     // every homepage view was pure waste that only grows with the catalog.
     storefront
       .query<ShowcaseCatalogQueryResult>(SHOWCASE_CATALOG_QUERY, {
-        variables: { first: 64 },
+        // Top Sellers picks its pinned products out of this list by handle,
+        // so it must cover the whole catalog (the store already has 64+).
+        variables: { first: 100 },
         cache: storefront.CacheShort(),
       })
       .catch((error: Error) => {
