@@ -84,7 +84,7 @@
                 width="800"
                 height="1200"
                 class="ue-hero__img"
-                {% if forloop.index > 2 %}loading="lazy"{% else %}fetchpriority="high"{% endif %}
+                {% if forloop.first %}fetchpriority="high"{% endif %}
                 decoding="async"
               >
             {%- else -%}

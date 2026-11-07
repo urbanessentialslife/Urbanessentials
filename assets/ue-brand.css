@@ -66,8 +66,9 @@ body {
   white-space: pre;
 }
 @media screen and (max-width: 749px) {
-  .header__heading-link .h2 { font-size: 1.7rem; letter-spacing: 0.08em; }
-  .header__heading-link .h2::after { font-size: 0.75rem; letter-spacing: 0.25em; }
+  /* Keep "URBAN ESSENTIALS" on one line between the mobile icons */
+  .header__heading-link .h2 { font-size: 1.45rem; letter-spacing: 0.06em; white-space: nowrap; }
+  .header__heading-link .h2::after { font-size: 0.65rem; letter-spacing: 0.2em; }
 }
 
 /* ── Navigation: uppercase, letter-spaced, gold hover ── */
@@ -133,7 +134,6 @@ body {
 
 /* Phones: compact cards so ~6 products fit on one screen (2 per row) */
 @media screen and (max-width: 749px) {
-  .product-grid { column-gap: 0.8rem; row-gap: 1.6rem; }
   .card__content .card__information { padding: 0.8rem 0.4rem 0; }
   .card__heading,
   .card__heading a { font-size: 1.25rem; }
