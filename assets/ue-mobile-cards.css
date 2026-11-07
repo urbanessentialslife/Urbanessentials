@@ -1,0 +1,19 @@
+/* Mobile: compact cards so 6 products (2 per row x 3 rows) fit on one screen */
+@media screen and (max-width: 749px) {
+  .product-grid { --grid-mobile-horizontal-spacing: .8rem; --grid-mobile-vertical-spacing: .8rem; }
+  .grid__item .card--card .card__inner.ratio { --ratio-percent: 66% !important; }
+  .grid__item .card--card .card__inner .card__media img { object-fit: cover; }
+  .grid__item .card--card .card__content { padding: .7rem .8rem .8rem !important; grid-template-rows: none; }
+  .grid__item .card--card .card__information { padding: 0 !important; }
+  .grid__item .card--card .card__heading { font-size: 1.2rem; line-height: 1.3; margin: 0 0 .3rem; }
+  .grid__item .card--card .card__heading a { display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
+  .grid__item .card--card .card-information { margin-top: 0; }
+  .grid__item .price { font-size: 1.2rem; line-height: 1.25; flex-wrap: nowrap; min-height: 3rem; align-items: flex-start; }
+  .grid__item .price .price-item { white-space: nowrap; line-height: 1.2; }
+  .grid__item .price--on-sale .price__sale { flex-direction: column; align-items: flex-start; gap: 0; }
+  .grid__item .price s.price-item--regular { font-size: 1rem; }
+  .grid__item .card--card .quick-add { margin-top: .5rem; margin-bottom: 0; }
+  .grid__item .quick-add__submit { min-height: 3rem; font-size: 1rem; letter-spacing: .06em; }
+  .grid__item .card__badge { padding: .4rem; }
+  .grid__item .card__badge .badge { font-size: 1rem; padding: .3rem .8rem; }
+}
