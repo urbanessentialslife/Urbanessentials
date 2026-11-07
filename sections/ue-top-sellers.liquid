@@ -29,7 +29,7 @@
     <div class="ue-top__head">
       <div>
         {%- if section.settings.eyebrow != blank -%}<p class="ue-top__eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
-        <h2 id="ue-top-heading-{{ section.id }}" class="ue-top__title ue-font-playful">{{ section.settings.heading }}</h2>
+        <h2 id="ue-top-heading-{{ section.id }}" class="ue-top__title">{{ section.settings.heading }}</h2>
       </div>
       {%- if section.settings.link_label != blank -%}
         <a class="ue-top__all" href="{{ section.settings.link | default: routes.all_products_collection_url }}">{{ section.settings.link_label }}</a>
@@ -73,7 +73,7 @@
   @media screen and (min-width: 750px) { .ue-top { padding: 6rem 0; } }
   .ue-top__head { display: flex; align-items: flex-end; justify-content: space-between; gap: 1.6rem; margin-bottom: 2.8rem; }
   .ue-top__eyebrow { margin: 0 0 .6rem; font-size: 1.1rem; letter-spacing: .25em; text-transform: uppercase; font-weight: 700; color: #b89b6a; }
-  .ue-top__title { margin: 0; font-size: clamp(2.4rem, 4vw, 3.8rem); font-weight: 600; }
+  .ue-top__title { margin: 0; font-family: var(--font-heading-family); font-size: clamp(3rem, 5vw, 4.6rem); font-weight: 500; letter-spacing: 0.01em; }
   .ue-top__all { flex-shrink: 0; font-weight: 700; font-size: 1.4rem; color: #ff6f61; text-decoration: none; }
   .ue-top__all:hover { text-decoration: underline; }
   /* Desktop shows one row (columns_desktop); the extra picks fill a 3rd row on phones. */

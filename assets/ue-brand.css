@@ -172,3 +172,43 @@ h1, h2, .h0, .h1, .h2 {
   letter-spacing: 0.25em;
   text-transform: uppercase;
 }
+
+/* ── Match the Hydrogen product cards ── */
+.card-wrapper .card--card {
+  background: #fff;
+  border-color: rgba(201, 194, 184, 0.7);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+.card-wrapper:hover .card--card {
+  box-shadow: 0 14px 32px rgba(40, 30, 20, 0.1);
+}
+.card--card .card__content { padding: 1.2rem 1.4rem 1.4rem; }
+@media screen and (max-width: 749px) {
+  .card--card .card__content { padding: 0.8rem 0.9rem 1rem; }
+}
+/* Dark, rounded "ADD TO CART" (Dawn's default is an outline button) */
+.quick-add__submit {
+  background: var(--ue-ink);
+  color: var(--ue-cream);
+  border-radius: 999px;
+  box-shadow: none;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.quick-add__submit::before,
+.quick-add__submit::after { box-shadow: none; border-radius: 999px; }
+.quick-add__submit:hover { background: #3a2c26; color: var(--ue-cream); }
+
+/* Section titles in the elegant serif, like "Top Sellers" / "Featured Gifts" */
+.collection__title .title,
+.title-wrapper-with-link .title {
+  font-family: var(--font-heading-family);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+/* "View all" link as an outlined pill */
+.collection__view-all .button {
+  border-radius: 999px;
+}
