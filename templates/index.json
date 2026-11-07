@@ -231,13 +231,13 @@
       "blocks": {
         "reason-1": { "type": "reason", "settings": { "icon": "check", "title": "Original design", "text": "Food-grade steel & borosilicate" } },
         "reason-2": { "type": "reason", "settings": { "icon": "clock", "title": "Fast dispatch", "text": "Ships within 24 business hours" } },
-        "reason-3": { "type": "reason", "settings": { "icon": "box", "title": "Luxury gifting", "text": "Signature box packaging" } },
+        "reason-3": { "type": "reason", "settings": { "icon": "truck", "title": "Free delivery", "text": "On every order across India" } },
         "reason-4": { "type": "reason", "settings": { "icon": "shield", "title": "Verified safe checkout", "text": "UPI, Cards & Netbanking via Fastrr" } }
       },
       "block_order": [
+        "reason-3",
         "reason-1",
         "reason-2",
-        "reason-3",
         "reason-4"
       ],
       "settings": {
