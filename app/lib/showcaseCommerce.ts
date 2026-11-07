@@ -189,6 +189,10 @@ export const PRODUCT_BY_HANDLE_QUERY = `#graphql
       handle
       title
       descriptionHtml
+      seo {
+        title
+        description
+      }
       tags
       productType
       featuredImage {
@@ -439,6 +443,8 @@ interface ShopifyProductNode {
   metafields?: ({ key: string; value: string } | null)[];
   /** Only requested by the shop-all query (powers the category filter). */
   collections?: { nodes: { handle: string }[] };
+  /** Admin "Search engine listing" fields — only requested by PRODUCT_BY_HANDLE_QUERY. */
+  seo?: { title: string | null; description: string | null } | null;
 }
 
 export interface ShowcaseCatalogQueryResult {

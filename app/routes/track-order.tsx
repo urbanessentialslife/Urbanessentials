@@ -1,14 +1,18 @@
 import {useState} from 'react';
+import {buildMeta} from '~/lib/seo';
 import {data, useFetcher} from 'react-router';
 import type {Route} from './+types/track-order';
 import {Breadcrumb} from '~/components/visual/Common/Breadcrumb';
 import {lookupOrderStatus, type OrderStatusResult} from '~/lib/admin.server';
 
-export const meta: Route.MetaFunction = () => {
-  return [
-    {title: 'Track Your Order | UrbanEssentials'},
-    {name: 'description', content: 'Look up the status of your UrbanEssentials order.'},
-  ];
+export const meta: Route.MetaFunction = ({matches, location}) => {
+  return buildMeta({
+    matches,
+    location,
+    title: 'Track Your Order',
+    description:
+      'Track your Urban Essentials order status with your order number and email address.',
+  });
 };
 
 export async function action({request, context}: Route.ActionArgs) {

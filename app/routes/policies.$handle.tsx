@@ -1,4 +1,5 @@
 import {Link, useLoaderData} from 'react-router';
+import {buildMeta} from '~/lib/seo';
 import type {Route} from './+types/policies.$handle';
 import {type Shop} from '@shopify/hydrogen/storefront-api-types';
 
@@ -7,8 +8,14 @@ type SelectedPolicies = keyof Pick<
   'privacyPolicy' | 'shippingPolicy' | 'termsOfService' | 'refundPolicy'
 >;
 
-export const meta: Route.MetaFunction = ({data}) => {
-  return [{title: `${data?.policy.title ?? ''} | Urban Essentials`}];
+export const meta: Route.MetaFunction = ({data, matches, location}) => {
+  const policy = data?.policy;
+  return buildMeta({
+    matches,
+    location,
+    title: policy?.title ?? 'Policy',
+    description: `${policy?.title ?? 'Store policy'} for Urban Essentials — read our terms for orders, shipping, returns and privacy.`,
+  });
 };
 
 export async function loader({params, context}: Route.LoaderArgs) {

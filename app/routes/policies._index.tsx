@@ -1,10 +1,17 @@
 import {useLoaderData, Link} from 'react-router';
+import {buildMeta} from '~/lib/seo';
 import type {Route} from './+types/policies._index';
 import type {PoliciesQuery, PolicyItemFragment} from 'storefrontapi.generated';
 import {Breadcrumb} from '~/components/visual/Common/Breadcrumb';
 
-export const meta: Route.MetaFunction = () => {
-  return [{title: 'Policies | UrbanEssentials'}];
+export const meta: Route.MetaFunction = ({matches, location}) => {
+  return buildMeta({
+    matches,
+    location,
+    title: 'Store Policies',
+    description:
+      'Shipping, refund, privacy and terms of service policies for Urban Essentials.',
+  });
 };
 
 export async function loader({context}: Route.LoaderArgs) {

@@ -1,4 +1,5 @@
 import { formatAmount } from '~/lib/money';
+import {buildMeta} from '~/lib/seo';
 import {Link} from 'react-router';
 import {Image} from '@shopify/hydrogen';
 import type {Route} from './+types/compare';
@@ -7,11 +8,13 @@ import {LogoMark} from '~/components/visual/Common/Logo';
 import {useCompare} from '~/context/CompareContext';
 import {useShowcaseCart} from '~/context/ShowcaseCartContext';
 
-export const meta: Route.MetaFunction = () => {
-  return [
-    {title: 'Compare Products | UrbanEssentials'},
-    {name: 'description', content: 'Compare UrbanEssentials products side by side.'},
-  ];
+export const meta: Route.MetaFunction = ({matches, location}) => {
+  return buildMeta({
+    matches,
+    location,
+    title: 'Compare Products',
+    noindex: true,
+  });
 };
 
 export default function Compare() {

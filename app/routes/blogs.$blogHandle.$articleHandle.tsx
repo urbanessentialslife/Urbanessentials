@@ -1,21 +1,26 @@
 import {useLoaderData} from 'react-router';
+import {buildMeta, stripHtml} from '~/lib/seo';
 import type {Route} from './+types/blogs.$blogHandle.$articleHandle';
 import {Image, useNonce} from '@shopify/hydrogen';
 import {redirectIfHandleIsLocalized} from '~/lib/redirect';
 import {Breadcrumb} from '~/components/visual/Common/Breadcrumb';
 
-function stripHtml(html: string): string {
-  return html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
-}
 
-export const meta: Route.MetaFunction = ({data}) => {
-  const description =
-    data?.article.seo?.description ||
-    stripHtml(data?.article.contentHtml ?? '').slice(0, 155);
-  return [
-    {title: data?.article.seo?.title || `${data?.article.title ?? ''} | Urban Essentials`},
-    {name: 'description', content: description},
-  ];
+export const meta: Route.MetaFunction = ({data, matches, location}) => {
+  const article = data?.article;
+  return buildMeta({
+    matches,
+    location,
+    title: article?.seo?.title || article?.title || 'Journal',
+    exactTitle: Boolean(article?.seo?.title),
+    description: article?.seo?.description || stripHtml(article?.contentHtml ?? ''),
+    image: article?.image?.url,
+    imageAlt: article?.image?.altText,
+    type: 'article',
+    extra: article?.publishedAt
+      ? [{property: 'article:published_time', content: article.publishedAt}]
+      : [],
+  });
 };
 
 export async function loader(args: Route.LoaderArgs) {

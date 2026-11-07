@@ -1,4 +1,5 @@
 import {tileImageFor} from '~/lib/navMenus';
+import {buildMeta} from '~/lib/seo';
 import {useLoaderData, Link} from 'react-router';
 import type {Route} from './+types/collections._index';
 import {getPaginationVariables, Image} from '@shopify/hydrogen';
@@ -6,14 +7,14 @@ import type {CollectionFragment} from 'storefrontapi.generated';
 import {PaginatedResourceSection} from '~/components/PaginatedResourceSection';
 import {ShopPageHeader} from '~/components/visual/Shop/ShopPageHeader';
 
-export const meta: Route.MetaFunction = () => {
-  return [
-    {title: `Collections | Urban Essentials`},
-    {
-      name: 'description',
-      content: 'Browse every Urban Essentials collection — tumblers, gift sets, and everyday lifestyle pieces.',
-    },
-  ];
+export const meta: Route.MetaFunction = ({matches, location}) => {
+  return buildMeta({
+    matches,
+    location,
+    title: 'Shop by Collection – Tumblers, Bottles, Mugs & Gifts',
+    description:
+      'Browse every Urban Essentials collection: Stanley tumblers, insulated water bottles, kids bottles, mugs, crockery, home décor and curated gift sets. Free delivery across India.',
+  });
 };
 
 export async function loader(args: Route.LoaderArgs) {

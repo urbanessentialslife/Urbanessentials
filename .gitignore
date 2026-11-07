@@ -13,3 +13,7 @@ node_modules
 /data
 .vercel
 .env*
+
+# Local notes (not pushed)
+GETTING_STARTED.md
+docs/seo-checklist.md

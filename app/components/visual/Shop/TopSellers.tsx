@@ -36,12 +36,15 @@ export function TopSellers({ products, limit = 4 }: TopSellersProps) {
   // catalog order.
   const isFeatured = (p: ShowcaseProduct) => (p.tags ?? []).some((t) => t.toLowerCase() === 'featured');
   const hasFeaturedTag = inStock.some(isFeatured);
-  // Target handles matching the user's curated Top Sellers:
-  // 1. Ribbed Water Bottle - Ivory
-  // 2. Illustrated Water Bottle - Pastel Designs
-  // 3. Stanley Shaker Bottle - Bright Red
-  // 4. Gold-Tone Decorative Jar Trio
+  // Target handles matching the user's curated Top Sellers (homepage shows
+  // the first `limit` = 4 that exist and are in stock):
+  // 1. Marble Finish Dry Fruit Box Set with Tray (4 jars)
+  // 2. Ribbed Water Bottle - Ivory
+  // 3. Illustrated Water Bottle - Pastel Designs
+  // 4. Stanley Shaker Bottle - Bright Red
+  // 5. Gold-Tone Decorative Jar Trio (shows only if one above is missing)
   const TARGET_TOP_HANDLES = [
+    'marble-dry-fruit-box-set-with-tray',
     'ubran-essential-ribbed-water-bottle-with-carry-handle-ivory',
     'ubran-essential-illustrated-water-bottle-pastel-designs',
     'ubran-essential-water-bottle-with-carry-handle-bright-red',
@@ -113,9 +116,16 @@ export function TopSellers({ products, limit = 4 }: TopSellersProps) {
           </Link>
         </div>
 
-        <div ref={railRef} className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 md:gap-8">
+        <div ref={railRef} className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-6 md:gap-8">
           {items.map((product, index) => (
-            <TopSellerCard key={product.id} product={product} rank={index + 1} />
+            <TopSellerCard
+              key={product.id}
+              product={product}
+              rank={index + 1}
+              // Mobile/tablet show all 6 (3 rows of 2); desktop keeps a
+              // single row of 4, so cards 5–6 are hidden from lg up.
+              className={index >= 4 ? 'lg:hidden' : undefined}
+            />
           ))}
         </div>
       </div>
@@ -123,7 +133,15 @@ export function TopSellers({ products, limit = 4 }: TopSellersProps) {
   );
 }
 
-function TopSellerCard({ product, rank }: { product: ShowcaseProduct; rank: number }) {
+function TopSellerCard({
+  product,
+  rank,
+  className,
+}: {
+  product: ShowcaseProduct;
+  rank: number;
+  className?: string;
+}) {
   const { addItem } = useShowcaseCart();
   const defaultVariant = product.variants.find((v) => v.id === product.defaultVariantId) || product.variants[0];
   const { state: addState, trigger: handleQuickAdd } = useAddToCartFeedback(
@@ -138,12 +156,12 @@ function TopSellerCard({ product, rank }: { product: ShowcaseProduct; rank: numb
     : 0;
 
   return (
-    <div className="group relative flex flex-col rounded-2xl sm:rounded-3xl bg-white border border-[#c9c2b8] overflow-hidden shadow-[0_4px_16px_rgba(40,30,20,0.04)] hover:shadow-[0_14px_32px_rgba(40,30,20,0.1)] transition-shadow duration-300">
+    <div className={`group relative flex flex-col rounded-2xl sm:rounded-3xl bg-white border border-[#c9c2b8] overflow-hidden shadow-[0_4px_16px_rgba(40,30,20,0.04)] hover:shadow-[0_14px_32px_rgba(40,30,20,0.1)] transition-shadow duration-300 ${className ?? ''}`}>
       <Link
         to={`/products/${product.handle}`}
         prefetch="intent"
         aria-label={product.title}
-        className="relative aspect-[4/5] bg-[#161210] overflow-hidden block"
+        className="relative aspect-square sm:aspect-[4/5] bg-[#161210] overflow-hidden block"
       >
         {imageSrc ? (
           <Image
@@ -166,9 +184,9 @@ function TopSellerCard({ product, rank }: { product: ShowcaseProduct; rank: numb
         )}
       </Link>
 
-      <div className="p-3 sm:p-5 flex-1 flex flex-col justify-between space-y-2.5 sm:space-y-3">
+      <div className="p-2.5 sm:p-5 flex-1 flex flex-col justify-between space-y-2.5 sm:space-y-3">
         <div>
-          <div className="flex flex-col gap-1 sm:gap-1.5">
+          <div className="flex flex-col gap-0.5 sm:gap-1.5">
             <Link
               to={`/products/${product.handle}`}
               prefetch="intent"
@@ -176,8 +194,9 @@ function TopSellerCard({ product, rank }: { product: ShowcaseProduct; rank: numb
             >
               {product.title}
             </Link>
-            <span className="flex items-baseline gap-1.5 sm:gap-2 flex-wrap">
-              <span className="text-base sm:text-xl font-serif font-bold text-[#241a16]">
+            <div className="flex items-center justify-between gap-2">
+            <span className="flex items-baseline gap-1.5 sm:gap-2 flex-wrap min-w-0">
+              <span className="text-[15px] sm:text-xl font-serif font-bold text-[#241a16]">
                 {product.currencySymbol}{formatAmount(product.price, product.currencySymbol)}
               </span>
               {hasDiscount && (
@@ -186,13 +205,36 @@ function TopSellerCard({ product, rank }: { product: ShowcaseProduct; rank: numb
                 </span>
               )}
             </span>
+              {/* Mobile: compact round cart button beside the price, so a
+                  card is ~30% shorter and 6 products fit on one phone screen.
+                  The full-width button below takes over from sm: up. */}
+              <button
+                type="button"
+                onClick={handleQuickAdd}
+                disabled={!defaultVariant?.inStock || addState !== 'idle'}
+                aria-label={`Add ${product.title} to cart`}
+                className={`sm:hidden shrink-0 w-8 h-8 rounded-full flex items-center justify-center shadow-xs cursor-pointer disabled:cursor-not-allowed disabled:opacity-40 transition-colors ${
+                  isAdded ? 'bg-emerald-600 text-white' : 'bg-[#241a16] text-[#f4f0e8]'
+                }`}
+              >
+                {isAdded ? (
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                ) : (
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.6" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007z" />
+                  </svg>
+                )}
+              </button>
+            </div>
           </div>
         </div>
 
         <button
           onClick={handleQuickAdd}
           disabled={!defaultVariant?.inStock || addState !== 'idle'}
-          className={`w-full py-2 px-2.5 sm:py-2.5 sm:px-4 rounded-full text-[10px] sm:text-xs uppercase tracking-wider sm:tracking-widest font-medium transition-all duration-200 flex items-center justify-center space-x-1 sm:space-x-1.5 cursor-pointer shadow-xs disabled:cursor-not-allowed disabled:opacity-50 ${
+          className={`hidden sm:flex w-full py-2 px-2.5 sm:py-2.5 sm:px-4 rounded-full text-[10px] sm:text-xs uppercase tracking-wider sm:tracking-widest font-medium transition-all duration-200 items-center justify-center space-x-1 sm:space-x-1.5 cursor-pointer shadow-xs disabled:cursor-not-allowed disabled:opacity-50 ${
             isAdded ? 'bg-emerald-600 text-white' : 'bg-[#241a16] hover:bg-[#3a2c24] text-[#f4f0e8]'
           }`}
         >

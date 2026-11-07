@@ -1,4 +1,5 @@
 import {useEffect} from 'react';
+import {buildMeta} from '~/lib/seo';
 import {Link, data, useLoaderData, type HeadersFunction} from 'react-router';
 import type {Route} from './+types/cart';
 import type {CartQueryDataReturn} from '@shopify/hydrogen';
@@ -6,8 +7,13 @@ import {CartForm} from '@shopify/hydrogen';
 import {Breadcrumb} from '~/components/visual/Common/Breadcrumb';
 import {useShowcaseCart} from '~/context/ShowcaseCartContext';
 
-export const meta: Route.MetaFunction = () => {
-  return [{title: `Your Gifting Box | Urban Essentials`}];
+export const meta: Route.MetaFunction = ({matches, location}) => {
+  return buildMeta({
+    matches,
+    location,
+    title: 'Your Gifting Box',
+    noindex: true,
+  });
 };
 
 export const headers: HeadersFunction = ({actionHeaders}) => actionHeaders;

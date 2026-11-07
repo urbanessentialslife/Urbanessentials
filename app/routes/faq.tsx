@@ -1,15 +1,29 @@
 import type {Route} from './+types/faq';
+import {buildMeta} from '~/lib/seo';
 import {Link} from 'react-router';
 import {Breadcrumb} from '~/components/visual/Common/Breadcrumb';
 
-export const meta: Route.MetaFunction = () => {
-  return [
-    {title: 'Frequently Asked Questions | UrbanEssentials'},
-    {
-      name: 'description',
-      content: 'Shipping, returns, customization, care, and payment answers for UrbanEssentials orders.',
-    },
-  ];
+export const meta: Route.MetaFunction = ({matches, location}) => {
+  return buildMeta({
+    matches,
+    location,
+    title: 'FAQ – Shipping, Returns, Customization & Care',
+    description:
+      'Answers on shipping across India, free delivery, 7-day returns, personalization, product care and payments for Urban Essentials orders.',
+    jsonLd: [
+      {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: FAQ_SECTIONS.flatMap((section) =>
+          section.items.map((item) => ({
+            '@type': 'Question',
+            name: item.question,
+            acceptedAnswer: {'@type': 'Answer', text: item.answer},
+          })),
+        ),
+      },
+    ],
+  });
 };
 
 interface FaqSection {

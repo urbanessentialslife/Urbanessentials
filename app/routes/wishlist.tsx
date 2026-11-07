@@ -1,4 +1,5 @@
 import { formatAmount } from '~/lib/money';
+import {buildMeta} from '~/lib/seo';
 import {Link} from 'react-router';
 import {Image} from '@shopify/hydrogen';
 import type {Route} from './+types/wishlist';
@@ -7,11 +8,13 @@ import {LogoMark} from '~/components/visual/Common/Logo';
 import {useWishlist} from '~/context/WishlistContext';
 import {useShowcaseCart} from '~/context/ShowcaseCartContext';
 
-export const meta: Route.MetaFunction = () => {
-  return [
-    {title: 'Wishlist | UrbanEssentials'},
-    {name: 'description', content: 'Your saved UrbanEssentials pieces.'},
-  ];
+export const meta: Route.MetaFunction = ({matches, location}) => {
+  return buildMeta({
+    matches,
+    location,
+    title: 'Wishlist',
+    noindex: true,
+  });
 };
 
 export default function Wishlist() {

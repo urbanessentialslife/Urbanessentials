@@ -258,7 +258,7 @@ export function ProductDiscoveryGrid({
       <>
         <div
           ref={gridRef}
-          className={`grid grid-cols-2 gap-3 sm:gap-6 md:gap-10 ${
+          className={`grid grid-cols-2 gap-2 sm:gap-6 md:gap-10 ${
             sidebar ? 'xl:grid-cols-3' : 'md:grid-cols-2 lg:grid-cols-4'
           }`}
         >
@@ -610,7 +610,7 @@ function ProductCard({ product, activeColors = [], onQuickView }: ProductCardPro
       {/* Visual Area — clicking the image goes straight to the full product
           page, like any normal storefront; Quick View is a distinct, small
           secondary trigger in the corner rather than the main click target. */}
-      <div className="relative aspect-[4/5] bg-[#161210] overflow-hidden w-full">
+      <div className="relative aspect-square sm:aspect-[4/5] bg-[#161210] overflow-hidden w-full">
         <Link
           to={`/products/${product.handle}`}
           prefetch="intent"
@@ -724,9 +724,9 @@ function ProductCard({ product, activeColors = [], onQuickView }: ProductCardPro
       </div>
 
       {/* Card Content Area — Clean & Minimal */}
-      <div className="p-3 sm:p-5 flex-1 flex flex-col justify-between space-y-2.5 sm:space-y-3">
+      <div className="p-2.5 sm:p-5 flex-1 flex flex-col justify-between space-y-2.5 sm:space-y-3">
         <div>
-          <div className="flex flex-col gap-1 sm:gap-1.5">
+          <div className="flex flex-col gap-0.5 sm:gap-1.5">
             <Link
               to={`/products/${product.handle}`}
               prefetch="intent"
@@ -734,8 +734,9 @@ function ProductCard({ product, activeColors = [], onQuickView }: ProductCardPro
             >
               {product.title}
             </Link>
-            <span className="flex items-baseline gap-1.5 sm:gap-2 flex-wrap">
-              <span className="text-base sm:text-xl font-serif font-bold text-[#241a16]">
+            <div className="flex items-center justify-between gap-2">
+            <span className="flex items-baseline gap-1.5 sm:gap-2 flex-wrap min-w-0">
+              <span className="text-[15px] sm:text-xl font-serif font-bold text-[#241a16]">
                 {product.currencySymbol}{formatAmount(product.price, product.currencySymbol)}
               </span>
               {hasDiscount && (
@@ -744,8 +745,31 @@ function ProductCard({ product, activeColors = [], onQuickView }: ProductCardPro
                 </span>
               )}
             </span>
+              {/* Mobile: compact round cart button beside the price, so a
+                  card is ~30% shorter and 6 products fit on one phone screen.
+                  The full-width button below takes over from sm: up. */}
+              <button
+                type="button"
+                onClick={product.customization?.enabled ? onQuickView : handleQuickAdd}
+                disabled={(!product.customization?.enabled && !displayVariant.inStock) || addState !== 'idle'}
+                aria-label={product.customization?.enabled ? `Customize ${product.title}` : `Add ${product.title} to cart`}
+                className={`sm:hidden shrink-0 w-8 h-8 rounded-full flex items-center justify-center shadow-xs cursor-pointer disabled:cursor-not-allowed disabled:opacity-40 transition-colors ${
+                  isAdded ? 'bg-emerald-600 text-white' : 'bg-[#241a16] text-[#f4f0e8]'
+                }`}
+              >
+                {isAdded ? (
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                  </svg>
+                ) : (
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.6" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007z" />
+                  </svg>
+                )}
+              </button>
+            </div>
           </div>
-          <span className="text-[10px] sm:text-[11px] text-[#6d6560] font-light mt-0.5 block line-clamp-1">
+          <span className="hidden sm:block text-[10px] sm:text-[11px] text-[#6d6560] font-light mt-0.5 line-clamp-1">
             {product.category === 'tumbler'
               ? 'Everyday Tumbler'
               : product.category === 'gift-set'
@@ -766,7 +790,7 @@ function ProductCard({ product, activeColors = [], onQuickView }: ProductCardPro
         <button
           onClick={product.customization?.enabled ? onQuickView : handleQuickAdd}
           disabled={(!product.customization?.enabled && !displayVariant.inStock) || addState !== 'idle'}
-          className={`w-full py-2 px-2.5 sm:py-2.5 sm:px-4 rounded-full text-[10px] sm:text-xs uppercase tracking-wider sm:tracking-widest font-medium transition-all duration-200 flex items-center justify-center space-x-1 sm:space-x-1.5 cursor-pointer shadow-xs disabled:cursor-not-allowed disabled:opacity-50 ${
+          className={`hidden sm:flex w-full py-2 px-2.5 sm:py-2.5 sm:px-4 rounded-full text-[10px] sm:text-xs uppercase tracking-wider sm:tracking-widest font-medium transition-all duration-200 items-center justify-center space-x-1 sm:space-x-1.5 cursor-pointer shadow-xs disabled:cursor-not-allowed disabled:opacity-50 ${
             isAdded
               ? 'bg-emerald-600 text-white'
               : 'bg-[#241a16] hover:bg-[#3a2c24] text-[#f4f0e8]'

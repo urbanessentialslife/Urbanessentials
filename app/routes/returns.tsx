@@ -1,4 +1,5 @@
 import {useRef, useState} from 'react';
+import {buildMeta} from '~/lib/seo';
 import {data, Link, useFetcher, useLoaderData} from 'react-router';
 import type {Route} from './+types/returns';
 import {Breadcrumb} from '~/components/visual/Common/Breadcrumb';
@@ -14,14 +15,14 @@ import {
 } from '~/lib/admin.server';
 import {getCustomerAccessToken} from '~/lib/customerAuth.server';
 
-export const meta: Route.MetaFunction = () => {
-  return [
-    {title: 'Returns & Exchanges | UrbanEssentials'},
-    {
-      name: 'description',
-      content: 'Start a return or exchange request for your UrbanEssentials order.',
-    },
-  ];
+export const meta: Route.MetaFunction = ({matches, location}) => {
+  return buildMeta({
+    matches,
+    location,
+    title: 'Returns & Exchanges',
+    description:
+      'Start a return or exchange for your Urban Essentials order. Unused items can be returned within 7 days of delivery.',
+  });
 };
 
 const CUSTOMER_EMAIL_QUERY = `#graphql

@@ -1,4 +1,5 @@
 import {redirect, useLoaderData} from 'react-router';
+import {buildMeta} from '~/lib/seo';
 import type {Route} from './+types/collections.$handle';
 import {Analytics, useNonce} from '@shopify/hydrogen';
 import {redirectIfHandleIsLocalized} from '~/lib/redirect';
@@ -6,14 +7,22 @@ import {ProductDiscoveryGrid} from '~/components/visual/Shop/ProductDiscoveryGri
 import {ShopPageHeader} from '~/components/visual/Shop/ShopPageHeader';
 import {mapShowcaseCatalog, type ShowcaseCatalogQueryResult} from '~/lib/showcaseCommerce';
 
-export const meta: Route.MetaFunction = ({data}) => {
-  const description =
-    data?.collection.description?.slice(0, 155) ||
-    `Shop the ${data?.collection.title ?? ''} collection at Urban Essentials.`;
-  return [
-    {title: `${data?.collection.title ?? ''} | Urban Essentials`},
-    {name: 'description', content: description},
-  ];
+export const meta: Route.MetaFunction = ({data, matches, location}) => {
+  const collection = data?.collection;
+  const title = collection?.title ?? 'Collection';
+  return buildMeta({
+    matches,
+    location,
+    path: collection ? `/collections/${collection.handle}` : undefined,
+    title: collection?.seo?.title || `${title} – Buy Online in India`,
+    exactTitle: Boolean(collection?.seo?.title),
+    description:
+      collection?.seo?.description ||
+      collection?.description ||
+      `Shop ${title} at Urban Essentials. Premium quality, thoughtful gifting and free delivery across India.`,
+    image: collection?.image?.url,
+    imageAlt: collection?.image?.altText,
+  });
 };
 
 export async function loader({context, params, request}: Route.LoaderArgs) {
@@ -108,6 +117,10 @@ const COLLECTION_QUERY = `#graphql
       handle
       title
       description
+      seo {
+        title
+        description
+      }
       image {
         url
         altText

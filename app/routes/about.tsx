@@ -1,15 +1,16 @@
 import type {Route} from './+types/about';
+import {buildMeta} from '~/lib/seo';
 import {Link} from 'react-router';
 import {Breadcrumb} from '~/components/visual/Common/Breadcrumb';
 
-export const meta: Route.MetaFunction = () => {
-  return [
-    {title: 'About | UrbanEssentials'},
-    {
-      name: 'description',
-      content: 'Architectural everyday tumblers and curated gifts, engineered for daily ritual and gifted as ceremony.',
-    },
-  ];
+export const meta: Route.MetaFunction = ({matches, location}) => {
+  return buildMeta({
+    matches,
+    location,
+    title: 'About Us – Our Story',
+    description:
+      'Urban Essentials curates premium tumblers, water bottles, mugs, home décor and gift sets for everyday rituals — designed to be used daily and gifted with pride. Shipping across India.',
+  });
 };
 
 const VALUES = [

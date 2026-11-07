@@ -21,8 +21,23 @@ import appStyles from '~/styles/app.css?url';
 import tailwindCss from './styles/tailwind.css?url';
 import {PageLayout} from './components/PageLayout';
 import {ThirdPartyAnalytics} from './components/ThirdPartyAnalytics';
+import {DEFAULT_OG_IMAGE, SITE_NAME, absoluteUrl, buildMeta, siteOrigin} from '~/lib/seo';
 
 export type RootLoader = typeof loader;
+
+/**
+ * Fallback SEO for any route that doesn't export its own `meta` (React
+ * Router uses the nearest ancestor's meta). Real pages override this.
+ */
+export const meta: Route.MetaFunction = ({matches, location, error}) =>
+  buildMeta({
+    matches,
+    location,
+    // Error/404 pages must never be indexed.
+    title: error ? 'Page Not Found' : `${SITE_NAME} | Premium Tumblers, Water Bottles & Luxury Gifts`,
+    exactTitle: !error,
+    noindex: Boolean(error),
+  });
 
 /**
  * This is important to avoid re-fetching root queries on sub-navigations
@@ -249,7 +264,7 @@ export function Layout({children}: {children?: React.ReactNode}) {
   const nonce = useNonce();
 
   return (
-    <html lang="en">
+    <html lang="en-IN">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -288,6 +303,8 @@ export default function App() {
     return <Outlet />;
   }
 
+  const siteUrl = siteOrigin([{id: 'root', data}]);
+
   return (
     <Analytics.Provider
       cart={data.cart}
@@ -306,9 +323,11 @@ export default function App() {
           __html: JSON.stringify({
             '@context': 'https://schema.org',
             '@type': 'Organization',
-            name: 'Urban Essentials',
-            url: data.origin,
-            logo: `${data.origin}${favicon}`,
+            name: SITE_NAME,
+            url: siteUrl,
+            logo: absoluteUrl(siteUrl, DEFAULT_OG_IMAGE),
+            ...(data.supportEmail ? {email: data.supportEmail} : {}),
+            ...(data.socialLinks.length ? {sameAs: data.socialLinks.map((l) => l.url)} : {}),
           }).replace(/</g, '\\u003c'),
         }}
       />
@@ -320,11 +339,11 @@ export default function App() {
           __html: JSON.stringify({
             '@context': 'https://schema.org',
             '@type': 'WebSite',
-            name: 'Urban Essentials',
-            url: data.origin,
+            name: SITE_NAME,
+            url: siteUrl,
             potentialAction: {
               '@type': 'SearchAction',
-              target: `${data.origin}/search?q={search_term_string}`,
+              target: `${siteUrl}/search?q={search_term_string}`,
               'query-input': 'required name=search_term_string',
             },
           }).replace(/</g, '\\u003c'),
@@ -355,7 +374,6 @@ export function ErrorBoundary() {
 
   const content = (
     <div className="urbanessentials-showcase min-h-[70vh] bg-[#f4f0e8] text-[#241a16] font-sans flex flex-col items-center justify-center text-center px-6">
-      <title>{errorStatus === 404 ? 'Page Not Found' : 'Something Went Wrong'} | UrbanEssentials</title>
       <span className="text-[11px] uppercase tracking-[0.3em] text-[#6d6560] font-semibold">
         {errorStatus === 404 ? 'Page Not Found' : 'Something Went Wrong'}
       </span>

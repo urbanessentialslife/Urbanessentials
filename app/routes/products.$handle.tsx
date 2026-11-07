@@ -1,8 +1,18 @@
 import { formatAmount } from '~/lib/money';
+import {
+  SITE_NAME,
+  absoluteUrl,
+  breadcrumbJsonLd,
+  buildMeta,
+  cleanBrandTypos,
+  siteOrigin,
+  stripHtml,
+  truncate,
+} from '~/lib/seo';
 import { useEffect, useState } from 'react';
 import { Link, useLoaderData } from 'react-router';
 import type { Route } from './+types/products.$handle';
-import { Analytics, Image, useNonce } from '@shopify/hydrogen';
+import { Analytics, Image } from '@shopify/hydrogen';
 import { useShowcaseCart } from '~/context/ShowcaseCartContext';
 import { useWishlist } from '~/context/WishlistContext';
 import { useRecentlyViewed } from '~/context/RecentlyViewedContext';
@@ -26,12 +36,85 @@ import {
   type RelatedProductsQueryResult,
 } from '~/lib/showcaseCommerce';
 
-export const meta: Route.MetaFunction = ({ data }) => {
-  return [
-    { title: `${data?.product.title ?? 'Product'} | UrbanEssentials` },
-    { name: 'description', content: data?.product.tagline ?? '' },
-    { rel: 'canonical', href: `/products/${data?.product.handle}` },
-  ];
+export const meta: Route.MetaFunction = ({ data, matches }) => {
+  const product = data?.product;
+  if (!product) {
+    return buildMeta({ matches, title: 'Product Not Found', noindex: true });
+  }
+
+  const origin = siteOrigin(matches);
+  const path = `/products/${product.handle}`;
+  const name = cleanBrandTypos(product.title);
+  const inStock = product.variants.some((v) => v.inStock);
+  const images = Array.from(
+    new Set([product.image, ...product.variants.map((v) => v.image)].filter((i): i is string => Boolean(i))),
+  )
+    .slice(0, 8)
+    .map((i) => absoluteUrl(origin, i));
+  const description = data.seo?.description || product.description || product.tagline;
+
+  return buildMeta({
+    matches,
+    path,
+    title: data.seo?.title || name,
+    exactTitle: Boolean(data.seo?.title),
+    description,
+    image: images[0],
+    imageAlt: name,
+    type: 'product',
+    extra: [
+      { property: 'product:price:amount', content: String(product.price) },
+      { property: 'product:price:currency', content: product.currency },
+      { property: 'product:availability', content: inStock ? 'in stock' : 'out of stock' },
+      { property: 'product:brand', content: SITE_NAME },
+    ],
+    jsonLd: [
+      {
+        '@context': 'https://schema.org',
+        '@type': 'Product',
+        name,
+        description: truncate(stripHtml(product.description || product.tagline), 5000),
+        image: images,
+        sku: product.handle,
+        brand: { '@type': 'Brand', name: SITE_NAME },
+        category: product.category,
+        offers: {
+          '@type': 'Offer',
+          url: absoluteUrl(origin, path),
+          priceCurrency: product.currency,
+          price: product.price.toFixed(2),
+          availability: inStock ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+          itemCondition: 'https://schema.org/NewCondition',
+          seller: { '@type': 'Organization', name: SITE_NAME },
+          // Mirrors the FAQ: free delivery across India, dispatch within 24h,
+          // 3–6 business days in transit, 7-day returns. Keep in sync with
+          // app/routes/faq.tsx and the Refund Policy if those ever change.
+          shippingDetails: {
+            '@type': 'OfferShippingDetails',
+            shippingRate: { '@type': 'MonetaryAmount', value: 0, currency: product.currency },
+            shippingDestination: { '@type': 'DefinedRegion', addressCountry: 'IN' },
+            deliveryTime: {
+              '@type': 'ShippingDeliveryTime',
+              handlingTime: { '@type': 'QuantitativeValue', minValue: 0, maxValue: 1, unitCode: 'DAY' },
+              transitTime: { '@type': 'QuantitativeValue', minValue: 3, maxValue: 6, unitCode: 'DAY' },
+            },
+          },
+          hasMerchantReturnPolicy: {
+            '@type': 'MerchantReturnPolicy',
+            applicableCountry: 'IN',
+            returnPolicyCategory: 'https://schema.org/MerchantReturnFiniteReturnWindow',
+            merchantReturnDays: 7,
+            returnMethod: 'https://schema.org/ReturnByMail',
+          },
+        },
+      },
+      breadcrumbJsonLd(origin, [
+        { name: 'Home', path: '/' },
+        { name: 'Shop', path: '/collections/all' },
+        { name, path },
+      ]),
+    ],
+  });
 };
 
 export async function loader({ context, params, request }: Route.LoaderArgs) {
@@ -88,7 +171,12 @@ export async function loader({ context, params, request }: Route.LoaderArgs) {
     relatedProducts = mapRelatedProducts(relatedResult, feeVariants).slice(0, 4);
   }
 
-  return { product, relatedProducts, origin: new URL(request.url).origin };
+  return {
+    product,
+    relatedProducts,
+    seo: result.product.seo ?? null,
+    origin: new URL(request.url).origin,
+  };
 }
 
 export default function Product() {
@@ -96,7 +184,6 @@ export default function Product() {
   const { addItem, openDrawer } = useShowcaseCart();
   const { isWishlisted, toggleWishlist } = useWishlist();
   const { recordView } = useRecentlyViewed();
-  const nonce = useNonce();
 
   const [activeVariant, setActiveVariant] = useState<ProductVariant>(
     () => product.variants.find((v) => v.id === product.defaultVariantId) || product.variants[0],
@@ -561,55 +648,7 @@ export default function Product() {
         }}
       />
 
-      <script
-        type="application/ld+json"
-        nonce={nonce}
-        suppressHydrationWarning
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'Product',
-            name: product.title,
-            description: product.description,
-            image: product.image
-              ? [product.image.startsWith('http') ? product.image : `${origin}${product.image}`]
-              : undefined,
-            sku: product.handle,
-            offers: {
-              '@type': 'Offer',
-              url: `${origin}/products/${product.handle}`,
-              priceCurrency: product.currency,
-              price: product.price,
-              availability:
-                product.availability === 'In Stock'
-                  ? 'https://schema.org/InStock'
-                  : 'https://schema.org/PreOrder',
-            },
-          }).replace(/</g, '\\u003c'),
-        }}
-      />
 
-      <script
-        type="application/ld+json"
-        nonce={nonce}
-        suppressHydrationWarning
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'BreadcrumbList',
-            itemListElement: [
-              { '@type': 'ListItem', position: 1, name: 'Home', item: origin },
-              { '@type': 'ListItem', position: 2, name: 'Shop', item: `${origin}/collections/all` },
-              {
-                '@type': 'ListItem',
-                position: 3,
-                name: product.title,
-                item: `${origin}/products/${product.handle}`,
-              },
-            ],
-          }).replace(/</g, '\\u003c'),
-        }}
-      />
       {/* Fullscreen Lightbox Modal */}
       {lightboxOpen && (
         <div

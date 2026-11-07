@@ -1,4 +1,5 @@
 import {Link, useLoaderData} from 'react-router';
+import {buildMeta} from '~/lib/seo';
 import {Breadcrumb} from '~/components/visual/Common/Breadcrumb';
 import type {Route} from './+types/blogs.$blogHandle._index';
 import {Image, getPaginationVariables} from '@shopify/hydrogen';
@@ -6,16 +7,17 @@ import type {ArticleItemFragment} from 'storefrontapi.generated';
 import {PaginatedResourceSection} from '~/components/PaginatedResourceSection';
 import {redirectIfHandleIsLocalized} from '~/lib/redirect';
 
-export const meta: Route.MetaFunction = ({data}) => {
-  return [
-    {title: data?.blog.seo?.title || `${data?.blog.title ?? ''} | Urban Essentials`},
-    {
-      name: 'description',
-      content:
-        data?.blog.seo?.description ||
-        `Stories and updates from the ${data?.blog.title ?? ''} journal at Urban Essentials.`,
-    },
-  ];
+export const meta: Route.MetaFunction = ({data, matches, location}) => {
+  const blog = data?.blog;
+  return buildMeta({
+    matches,
+    location,
+    title: blog?.seo?.title || blog?.title || 'Journal',
+    exactTitle: Boolean(blog?.seo?.title),
+    description:
+      blog?.seo?.description ||
+      `Gifting ideas, care guides and stories from the ${blog?.title ?? ''} journal at Urban Essentials.`,
+  });
 };
 
 export async function loader(args: Route.LoaderArgs) {

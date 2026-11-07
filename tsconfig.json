@@ -25,7 +25,6 @@
     "allowJs": true,
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
-    "baseUrl": ".",
     "types": [
       "@shopify/oxygen-workers-types",
       "react-router",
@@ -33,8 +32,9 @@
       "vite/client"
     ],
     "paths": {
-      "~/lib/renderPlatform": ["app/lib/renderPlatform.oxygen.tsx"],
-      "~/*": ["app/*"]
+      "~/lib/renderPlatform": ["./app/lib/renderPlatform.oxygen.tsx"],
+      "~/*": ["./app/*"],
+      "storefrontapi.generated": ["./storefrontapi.generated.d.ts"]
     },
     "noEmit": true,
     "rootDirs": [".", "./.react-router/types"],

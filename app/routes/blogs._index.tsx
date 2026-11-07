@@ -1,4 +1,5 @@
 import {Link, useLoaderData} from 'react-router';
+import {buildMeta} from '~/lib/seo';
 import type {Route} from './+types/blogs._index';
 import {getPaginationVariables} from '@shopify/hydrogen';
 import {PaginatedResourceSection} from '~/components/PaginatedResourceSection';
@@ -6,14 +7,14 @@ import type {BlogsQuery} from 'storefrontapi.generated';
 
 type BlogNode = BlogsQuery['blogs']['nodes'][0];
 
-export const meta: Route.MetaFunction = () => {
-  return [
-    {title: `Journal | Urban Essentials`},
-    {
-      name: 'description',
-      content: 'Stories, care guides, and behind-the-scenes notes from Urban Essentials.',
-    },
-  ];
+export const meta: Route.MetaFunction = ({matches, location}) => {
+  return buildMeta({
+    matches,
+    location,
+    title: 'Journal – Gifting Ideas, Care Guides & Stories',
+    description:
+      'Gifting ideas, product care guides and behind-the-scenes stories from Urban Essentials — premium tumblers, bottles, mugs and home décor.',
+  });
 };
 
 export async function loader(args: Route.LoaderArgs) {

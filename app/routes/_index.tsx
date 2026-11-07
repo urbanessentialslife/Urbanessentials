@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import {buildMeta} from '~/lib/seo';
 import { useLoaderData, useRouteLoaderData } from 'react-router';
 import type { Route } from './+types/_index';
 import { ShowroomGate } from '~/components/visual/Showroom/ShowroomGate';
@@ -21,15 +22,15 @@ import {
 // (see ProductCinematicScroll / public/frames/coffee-cup-*).
 const CINEMATIC_PRODUCT_HANDLE = 'the-coffee-cup';
 
-export const meta: Route.MetaFunction = () => {
-  return [
-    { title: 'UrbanEssentials | Lifestyle, Travel & Home' },
-    {
-      name: 'description',
-      content:
-        'Architectural everyday tumblers and bespoke curated gifts. Thoughtful gifts. Made memorable.',
-    },
-  ];
+export const meta: Route.MetaFunction = ({matches, location}) => {
+  return buildMeta({
+    matches,
+    location,
+    title: 'Urban Essentials | Premium Tumblers, Water Bottles & Luxury Gifts',
+    exactTitle: true,
+    description:
+      'Shop premium insulated tumblers, Stanley cups, water bottles, coffee mugs, home décor and luxury gift sets at Urban Essentials. Thoughtful gifts, free delivery across India.',
+  });
 };
 
 export async function loader({ context }: Route.LoaderArgs) {
@@ -104,6 +105,11 @@ export default function Homepage() {
 
   return (
     <>
+      {/* The homepage hero is purely visual (a scroll-driven showroom), so
+          give search engines and screen readers the page's main heading. */}
+      <h1 className="sr-only">
+        Urban Essentials – Premium Tumblers, Water Bottles, Mugs, Home Décor &amp; Luxury Gift Sets
+      </h1>
       <ShowroomGate />
       {/* The light shop sheet rises over the entrance showroom */}
       <div
@@ -111,7 +117,7 @@ export default function Homepage() {
         className="relative z-10 -mt-10 rounded-t-[2.5rem] overflow-hidden bg-white shadow-[0_-30px_60px_rgba(0,0,0,0.35)]"
       >
         {/* Top Sellers right after scrolling main page */}
-        <TopSellers products={catalog.length ? catalog : topSellers} limit={4} />
+        <TopSellers products={catalog.length ? catalog : topSellers} limit={6} />
         {/* Curated Collections Spotlight */}
         <FeaturedCollections categories={rootData?.categories} />
         <ProductDiscoveryGrid

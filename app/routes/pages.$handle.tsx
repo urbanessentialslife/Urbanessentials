@@ -1,19 +1,19 @@
 import {useLoaderData} from 'react-router';
+import {buildMeta, stripHtml} from '~/lib/seo';
 import type {Route} from './+types/pages.$handle';
 import {redirectIfHandleIsLocalized} from '~/lib/redirect';
 import {Breadcrumb} from '~/components/visual/Common/Breadcrumb';
 
-function stripHtml(html: string): string {
-  return html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
-}
 
-export const meta: Route.MetaFunction = ({data}) => {
-  const description =
-    data?.page.seo?.description || stripHtml(data?.page.body ?? '').slice(0, 155);
-  return [
-    {title: data?.page.seo?.title || `${data?.page.title ?? ''} | Urban Essentials`},
-    {name: 'description', content: description},
-  ];
+export const meta: Route.MetaFunction = ({data, matches, location}) => {
+  const page = data?.page;
+  return buildMeta({
+    matches,
+    location,
+    title: page?.seo?.title || page?.title || 'Urban Essentials',
+    exactTitle: Boolean(page?.seo?.title),
+    description: page?.seo?.description || stripHtml(page?.body ?? ''),
+  });
 };
 
 export async function loader(args: Route.LoaderArgs) {

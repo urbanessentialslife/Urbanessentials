@@ -30,7 +30,8 @@ declare global {
     PUBLIC_LINKEDIN_URL?: string;
     /** Shiprocket Fastrr seller domain */
     PUBLIC_SHIPROCKET_SELLER_DOMAIN?: string;
-    /** Shopify Checkout domain for consent management */
-PUBLIC_CHECKOUT_DOMAIN?: string;
+    /** Shopify Checkout domain for consent management. Required (non-optional)
+     * to match Hydrogen's own HydrogenEnv type. */
+    PUBLIC_CHECKOUT_DOMAIN: string;
   }
 }

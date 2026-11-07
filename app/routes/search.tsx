@@ -1,4 +1,5 @@
 import {useLoaderData} from 'react-router';
+import {buildMeta} from '~/lib/seo';
 import type {Route} from './+types/search';
 import {getPaginationVariables, Analytics} from '@shopify/hydrogen';
 import {SearchForm} from '~/components/SearchForm';
@@ -14,11 +15,13 @@ import type {
   PredictiveSearchQuery,
 } from 'storefrontapi.generated';
 
-export const meta: Route.MetaFunction = () => {
-  return [
-    {title: `Search | Urban Essentials`},
-    {name: 'robots', content: 'noindex'},
-  ];
+export const meta: Route.MetaFunction = ({matches, location}) => {
+  return buildMeta({
+    matches,
+    location,
+    title: 'Search',
+    noindex: true,
+  });
 };
 
 export async function loader({request, context}: Route.LoaderArgs) {
