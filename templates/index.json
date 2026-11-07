@@ -18,7 +18,7 @@
         "show_categories": false,
         "categories_count": 6,
         "trust_1": "Free delivery across India",
-        "trust_2": "7-day easy returns",
+        "trust_2": "Dispatch in 24 hours",
         "trust_3": "Secure checkout",
         "trust_4": "Personalised names",
         "accent": "#dfc08a"
@@ -36,7 +36,7 @@
         "perk-2": {
           "type": "perk",
           "settings": {
-            "text": "7-day easy returns"
+            "text": "Dispatch in 24 hours"
           }
         },
         "perk-3": {
@@ -229,42 +229,10 @@
     "why_us": {
       "type": "ue-why-us",
       "blocks": {
-        "reason-1": {
-          "type": "reason",
-          "settings": {
-            "emoji": "🚚",
-            "title": "Free delivery",
-            "text": "On every order, anywhere in India.",
-            "color": "#dcefff"
-          }
-        },
-        "reason-2": {
-          "type": "reason",
-          "settings": {
-            "emoji": "↩️",
-            "title": "7-day easy returns",
-            "text": "Changed your mind? Send it back within 7 days.",
-            "color": "#fde2e4"
-          }
-        },
-        "reason-3": {
-          "type": "reason",
-          "settings": {
-            "emoji": "✍️",
-            "title": "Make it personal",
-            "text": "Add a name to select tumblers and bottles.",
-            "color": "#fff1c1"
-          }
-        },
-        "reason-4": {
-          "type": "reason",
-          "settings": {
-            "emoji": "🔒",
-            "title": "Safe & secure",
-            "text": "Checkout powered by Shopify.",
-            "color": "#d8f3e8"
-          }
-        }
+        "reason-1": { "type": "reason", "settings": { "icon": "check", "title": "Original design", "text": "Food-grade steel & borosilicate" } },
+        "reason-2": { "type": "reason", "settings": { "icon": "clock", "title": "Fast dispatch", "text": "Ships within 24 business hours" } },
+        "reason-3": { "type": "reason", "settings": { "icon": "box", "title": "Luxury gifting", "text": "Signature box packaging" } },
+        "reason-4": { "type": "reason", "settings": { "icon": "shield", "title": "Verified safe checkout", "text": "UPI, Cards & Netbanking via Fastrr" } }
       },
       "block_order": [
         "reason-1",

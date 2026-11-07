@@ -1,12 +1,7 @@
 {% comment %}
-  Urban Essentials — "Why gifting with us is easy"
-  Pastel reason cards (emoji, title, short text).
+  Urban Essentials — "Why shop with us"
+  One calm panel with 4 trust points: round beige icon, bold caps title, small grey line.
 {% endcomment %}
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&display=swap">
-
 
 {%- style -%}
   #ue-why-{{ section.id }} { --ue-why-bg: {{ section.settings.background }}; }
@@ -14,13 +9,28 @@
 
 <section id="ue-why-{{ section.id }}" class="ue-why" aria-labelledby="ue-why-heading-{{ section.id }}">
   <div class="page-width">
-    <h2 id="ue-why-heading-{{ section.id }}" class="ue-why__title ue-heading">{{ section.settings.heading }}{% if section.settings.heading_accent != blank %} <em>{{ section.settings.heading_accent }}</em>{% endif %}</h2>
-    <ul class="ue-why__grid">
+    {%- if section.settings.heading != blank -%}
+      <h2 id="ue-why-heading-{{ section.id }}" class="ue-why__title ue-heading">{{ section.settings.heading }}{% if section.settings.heading_accent != blank %} <em>{{ section.settings.heading_accent }}</em>{% endif %}</h2>
+    {%- endif -%}
+    <ul class="ue-why__panel">
       {%- for block in section.blocks -%}
-        <li class="ue-why__card" style="background: {{ block.settings.color }};" {{ block.shopify_attributes }}>
-          <span class="ue-why__emoji" aria-hidden="true">{{ block.settings.emoji }}</span>
-          <h3 class="ue-why__card-title ue-font-playful">{{ block.settings.title }}</h3>
-          <p class="ue-why__text">{{ block.settings.text }}</p>
+        <li class="ue-why__item" {{ block.shopify_attributes }}>
+          <span class="ue-why__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              {%- case block.settings.icon -%}
+                {%- when 'clock' -%}<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>
+                {%- when 'box' -%}<path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/><path d="M4 7.5l8 4.5 8-4.5M12 12v9"/>
+                {%- when 'shield' -%}<path d="M12 3l7 3v5.5c0 4.3-2.9 8-7 9.5-4.1-1.5-7-5.2-7-9.5V6l7-3z"/><path d="M9 12l2 2 4-4"/>
+                {%- when 'truck' -%}<path d="M3 6h11v9H3zM14 9h4l3 3v3h-7"/><circle cx="7" cy="17" r="1.6"/><circle cx="17" cy="17" r="1.6"/>
+                {%- when 'lock' -%}<rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8 10.5V7.5a4 4 0 018 0v3"/>
+                {%- when 'star' -%}<path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9L12 3.5z"/>
+                {%- when 'heart' -%}<path d="M12 20s-7.5-4.6-7.5-10A4.3 4.3 0 0112 7.3 4.3 4.3 0 0119.5 10c0 5.4-7.5 10-7.5 10z"/>
+                {%- else -%}<path d="M6 12.5l4 4 8-9"/>
+              {%- endcase -%}
+            </svg>
+          </span>
+          <h3 class="ue-why__item-title">{{ block.settings.title }}</h3>
+          <p class="ue-why__item-text">{{ block.settings.text }}</p>
         </li>
       {%- endfor -%}
     </ul>
@@ -28,18 +38,22 @@
 </section>
 
 {% stylesheet %}
-  .ue-font-playful { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; letter-spacing: 0; }
   .ue-why { background: var(--ue-why-bg); padding: 4rem 0; }
   @media screen and (min-width: 750px) { .ue-why { padding: 6rem 0; } }
-  .ue-why__title { margin: 0 0 2.8rem; text-align: center; font-size: clamp(2.4rem, 4vw, 3.8rem); font-weight: 600; }
-  .ue-why__grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.2rem; }
-  @media screen and (min-width: 990px) { .ue-why__grid { grid-template-columns: repeat(4, 1fr); gap: 2rem; } }
-  .ue-why__card { padding: 2rem; border-radius: 2.4rem; color: #2b2220; }
-  @media screen and (min-width: 750px) { .ue-why__card { padding: 2.4rem; } }
-  .ue-why__emoji { font-size: 3.6rem; line-height: 1; }
-  .ue-why__card-title { margin: 1.2rem 0 .4rem; font-size: 1.7rem; font-weight: 600; }
-  @media screen and (min-width: 750px) { .ue-why__card-title { font-size: 2rem; } }
-  .ue-why__text { margin: 0; font-size: 1.3rem; line-height: 1.5; opacity: .8; }
+  .ue-why__title { margin: 0 0 2.4rem; text-align: center; }
+  .ue-why__panel { list-style: none; margin: 0 auto; padding: 2.8rem 1.2rem; max-width: 110rem; display: grid; grid-template-columns: repeat(2, 1fr); row-gap: 3rem; column-gap: 1rem;
+    background: #fbf9f5; border: 1px solid rgba(36,26,22,.1); border-radius: 2.4rem; box-shadow: 0 10px 30px rgba(36,26,22,.05); }
+  @media screen and (min-width: 990px) { .ue-why__panel { grid-template-columns: repeat(4, 1fr); padding: 4rem 2rem; } }
+  .ue-why__item { display: flex; flex-direction: column; align-items: center; text-align: center; }
+  .ue-why__icon { display: flex; align-items: center; justify-content: center; width: 4.6rem; height: 4.6rem; border-radius: 50%; background: #efe7da; color: #6b5a4a; margin-bottom: 1.4rem; }
+  .ue-why__icon svg { width: 2rem; height: 2rem; }
+  .ue-why__item-title { margin: 0 0 .5rem; font-family: var(--font-body-family); font-size: 1.25rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #241a16; line-height: 1.3; }
+  .ue-why__item-text { margin: 0; font-size: 1.15rem; line-height: 1.45; color: #7d7068; }
+  @media screen and (min-width: 750px) {
+    .ue-why__icon { width: 5.2rem; height: 5.2rem; }
+    .ue-why__item-title { font-size: 1.45rem; }
+    .ue-why__item-text { font-size: 1.3rem; }
+  }
 {% endstylesheet %}
 
 {% schema %}
@@ -48,19 +62,91 @@
   "tag": "div",
   "class": "section",
   "settings": [
-    { "type": "text", "id": "heading", "label": "Heading", "default": "Why gifting with us is easy 💛" },
-    { "type": "text", "id": "heading_accent", "label": "Heading accent (gold italic)" },
-    { "type": "color", "id": "background", "label": "Background", "default": "#ffffff" }
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Why shop with us"
+    },
+    {
+      "type": "text",
+      "id": "heading_accent",
+      "label": "Heading accent (gold italic)"
+    },
+    {
+      "type": "color",
+      "id": "background",
+      "label": "Background",
+      "default": "#f4f0e8"
+    }
   ],
   "blocks": [
     {
       "type": "reason",
       "name": "Reason",
       "settings": [
-        { "type": "text", "id": "emoji", "label": "Emoji", "default": "🚚" },
-        { "type": "text", "id": "title", "label": "Title", "default": "Free delivery" },
-        { "type": "text", "id": "text", "label": "Text", "default": "On every order, anywhere in India." },
-        { "type": "color", "id": "color", "label": "Card colour", "default": "#dcefff" }
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "default": "check",
+          "options": [
+            {
+              "value": "check",
+              "label": "Tick"
+            },
+            {
+              "value": "clock",
+              "label": "Clock"
+            },
+            {
+              "value": "box",
+              "label": "Box"
+            },
+            {
+              "value": "shield",
+              "label": "Shield"
+            },
+            {
+              "value": "truck",
+              "label": "Truck"
+            },
+            {
+              "value": "lock",
+              "label": "Lock"
+            },
+            {
+              "value": "star",
+              "label": "Star"
+            },
+            {
+              "value": "heart",
+              "label": "Heart"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Original design"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "Food-grade steel & borosilicate"
+        },
+        {
+          "type": "text",
+          "id": "emoji",
+          "label": "(old) Emoji – not used"
+        },
+        {
+          "type": "color",
+          "id": "color",
+          "label": "(old) Colour – not used"
+        }
       ]
     }
   ],
@@ -68,10 +154,18 @@
     {
       "name": "UE Why us",
       "blocks": [
-        { "type": "reason", "settings": { "emoji": "🚚", "title": "Free delivery", "text": "On every order, anywhere in India.", "color": "#dcefff" } },
-        { "type": "reason", "settings": { "emoji": "↩️", "title": "7-day easy returns", "text": "Changed your mind? Send it back within 7 days.", "color": "#fde2e4" } },
-        { "type": "reason", "settings": { "emoji": "✍️", "title": "Make it personal", "text": "Add a name to select tumblers and bottles.", "color": "#fff1c1" } },
-        { "type": "reason", "settings": { "emoji": "🔒", "title": "Safe & secure", "text": "Checkout powered by Shopify.", "color": "#d8f3e8" } }
+        {
+          "type": "reason"
+        },
+        {
+          "type": "reason"
+        },
+        {
+          "type": "reason"
+        },
+        {
+          "type": "reason"
+        }
       ]
     }
   ]
