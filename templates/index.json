@@ -13,7 +13,7 @@
         "button_1_link": "#top-sellers",
         "button_2_label": "Explore all gifts",
         "button_2_link": "/collections/all",
-        "show_categories": true,
+        "show_categories": false,
         "categories_count": 6,
         "trust_1": "Free delivery across India",
         "trust_2": "7-day easy returns",

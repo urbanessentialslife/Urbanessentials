@@ -15,12 +15,12 @@
     {%- if section.settings.image_mobile != blank -%}
       <source media="(max-width: 749px)" srcset="{{ section.settings.image_mobile | image_url: width: 900 }}">
     {%- else -%}
-      <source media="(max-width: 749px)" srcset="{{ 'ue-hero-boutique-mobile.webp' | asset_url }}">
+      <source media="(max-width: 749px)" srcset="{{ 'ue-hero-storefront-mobile.webp' | asset_url }}">
     {%- endif -%}
     {%- if section.settings.image != blank -%}
       {{ section.settings.image | image_url: width: 2400 | image_tag: loading: 'eager', fetchpriority: 'high', widths: '1000, 1600, 2400', sizes: '100vw', class: 'ue-bhero__img', alt: section.settings.image.alt }}
     {%- else -%}
-      <img src="{{ 'ue-hero-boutique-desktop.webp' | asset_url }}" alt="Inside the Urban Essentials boutique — marble shelves of curated tumblers, ceramics and home décor" width="1920" height="1080" fetchpriority="high" class="ue-bhero__img">
+      <img src="{{ 'ue-hero-storefront-desktop.webp' | asset_url }}" alt="The Urban Essentials store — white marble storefront with the UE logo above glass doors" width="1920" height="1078" fetchpriority="high" class="ue-bhero__img">
     {%- endif -%}
   </picture>
   <div class="ue-bhero__shade ue-bhero__shade--bottom" aria-hidden="true"></div>
@@ -85,6 +85,8 @@
 
 {% stylesheet %}
   .ue-bhero__pills + .ue-bhero__buttons { margin-top: 1.6rem; }
+  .ue-bhero.ue-bhero--photo .ue-bhero__img { object-position: 50% 30%; }
+  @media screen and (max-width: 749px) { .ue-bhero.ue-bhero--photo .ue-bhero__img { object-position: 50% 0%; } }
   /* Photo-only mode (no heading on the photo): lighter photo, dark only behind the buttons */
   .ue-bhero.ue-bhero--photo .ue-bhero__shade--bottom { background: linear-gradient(to top, rgba(18,13,11,.92) 0%, rgba(18,13,11,.55) 28%, rgba(18,13,11,.08) 55%, rgba(18,13,11,0) 100%); }
   .ue-bhero.ue-bhero--photo .ue-bhero__shade--side { display: none; }
