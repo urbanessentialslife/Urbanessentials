@@ -1,19 +1,12 @@
-node_modules
-/.cache
-/build
-/dist
-/public/build
-/.mf
-.env
+# OS generated files #
+######################
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
 .shopify
-.react-router
-*.tsbuildinfo
-.claude/scheduled_tasks.lock
-.worktrees/
-/data
-.vercel
-.env*
-
-# Local notes (not pushed)
-GETTING_STARTED.md
-docs/seo-checklist.md
+node_modules
+*.zip

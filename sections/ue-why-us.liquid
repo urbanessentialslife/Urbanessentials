@@ -1,0 +1,78 @@
+{% comment %}
+  Urban Essentials — "Why gifting with us is easy"
+  Pastel reason cards (emoji, title, short text).
+{% endcomment %}
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&display=swap">
+
+
+{%- style -%}
+  #ue-why-{{ section.id }} { --ue-why-bg: {{ section.settings.background }}; }
+{%- endstyle -%}
+
+<section id="ue-why-{{ section.id }}" class="ue-why" aria-labelledby="ue-why-heading-{{ section.id }}">
+  <div class="page-width">
+    <h2 id="ue-why-heading-{{ section.id }}" class="ue-why__title ue-font-playful">{{ section.settings.heading }}</h2>
+    <ul class="ue-why__grid">
+      {%- for block in section.blocks -%}
+        <li class="ue-why__card" style="background: {{ block.settings.color }};" {{ block.shopify_attributes }}>
+          <span class="ue-why__emoji" aria-hidden="true">{{ block.settings.emoji }}</span>
+          <h3 class="ue-why__card-title ue-font-playful">{{ block.settings.title }}</h3>
+          <p class="ue-why__text">{{ block.settings.text }}</p>
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</section>
+
+{% stylesheet %}
+  .ue-font-playful { font-family: 'Fredoka', var(--font-heading-family), sans-serif; letter-spacing: -0.01em; }
+  .ue-why { background: var(--ue-why-bg); padding: 4rem 0; }
+  @media screen and (min-width: 750px) { .ue-why { padding: 6rem 0; } }
+  .ue-why__title { margin: 0 0 2.8rem; text-align: center; font-size: clamp(2.4rem, 4vw, 3.8rem); font-weight: 600; }
+  .ue-why__grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.2rem; }
+  @media screen and (min-width: 990px) { .ue-why__grid { grid-template-columns: repeat(4, 1fr); gap: 2rem; } }
+  .ue-why__card { padding: 2rem; border-radius: 2.4rem; color: #2b2220; }
+  @media screen and (min-width: 750px) { .ue-why__card { padding: 2.4rem; } }
+  .ue-why__emoji { font-size: 3.6rem; line-height: 1; }
+  .ue-why__card-title { margin: 1.2rem 0 .4rem; font-size: 1.7rem; font-weight: 600; }
+  @media screen and (min-width: 750px) { .ue-why__card-title { font-size: 2rem; } }
+  .ue-why__text { margin: 0; font-size: 1.3rem; line-height: 1.5; opacity: .8; }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "UE Why us",
+  "tag": "div",
+  "class": "section",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Why gifting with us is easy 💛" },
+    { "type": "color", "id": "background", "label": "Background", "default": "#ffffff" }
+  ],
+  "blocks": [
+    {
+      "type": "reason",
+      "name": "Reason",
+      "settings": [
+        { "type": "text", "id": "emoji", "label": "Emoji", "default": "🚚" },
+        { "type": "text", "id": "title", "label": "Title", "default": "Free delivery" },
+        { "type": "text", "id": "text", "label": "Text", "default": "On every order, anywhere in India." },
+        { "type": "color", "id": "color", "label": "Card colour", "default": "#dcefff" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "UE Why us",
+      "blocks": [
+        { "type": "reason", "settings": { "emoji": "🚚", "title": "Free delivery", "text": "On every order, anywhere in India.", "color": "#dcefff" } },
+        { "type": "reason", "settings": { "emoji": "↩️", "title": "7-day easy returns", "text": "Changed your mind? Send it back within 7 days.", "color": "#fde2e4" } },
+        { "type": "reason", "settings": { "emoji": "✍️", "title": "Make it personal", "text": "Add a name to select tumblers and bottles.", "color": "#fff1c1" } },
+        { "type": "reason", "settings": { "emoji": "🔒", "title": "Safe & secure", "text": "Checkout powered by Shopify.", "color": "#d8f3e8" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

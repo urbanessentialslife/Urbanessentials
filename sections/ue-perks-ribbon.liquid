@@ -1,0 +1,78 @@
+{% comment %}
+  Urban Essentials — Perks ribbon
+  A slowly scrolling strip of store benefits. Items are rendered twice so the
+  -50% marquee loops seamlessly; the second copy is hidden from screen readers.
+{% endcomment %}
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&display=swap">
+
+
+{%- style -%}
+  #ue-ribbon-{{ section.id }} {
+    --ue-ribbon-bg: {{ section.settings.background }};
+    --ue-ribbon-text: {{ section.settings.text_color }};
+    --ue-ribbon-dot: {{ section.settings.separator_color }};
+    --ue-ribbon-speed: {{ section.settings.speed }}s;
+  }
+{%- endstyle -%}
+
+<div id="ue-ribbon-{{ section.id }}" class="ue-ribbon" aria-label="Store benefits">
+  <ul class="ue-ribbon__track">
+    {%- for pass in (1..2) -%}
+      {%- for block in section.blocks -%}
+        <li {% if pass == 2 %}aria-hidden="true"{% endif %} {% if pass == 1 %}{{ block.shopify_attributes }}{% endif %}>
+          <span>{{ block.settings.text }}</span>
+          <span class="ue-ribbon__dot" aria-hidden="true">{{ section.settings.separator }}</span>
+        </li>
+      {%- endfor -%}
+    {%- endfor -%}
+  </ul>
+</div>
+
+{% stylesheet %}
+  .ue-ribbon { overflow: hidden; background: var(--ue-ribbon-bg); color: var(--ue-ribbon-text); padding: 1.2rem 0; }
+  .ue-ribbon__track { display: flex; width: max-content; gap: 3.2rem; margin: 0; padding: 0; list-style: none; white-space: nowrap; font-size: 1.4rem; font-weight: 600; animation: ue-marquee var(--ue-ribbon-speed, 30s) linear infinite; }
+  .ue-ribbon__track li { display: flex; align-items: center; gap: 3.2rem; }
+  .ue-ribbon__dot { color: var(--ue-ribbon-dot); }
+  .ue-ribbon:hover .ue-ribbon__track { animation-play-state: paused; }
+  @keyframes ue-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  @media (prefers-reduced-motion: reduce) { .ue-ribbon__track { animation: none; } }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "UE Perks ribbon",
+  "tag": "div",
+  "class": "section",
+  "settings": [
+    { "type": "text", "id": "separator", "label": "Separator", "default": "✿" },
+    { "type": "range", "id": "speed", "label": "Loop duration (higher = slower)", "min": 10, "max": 60, "step": 2, "unit": "s", "default": 30 },
+    { "type": "color", "id": "background", "label": "Background", "default": "#2b2220" },
+    { "type": "color", "id": "text_color", "label": "Text", "default": "#fff8f1" },
+    { "type": "color", "id": "separator_color", "label": "Separator colour", "default": "#ffb4a8" }
+  ],
+  "blocks": [
+    {
+      "type": "perk",
+      "name": "Perk",
+      "settings": [
+        { "type": "text", "id": "text", "label": "Text", "default": "Free delivery across India" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "UE Perks ribbon",
+      "blocks": [
+        { "type": "perk", "settings": { "text": "Free delivery across India" } },
+        { "type": "perk", "settings": { "text": "7-day easy returns" } },
+        { "type": "perk", "settings": { "text": "Personalised names on select gifts" } },
+        { "type": "perk", "settings": { "text": "Secure checkout" } },
+        { "type": "perk", "settings": { "text": "Premium quality, everyday prices" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
