@@ -248,3 +248,35 @@ h1, h2, .h0, .h1, .h2 {
 @media screen and (max-width: 399px) {
   .header__icons .header__icon--account { display: none !important; }
 }
+
+/* Equal-height product cards, button always at the bottom */
+.grid__item > product-component { display: block; height: 100%; }
+.grid__item .card-wrapper { height: 100%; }
+.grid__item .card--card { height: 100%; }
+.grid__item .card--card .card__content { display: flex; flex-direction: column; }
+.grid__item .card--card .card__content .card__information { flex: 1 1 auto; }
+.grid__item .card--card .quick-add { margin-top: auto; }
+@media screen and (max-width: 749px) {
+  .grid__item .price { display: flex; flex-wrap: wrap; align-items: baseline; gap: .2rem .6rem; font-size: 1.3rem; line-height: 1.3; }
+  .grid__item .price--on-sale .price__sale { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 .6rem; }
+  .grid__item .price s.price-item--regular { font-size: 1.1rem; opacity: .7; }
+  .grid__item .quick-add__submit { min-height: 3.8rem; padding: 0 1rem; font-size: 1.15rem; letter-spacing: .08em; white-space: nowrap; width: 100%; }
+  .grid__item .quick-add__submit span { white-space: nowrap; }
+}
+
+/* Elegant section headings: serif + gold italic accent word */
+.ue-heading, .collection__title .title, .collection__title.title-wrapper h2 {
+  font-family: 'Cormorant Garamond', Georgia, serif !important;
+  font-weight: 500 !important;
+  font-size: clamp(3rem, 5vw, 4.6rem) !important;
+  letter-spacing: .01em !important;
+  line-height: 1.1;
+  color: #241a16;
+}
+.ue-heading em, .collection__title .title em {
+  font-style: italic;
+  color: #b08d57;
+  font-weight: 500;
+}
+.ue-cats__all, .ue-top__all { color: #b08d57 !important; font-weight: 600; letter-spacing: .04em; }
+.ue-cats__all:hover, .ue-top__all:hover { color: #241a16 !important; }

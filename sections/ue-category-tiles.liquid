@@ -20,7 +20,7 @@
 <section id="ue-cats-{{ section.id }}" class="ue-cats" aria-labelledby="ue-cats-heading-{{ section.id }}">
   <div class="page-width">
     <div class="ue-cats__head">
-      <h2 id="ue-cats-heading-{{ section.id }}" class="ue-cats__title ue-font-playful">{{ section.settings.heading }}</h2>
+      <h2 id="ue-cats-heading-{{ section.id }}" class="ue-cats__title ue-heading">{{ section.settings.heading }}{% if section.settings.heading_accent != blank %} <em>{{ section.settings.heading_accent }}</em>{% endif %}</h2>
       {%- if section.settings.link_label != blank -%}
         <a class="ue-cats__all" href="{{ section.settings.link | default: routes.collections_url }}">{{ section.settings.link_label }}</a>
       {%- endif -%}
@@ -66,7 +66,7 @@
 </section>
 
 {% stylesheet %}
-  .ue-font-playful { font-family: 'Fredoka', var(--font-heading-family), sans-serif; letter-spacing: -0.01em; }
+  .ue-font-playful { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; letter-spacing: 0; }
   .ue-cats { background: var(--ue-cats-bg); padding: 4rem 0; }
   @media screen and (min-width: 750px) { .ue-cats { padding: 6rem 0; } }
   .ue-cats__head { display: flex; align-items: flex-end; justify-content: space-between; gap: 1.6rem; margin-bottom: 2.8rem; }
@@ -92,6 +92,7 @@
   "class": "section",
   "settings": [
     { "type": "text", "id": "heading", "label": "Heading", "default": "Pick a category 👇" },
+    { "type": "text", "id": "heading_accent", "label": "Heading accent (gold italic)" },
     { "type": "text", "id": "link_label", "label": "Link label", "default": "See all →" },
     { "type": "url", "id": "link", "label": "Link", "info": "Defaults to all collections." },
     { "type": "color", "id": "background", "label": "Background", "default": "#ffffff" }

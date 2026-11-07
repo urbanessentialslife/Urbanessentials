@@ -18,7 +18,7 @@
 <span id="budget" class="ue-anchor" aria-hidden="true"></span>
 <section id="ue-budget-{{ section.id }}" class="ue-budget" aria-labelledby="ue-budget-heading-{{ section.id }}">
   <div class="page-width">
-    <h2 id="ue-budget-heading-{{ section.id }}" class="ue-budget__title ue-font-playful">{{ section.settings.heading }}</h2>
+    <h2 id="ue-budget-heading-{{ section.id }}" class="ue-budget__title ue-heading">{{ section.settings.heading }}{% if section.settings.heading_accent != blank %} <em>{{ section.settings.heading_accent }}</em>{% endif %}</h2>
     {%- if section.settings.subheading != blank -%}
       <p class="ue-budget__sub">{{ section.settings.subheading }}</p>
     {%- endif -%}
@@ -53,7 +53,7 @@
 
 {% stylesheet %}
   .ue-anchor { display: block; position: relative; top: -8rem; visibility: hidden; }
-  .ue-font-playful { font-family: 'Fredoka', var(--font-heading-family), sans-serif; letter-spacing: -0.01em; }
+  .ue-font-playful { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; letter-spacing: 0; }
   .ue-budget { background: var(--ue-budget-bg); padding: 4rem 0; }
   @media screen and (min-width: 750px) { .ue-budget { padding: 6rem 0; } }
   .ue-budget__title { margin: 0 0 .6rem; font-size: clamp(2.4rem, 4vw, 3.8rem); font-weight: 600; }
@@ -77,6 +77,7 @@
   "class": "section",
   "settings": [
     { "type": "text", "id": "heading", "label": "Heading", "default": "Gifts for every budget" },
+    { "type": "text", "id": "heading_accent", "label": "Heading accent (gold italic)" },
     { "type": "text", "id": "subheading", "label": "Subheading", "default": "Tap a budget and we'll show you everything that fits." },
     { "type": "color", "id": "background", "label": "Background", "default": "#fff8f1" }
   ],

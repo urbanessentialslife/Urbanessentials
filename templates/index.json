@@ -72,7 +72,8 @@
     "categories": {
       "type": "ue-category-tiles",
       "settings": {
-        "heading": "Pick a category 👇",
+        "heading": "Explore by",
+        "heading_accent": "Collection",
         "link_label": "See all →",
         "background": "#f4f0e8"
       }
@@ -127,7 +128,8 @@
       ],
       "settings": {
         "eyebrow": "Loved by our customers",
-        "heading": "Top Sellers ⭐",
+        "heading": "Our",
+        "heading_accent": "Top Sellers",
         "link_label": "Shop all →",
         "limit": 6,
         "columns_desktop": 4,
@@ -190,7 +192,8 @@
         "budget-4"
       ],
       "settings": {
-        "heading": "Gifts for every budget",
+        "heading": "Gifts for every",
+        "heading_accent": "Budget",
         "subheading": "Tap a budget and we'll show you everything that fits.",
         "background": "#fff8f1"
       }
@@ -198,7 +201,7 @@
     "featured_gifts": {
       "type": "featured-collection",
       "settings": {
-        "title": "Featured Gifts",
+        "title": "Featured <em>Gifts</em>",
         "heading_size": "h1",
         "description": "",
         "show_description": false,
@@ -270,7 +273,8 @@
         "reason-4"
       ],
       "settings": {
-        "heading": "Why gifting with us is easy 💛",
+        "heading": "Why gift with",
+        "heading_accent": "Urban Essentials",
         "background": "#f4f0e8"
       }
     }
