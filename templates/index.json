@@ -138,7 +138,6 @@
       "settings": {
         "heading": "Pick a category 👇",
         "link_label": "See all →",
-        "link": "",
         "background": "#ffffff"
       }
     },
@@ -194,7 +193,6 @@
         "eyebrow": "Loved by our customers",
         "heading": "Top Sellers ⭐",
         "link_label": "Shop all →",
-        "link": "",
         "limit": 6,
         "columns_desktop": 4,
         "quick_add": "standard",
