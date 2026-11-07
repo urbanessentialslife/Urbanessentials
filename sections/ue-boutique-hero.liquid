@@ -10,7 +10,7 @@
   #ue-bhero-{{ section.id }} { --ue-bh-accent: {{ section.settings.accent }}; }
 {%- endstyle -%}
 
-<section id="ue-bhero-{{ section.id }}" class="ue-bhero" aria-label="{{ section.settings.heading_1 | escape }}">
+<section id="ue-bhero-{{ section.id }}" class="ue-bhero{% unless section.settings.show_text %} ue-bhero--photo{% endunless %}" aria-label="{{ section.settings.heading_1 | escape }}">
   <picture class="ue-bhero__media">
     {%- if section.settings.image_mobile != blank -%}
       <source media="(max-width: 749px)" srcset="{{ section.settings.image_mobile | image_url: width: 900 }}">
@@ -28,24 +28,15 @@
 
   <div class="ue-bhero__inner page-width">
     <div class="ue-bhero__copy">
-      <h1 class="ue-bhero__title">
+      <h1 class="ue-bhero__title{% unless section.settings.show_text %} visually-hidden{% endunless %}">
         {%- if section.settings.eyebrow != blank -%}<span class="ue-bhero__eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
         <span class="ue-bhero__line1">{{ section.settings.heading_1 }}</span>
         {%- if section.settings.heading_2 != blank -%}<span class="ue-bhero__line2">{{ section.settings.heading_2 }}</span>{%- endif -%}
       </h1>
 
-      {%- if section.settings.text != blank -%}
+      {%- if section.settings.show_text and section.settings.text != blank -%}
         <div class="ue-bhero__text">{{ section.settings.text }}</div>
       {%- endif -%}
-
-      <div class="ue-bhero__buttons">
-        {%- if section.settings.button_1_label != blank -%}
-          <a class="ue-bhero__btn ue-bhero__btn--gold" href="{{ section.settings.button_1_link | default: '#top-sellers' }}">{{ section.settings.button_1_label }}</a>
-        {%- endif -%}
-        {%- if section.settings.button_2_label != blank -%}
-          <a class="ue-bhero__btn ue-bhero__btn--ghost" href="{{ section.settings.button_2_link | default: routes.all_products_collection_url }}">{{ section.settings.button_2_label }}</a>
-        {%- endif -%}
-      </div>
 
       {%- if section.settings.show_categories -%}
         <nav class="ue-bhero__pills" aria-label="Shop by category">
@@ -58,8 +49,18 @@
           {%- endfor -%}
         </nav>
       {%- endif -%}
+
+      <div class="ue-bhero__buttons">
+        {%- if section.settings.button_1_label != blank -%}
+          <a class="ue-bhero__btn ue-bhero__btn--gold" href="{{ section.settings.button_1_link | default: '#top-sellers' }}">{{ section.settings.button_1_label }}</a>
+        {%- endif -%}
+        {%- if section.settings.button_2_label != blank -%}
+          <a class="ue-bhero__btn ue-bhero__btn--ghost" href="{{ section.settings.button_2_link | default: routes.all_products_collection_url }}">{{ section.settings.button_2_label }}</a>
+        {%- endif -%}
+      </div>
     </div>
 
+    {%- if section.settings.show_trust -%}
     <ul class="ue-bhero__trust">
       <li>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12"/></svg>
@@ -78,10 +79,15 @@
         <span>{{ section.settings.trust_4 }}</span>
       </li>
     </ul>
+    {%- endif -%}
   </div>
 </section>
 
 {% stylesheet %}
+  .ue-bhero__pills + .ue-bhero__buttons { margin-top: 1.6rem; }
+  /* Photo-only mode (no heading on the photo): lighter photo, dark only behind the buttons */
+  .ue-bhero.ue-bhero--photo .ue-bhero__shade--bottom { background: linear-gradient(to top, rgba(18,13,11,.92) 0%, rgba(18,13,11,.55) 28%, rgba(18,13,11,.08) 55%, rgba(18,13,11,0) 100%); }
+  .ue-bhero.ue-bhero--photo .ue-bhero__shade--side { display: none; }
   .ue-bhero { position: relative; display: flex; align-items: flex-end; min-height: calc(100svh - 10rem); overflow: hidden; background: #1a1411; color: #fdfaf5; }
   @media screen and (min-width: 990px) { .ue-bhero { min-height: 82vh; } }
   .ue-bhero__media, .ue-bhero__img { position: absolute; inset: 0; width: 100%; height: 100%; }
@@ -140,6 +146,8 @@
   "tag": "div",
   "class": "section",
   "settings": [
+    { "type": "checkbox", "id": "show_text", "label": "Show heading & text on photo", "default": true },
+    { "type": "checkbox", "id": "show_trust", "label": "Show trust bar", "default": true },
     { "type": "image_picker", "id": "image", "label": "Image (desktop)", "info": "Defaults to the boutique photo." },
     { "type": "image_picker", "id": "image_mobile", "label": "Image (mobile, optional)" },
     { "type": "text", "id": "eyebrow", "label": "Small label", "default": "Premium tumblers · Bottles · Home décor" },

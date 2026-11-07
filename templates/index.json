@@ -3,6 +3,8 @@
     "hero": {
       "type": "ue-boutique-hero",
       "settings": {
+        "show_text": false,
+        "show_trust": false,
         "eyebrow": "Premium tumblers · Bottles · Home décor",
         "heading_1": "Thoughtful gifts,",
         "heading_2": "made memorable.",
