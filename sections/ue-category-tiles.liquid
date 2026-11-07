@@ -30,7 +30,7 @@
       {%- if section.blocks.size > 0 -%}
         {%- for block in section.blocks -%}
           {%- assign c = block.settings.collection -%}
-          {%- assign tint = pastels[forloop.index0 | modulo: 6] -%}
+          {%- assign tint_index = forloop.index0 | modulo: 6 -%}{%- assign tint = pastels[tint_index] -%}
           <li {{ block.shopify_attributes }}>
             <a class="ue-cats__tile" href="{% if c != blank %}{{ c.url }}{% else %}#{% endif %}">
               <span class="ue-cats__circle" style="background: {{ tint }};">
@@ -48,7 +48,7 @@
       {%- else -%}
         {%- for c in collections limit: 12 -%}
           {%- if c.handle == 'frontpage' or c.handle == 'all' -%}{%- continue -%}{%- endif -%}
-          {%- assign tint = pastels[forloop.index0 | modulo: 6] -%}
+          {%- assign tint_index = forloop.index0 | modulo: 6 -%}{%- assign tint = pastels[tint_index] -%}
           <li>
             <a class="ue-cats__tile" href="{{ c.url }}">
               <span class="ue-cats__circle" style="background: {{ tint }};">
