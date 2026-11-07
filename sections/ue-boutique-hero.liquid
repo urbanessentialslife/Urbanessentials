@@ -95,8 +95,10 @@
   .ue-bhero .ue-bhero__shade--side { display: none; background: linear-gradient(to right, rgba(18,13,11,.78) 0%, rgba(18,13,11,.25) 50%, transparent 75%); }
   @media screen and (min-width: 750px) { .ue-bhero .ue-bhero__shade--side { display: block; } }
 
-  .ue-bhero__inner { position: relative; z-index: 1; width: 100%; padding-top: 8rem; padding-bottom: 3rem; }
-  @media screen and (min-width: 750px) { .ue-bhero__inner { padding-bottom: 4rem; } }
+  .ue-bhero__inner { position: relative; z-index: 1; width: 100%; }
+  /* .page-width resets vertical padding, so use a stronger selector */
+  .ue-bhero .ue-bhero__inner { padding-top: 8rem; padding-bottom: 4rem; }
+  @media screen and (min-width: 750px) { .ue-bhero .ue-bhero__inner { padding-bottom: 6rem; } }
   .ue-bhero__copy { max-width: 64rem; text-align: center; margin: 0 auto; }
   @media screen and (min-width: 750px) { .ue-bhero__copy { text-align: left; margin: 0; } }
 

@@ -74,7 +74,7 @@
       "settings": {
         "heading": "Pick a category 👇",
         "link_label": "See all →",
-        "background": "#ffffff"
+        "background": "#f4f0e8"
       }
     },
     "top_sellers": {
@@ -132,7 +132,7 @@
         "limit": 6,
         "columns_desktop": 4,
         "quick_add": "standard",
-        "background": "#ffffff"
+        "background": "#f4f0e8"
       }
     },
     "budget": {
@@ -271,7 +271,7 @@
       ],
       "settings": {
         "heading": "Why gifting with us is easy 💛",
-        "background": "#ffffff"
+        "background": "#f4f0e8"
       }
     }
   },
