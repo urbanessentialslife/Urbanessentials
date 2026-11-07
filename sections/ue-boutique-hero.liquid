@@ -50,6 +50,12 @@
         </nav>
       {%- endif -%}
 
+      {%- unless section.settings.show_text -%}<div class="ue-bhero__card">
+        {%- if section.settings.card_eyebrow != blank -%}<p class="ue-bhero__card-eyebrow">{{ section.settings.card_eyebrow }}</p>{%- endif -%}
+        {%- if section.settings.card_title != blank -%}
+          <p class="ue-bhero__card-title">{{ section.settings.card_title }}{% if section.settings.card_title_accent != blank %} <em>{{ section.settings.card_title_accent }}</em>{% endif %}</p>
+        {%- endif -%}
+      {%- endunless -%}
       <div class="ue-bhero__buttons">
         {%- if section.settings.button_1_label != blank -%}
           <a class="ue-bhero__btn ue-bhero__btn--gold" href="{{ section.settings.button_1_link | default: '#top-sellers' }}">{{ section.settings.button_1_label }}</a>
@@ -58,6 +64,7 @@
           <a class="ue-bhero__btn ue-bhero__btn--ghost" href="{{ section.settings.button_2_link | default: routes.all_products_collection_url }}">{{ section.settings.button_2_label }}</a>
         {%- endif -%}
       </div>
+      {%- unless section.settings.show_text -%}</div>{%- endunless -%}
     </div>
 
     {%- if section.settings.show_trust -%}
@@ -140,6 +147,33 @@
   .ue-bhero__trust li { display: flex; align-items: center; gap: 1rem; font-size: 1.15rem; color: rgba(253,250,245,.9); }
   @media screen and (min-width: 750px) { .ue-bhero__trust li { font-size: 1.4rem; } }
   .ue-bhero__trust svg { width: 1.8rem; height: 1.8rem; flex-shrink: 0; color: var(--ue-bh-accent); }
+
+  /* Photo-only mode: ivory "welcome card" in front of the shop doors */
+  .ue-bhero--photo .ue-bhero__copy { max-width: none; margin: 0; text-align: center; }
+  .ue-bhero__card { position: relative; max-width: 56rem; margin: 0 auto; padding: 2.2rem 2rem 2rem; text-align: center; color: #241a16;
+    background: rgba(244,240,232,.93); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+    border: 1px solid rgba(176,141,87,.45); border-radius: 2.4rem; box-shadow: 0 24px 60px rgba(18,13,11,.35);
+    animation: ue-card-in .9s .2s cubic-bezier(.2,.7,.2,1) both; }
+  .ue-bhero__card::before { content: ""; position: absolute; inset: .6rem; border: 1px solid rgba(176,141,87,.28); border-radius: 1.9rem; pointer-events: none; }
+  .ue-bhero__card-eyebrow { margin: 0 0 .6rem; font-family: var(--font-body-family); font-size: 1.05rem; font-weight: 700; letter-spacing: .32em; text-transform: uppercase; color: #b08d57; }
+  .ue-bhero__card-title { margin: 0 0 1.6rem; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 500; font-size: 2.6rem; line-height: 1.15; color: #241a16; }
+  .ue-bhero__card-title em { font-style: italic; color: #b08d57; }
+  .ue-bhero__card .ue-bhero__buttons { margin-top: 0; flex-direction: row; justify-content: center; gap: .8rem; }
+  .ue-bhero__card .ue-bhero__btn { flex: 1 1 0; padding: 1.3rem 1rem; font-size: 1.05rem; letter-spacing: .14em; }
+  .ue-bhero__card .ue-bhero__btn--gold { background: #241a16; color: #f4f0e8; box-shadow: 0 8px 20px rgba(36,26,22,.25); }
+  .ue-bhero__card .ue-bhero__btn--gold:hover { background: #3a2a23; }
+  .ue-bhero__card .ue-bhero__btn--ghost { background: transparent; color: #241a16; border: 1px solid #241a16; -webkit-backdrop-filter: none; backdrop-filter: none; }
+  .ue-bhero__card .ue-bhero__btn--ghost:hover { background: #241a16; color: #f4f0e8; }
+  @media screen and (min-width: 750px) {
+    .ue-bhero__card { padding: 2.8rem 3.6rem 3rem; }
+    .ue-bhero__card-eyebrow { font-size: 1.15rem; }
+    .ue-bhero__card-title { font-size: 3.4rem; margin-bottom: 2rem; }
+    .ue-bhero__card .ue-bhero__btn { flex: 0 1 auto; padding: 1.5rem 3rem; font-size: 1.2rem; letter-spacing: .18em; }
+  }
+  @media screen and (max-width: 749px) { .ue-bhero__card .ue-bhero__btn { font-size: 1rem; letter-spacing: .1em; white-space: nowrap; padding: 1.3rem .6rem; } }
+  @keyframes ue-card-in { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .ue-bhero__card { animation: none; } }
+  .ue-bhero.ue-bhero--photo .ue-bhero__shade--bottom { background: linear-gradient(to top, rgba(18,13,11,.55) 0%, rgba(18,13,11,.2) 30%, rgba(18,13,11,0) 55%); }
 {% endstylesheet %}
 
 {% schema %}
@@ -148,6 +182,9 @@
   "tag": "div",
   "class": "section",
   "settings": [
+    { "type": "text", "id": "card_eyebrow", "label": "Welcome card: small line", "default": "Welcome to Urban Essentials" },
+    { "type": "text", "id": "card_title", "label": "Welcome card: heading", "default": "Step inside &" },
+    { "type": "text", "id": "card_title_accent", "label": "Welcome card: gold italic words", "default": "find the perfect gift" },
     { "type": "checkbox", "id": "show_text", "label": "Show heading & text on photo", "default": true },
     { "type": "checkbox", "id": "show_trust", "label": "Show trust bar", "default": true },
     { "type": "image_picker", "id": "image", "label": "Image (desktop)", "info": "Defaults to the boutique photo." },
