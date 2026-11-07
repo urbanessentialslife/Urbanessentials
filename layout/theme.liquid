@@ -319,6 +319,11 @@
         document.documentElement.classList.add('shopify-design-mode');
       }
     </script>
+    {%- comment -%} Urban Essentials brand layer (fonts + ue-brand.css) {%- endcomment -%}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&family=Fredoka:wght@500;600;700&display=swap">
+    {{ 'ue-brand.css' | asset_url | stylesheet_tag }}
   </head>
 
   <body class="gradient{% if settings.animations_hover_elements != 'none' %} animate--hover-{{ settings.animations_hover_elements }}{% endif %}">

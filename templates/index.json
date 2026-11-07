@@ -1,48 +1,270 @@
 {
   "sections": {
-    "image_banner": {
-      "type": "image-banner",
+    "hero": {
+      "type": "ue-playful-hero",
       "blocks": {
-        "heading": {
-          "type": "heading",
+        "cutout-1": {
+          "type": "product_image",
           "settings": {
-            "heading": "Browse our latest products",
-            "heading_size": "h0"
+            "asset": "ue-cutout-tumbler-pink.webp",
+            "alt": "Pink everyday tumbler",
+            "backdrop": "#fde2e4",
+            "tilt": -4,
+            "sticker": "New!",
+            "sticker_style": "coral"
           }
         },
-        "button": {
-          "type": "buttons",
+        "cutout-2": {
+          "type": "product_image",
           "settings": {
-            "button_label_1": "Shop all",
-            "button_link_1": "shopify://collections/all",
-            "button_style_secondary_1": true,
-            "button_label_2": "",
-            "button_link_2": "",
-            "button_style_secondary_2": false
+            "asset": "ue-cutout-bottle-bunny.webp",
+            "alt": "Bunny kids water bottle",
+            "backdrop": "#fff1c1",
+            "tilt": 6,
+            "sticker": "Kids' fav 🐰",
+            "sticker_style": "white"
+          }
+        },
+        "cutout-3": {
+          "type": "product_image",
+          "settings": {
+            "asset": "ue-cutout-tumbler-blue.webp",
+            "alt": "Blue everyday tumbler",
+            "backdrop": "#dcefff",
+            "tilt": 5,
+            "sticker": "Bestseller ★",
+            "sticker_style": "dark"
+          }
+        },
+        "cutout-4": {
+          "type": "product_image",
+          "settings": {
+            "asset": "ue-cutout-bottle-elephant.webp",
+            "alt": "Elephant kids water bottle",
+            "backdrop": "#e9e3ff",
+            "tilt": -6,
+            "sticker": "",
+            "sticker_style": "coral"
+          }
+        },
+        "cutout-5": {
+          "type": "product_image",
+          "settings": {
+            "asset": "ue-cutout-coffee-cup.webp",
+            "alt": "Sage and coral coffee cup",
+            "backdrop": "#d8f3e8",
+            "tilt": 3,
+            "sticker": "",
+            "sticker_style": "coral"
           }
         }
       },
       "block_order": [
-        "heading",
-        "button"
+        "cutout-1",
+        "cutout-2",
+        "cutout-3",
+        "cutout-4",
+        "cutout-5"
       ],
       "settings": {
-        "image_overlay_opacity": 40,
-        "image_height": "large",
-        "desktop_content_position": "bottom-center",
-        "show_text_box": false,
-        "image_behavior": "none",
-        "desktop_content_alignment": "center",
-        "color_scheme": "scheme-3",
-        "mobile_content_alignment": "center",
-        "stack_images_on_mobile": false,
-        "show_text_below": false
+        "eyebrow": "✿ The gifting edit · free delivery across India",
+        "heading_start": "Gifts that make them",
+        "heading_highlight": "smile",
+        "heading_end": "✨",
+        "text": "<p>Colourful tumblers, cute kids' bottles, cosy mugs and home décor — premium everyday essentials that are fun to give and lovely to use.</p>",
+        "button_1_label": "Shop bestsellers →",
+        "button_1_link": "#top-sellers",
+        "button_2_label": "Gifts by budget 🎁",
+        "button_2_link": "#budget",
+        "trust_1": "🚚 Free delivery",
+        "trust_2": "↩️ 7-day easy returns",
+        "trust_3": "✍️ Personalise select gifts",
+        "background": "#fff8f1",
+        "accent": "#ff6f61",
+        "text_color": "#2b2220"
       }
     },
-    "featured_collection": {
+    "ribbon": {
+      "type": "ue-perks-ribbon",
+      "blocks": {
+        "perk-1": {
+          "type": "perk",
+          "settings": {
+            "text": "Free delivery across India"
+          }
+        },
+        "perk-2": {
+          "type": "perk",
+          "settings": {
+            "text": "7-day easy returns"
+          }
+        },
+        "perk-3": {
+          "type": "perk",
+          "settings": {
+            "text": "Personalised names on select gifts"
+          }
+        },
+        "perk-4": {
+          "type": "perk",
+          "settings": {
+            "text": "Secure checkout"
+          }
+        },
+        "perk-5": {
+          "type": "perk",
+          "settings": {
+            "text": "Premium quality, everyday prices"
+          }
+        }
+      },
+      "block_order": [
+        "perk-1",
+        "perk-2",
+        "perk-3",
+        "perk-4",
+        "perk-5"
+      ],
+      "settings": {
+        "separator": "✿",
+        "speed": 30,
+        "background": "#241a16",
+        "text_color": "#f4f0e8",
+        "separator_color": "#dfc08a"
+      }
+    },
+    "categories": {
+      "type": "ue-category-tiles",
+      "settings": {
+        "heading": "Pick a category 👇",
+        "link_label": "See all →",
+        "link": "",
+        "background": "#ffffff"
+      }
+    },
+    "top_sellers": {
+      "type": "ue-top-sellers",
+      "blocks": {
+        "pick-1": {
+          "type": "product",
+          "settings": {
+            "product": "marble-finish-dry-fruit-container-set-with-tray"
+          }
+        },
+        "pick-3": {
+          "type": "product",
+          "settings": {
+            "product": "ubran-essential-gold-tone-decorative-jar-trio"
+          }
+        },
+        "pick-4": {
+          "type": "product",
+          "settings": {
+            "product": "ubran-essential-water-bottle-with-carry-handle-blush-pink"
+          }
+        },
+        "pick-5": {
+          "type": "product",
+          "settings": {
+            "product": "ubran-essential-water-bottle-with-carry-handle-bright-red"
+          }
+        },
+        "pick-6": {
+          "type": "product",
+          "settings": {
+            "product": "ubran-essential-illustrated-water-bottle-pastel-designs"
+          }
+        },
+        "pick-7": {
+          "type": "product",
+          "settings": {
+            "product": "ubran-essential-ribbed-water-bottle-with-carry-handle-ivory"
+          }
+        }
+      },
+      "block_order": [
+        "pick-1",
+        "pick-3",
+        "pick-4",
+        "pick-5",
+        "pick-6",
+        "pick-7"
+      ],
+      "settings": {
+        "eyebrow": "Loved by our customers",
+        "heading": "Top Sellers ⭐",
+        "link_label": "Shop all →",
+        "link": "",
+        "limit": 6,
+        "columns_desktop": 4,
+        "quick_add": "standard",
+        "background": "#ffffff"
+      }
+    },
+    "budget": {
+      "type": "ue-budget-tiles",
+      "blocks": {
+        "budget-1": {
+          "type": "budget",
+          "settings": {
+            "label": "Under",
+            "amount": "₹999",
+            "min_price": 0,
+            "max_price": 999,
+            "emoji": "🎈",
+            "color": "#d8f3e8"
+          }
+        },
+        "budget-2": {
+          "type": "budget",
+          "settings": {
+            "label": "Under",
+            "amount": "₹1,499",
+            "min_price": 0,
+            "max_price": 1499,
+            "emoji": "🎀",
+            "color": "#fde2e4"
+          }
+        },
+        "budget-3": {
+          "type": "budget",
+          "settings": {
+            "label": "Under",
+            "amount": "₹1,999",
+            "min_price": 0,
+            "max_price": 1999,
+            "emoji": "🎁",
+            "color": "#fff1c1"
+          }
+        },
+        "budget-4": {
+          "type": "budget",
+          "settings": {
+            "label": "Premium",
+            "amount": "₹2,000+",
+            "min_price": 2000,
+            "max_price": 0,
+            "emoji": "💎",
+            "color": "#e9e3ff"
+          }
+        }
+      },
+      "block_order": [
+        "budget-1",
+        "budget-2",
+        "budget-3",
+        "budget-4"
+      ],
+      "settings": {
+        "heading": "Gifts for every budget",
+        "subheading": "Tap a budget and we'll show you everything that fits.",
+        "background": "#fff8f1"
+      }
+    },
+    "featured_gifts": {
       "type": "featured-collection",
       "settings": {
-        "title": "Featured products",
+        "title": "Featured Gifts",
         "heading_size": "h2",
         "description": "",
         "show_description": false,
@@ -56,20 +278,76 @@
         "view_all_style": "solid",
         "enable_desktop_slider": false,
         "swipe_on_mobile": false,
-        "image_ratio": "adapt",
+        "image_ratio": "square",
         "image_shape": "default",
         "show_secondary_image": true,
         "show_vendor": false,
         "show_rating": false,
-        "quick_add": "none",
+        "quick_add": "standard",
         "columns_mobile": "2",
-        "padding_top": 44,
-        "padding_bottom": 36
+        "padding_top": 48,
+        "padding_bottom": 48
+      }
+    },
+    "why_us": {
+      "type": "ue-why-us",
+      "blocks": {
+        "reason-1": {
+          "type": "reason",
+          "settings": {
+            "emoji": "🚚",
+            "title": "Free delivery",
+            "text": "On every order, anywhere in India.",
+            "color": "#dcefff"
+          }
+        },
+        "reason-2": {
+          "type": "reason",
+          "settings": {
+            "emoji": "↩️",
+            "title": "7-day easy returns",
+            "text": "Changed your mind? Send it back within 7 days.",
+            "color": "#fde2e4"
+          }
+        },
+        "reason-3": {
+          "type": "reason",
+          "settings": {
+            "emoji": "✍️",
+            "title": "Make it personal",
+            "text": "Add a name to select tumblers and bottles.",
+            "color": "#fff1c1"
+          }
+        },
+        "reason-4": {
+          "type": "reason",
+          "settings": {
+            "emoji": "🔒",
+            "title": "Safe & secure",
+            "text": "Checkout powered by Shopify.",
+            "color": "#d8f3e8"
+          }
+        }
+      },
+      "block_order": [
+        "reason-1",
+        "reason-2",
+        "reason-3",
+        "reason-4"
+      ],
+      "settings": {
+        "heading": "Why gifting with us is easy 💛",
+        "background": "#ffffff"
       }
     }
   },
   "order": [
-    "image_banner",
-    "featured_collection"
+    "hero",
+    "ribbon",
+    "categories",
+    "top_sellers",
+    "budget",
+    "featured_gifts",
+    "why_us"
   ]
 }

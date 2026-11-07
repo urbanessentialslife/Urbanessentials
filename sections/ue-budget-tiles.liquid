@@ -15,6 +15,7 @@
   #ue-budget-{{ section.id }} { --ue-budget-bg: {{ section.settings.background }}; }
 {%- endstyle -%}
 
+<span id="budget" class="ue-anchor" aria-hidden="true"></span>
 <section id="ue-budget-{{ section.id }}" class="ue-budget" aria-labelledby="ue-budget-heading-{{ section.id }}">
   <div class="page-width">
     <h2 id="ue-budget-heading-{{ section.id }}" class="ue-budget__title ue-font-playful">{{ section.settings.heading }}</h2>
@@ -51,6 +52,7 @@
 </section>
 
 {% stylesheet %}
+  .ue-anchor { display: block; position: relative; top: -8rem; visibility: hidden; }
   .ue-font-playful { font-family: 'Fredoka', var(--font-heading-family), sans-serif; letter-spacing: -0.01em; }
   .ue-budget { background: var(--ue-budget-bg); padding: 4rem 0; }
   @media screen and (min-width: 750px) { .ue-budget { padding: 6rem 0; } }

@@ -1,0 +1,114 @@
+{% comment %}
+  Urban Essentials — Top Sellers
+  Hand-picked products in a fixed order (add one "Product" block each).
+  Out-of-stock picks are skipped automatically. Uses Dawn's own product
+  card, so quick add, prices and sale badges behave like the rest of the
+  store. 2 columns on mobile, 4 (or 3/5) on desktop.
+{% endcomment %}
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&display=swap">
+
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+{{ 'template-collection.css' | asset_url | stylesheet_tag }}
+{%- unless section.settings.quick_add == 'none' -%}
+  {{ 'quick-add.css' | asset_url | stylesheet_tag }}
+  <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'quick-add.js' | asset_url }}" defer="defer"></script>
+{%- endunless -%}
+
+{%- style -%}
+  #ue-top-{{ section.id }} { --ue-top-bg: {{ section.settings.background }}; }
+{%- endstyle -%}
+
+<span id="top-sellers" class="ue-anchor" aria-hidden="true"></span>
+<section id="ue-top-{{ section.id }}" class="ue-top" aria-labelledby="ue-top-heading-{{ section.id }}">
+  <div class="page-width">
+    <div class="ue-top__head">
+      <div>
+        {%- if section.settings.eyebrow != blank -%}<p class="ue-top__eyebrow">{{ section.settings.eyebrow }}</p>{%- endif -%}
+        <h2 id="ue-top-heading-{{ section.id }}" class="ue-top__title ue-font-playful">{{ section.settings.heading }}</h2>
+      </div>
+      {%- if section.settings.link_label != blank -%}
+        <a class="ue-top__all" href="{{ section.settings.link | default: routes.all_products_collection_url }}">{{ section.settings.link_label }}</a>
+      {%- endif -%}
+    </div>
+
+    <ul class="grid product-grid contains-card contains-card--product{% if settings.card_style == 'standard' %} contains-card--standard{% endif %} grid--{{ section.settings.columns_desktop }}-col-desktop grid--2-col-tablet-down" role="list">
+      {%- assign shown = 0 -%}
+      {%- for block in section.blocks -%}
+        {%- assign p = block.settings.product -%}
+        {%- if p == blank or p.available == false -%}{%- continue -%}{%- endif -%}
+        {%- if shown >= section.settings.limit -%}{%- break -%}{%- endif -%}
+        {%- assign shown = shown | plus: 1 -%}
+        <li class="grid__item{% if shown > section.settings.columns_desktop %} ue-top__mobile-only{% endif %}" {{ block.shopify_attributes }}>
+          {% render 'card-product',
+            card_product: p,
+            media_aspect_ratio: 'square',
+            show_secondary_image: true,
+            show_vendor: false,
+            show_rating: false,
+            lazy_load: true,
+            section_id: section.id,
+            quick_add: section.settings.quick_add,
+            product_view_context: 'collection'
+          %}
+        </li>
+      {%- endfor -%}
+      {%- if shown == 0 -%}
+        {%- for i in (1..4) -%}
+          <li class="grid__item">{% render 'card-product', show_vendor: false, placeholder_image: 'product-apparel-1' %}</li>
+        {%- endfor -%}
+      {%- endif -%}
+    </ul>
+  </div>
+</section>
+
+{% stylesheet %}
+  .ue-anchor { display: block; position: relative; top: -8rem; visibility: hidden; }
+  .ue-font-playful { font-family: 'Fredoka', var(--font-heading-family), sans-serif; letter-spacing: -0.01em; }
+  .ue-top { background: var(--ue-top-bg); padding: 4rem 0; }
+  @media screen and (min-width: 750px) { .ue-top { padding: 6rem 0; } }
+  .ue-top__head { display: flex; align-items: flex-end; justify-content: space-between; gap: 1.6rem; margin-bottom: 2.8rem; }
+  .ue-top__eyebrow { margin: 0 0 .6rem; font-size: 1.1rem; letter-spacing: .25em; text-transform: uppercase; font-weight: 700; color: #b89b6a; }
+  .ue-top__title { margin: 0; font-size: clamp(2.4rem, 4vw, 3.8rem); font-weight: 600; }
+  .ue-top__all { flex-shrink: 0; font-weight: 700; font-size: 1.4rem; color: #ff6f61; text-decoration: none; }
+  .ue-top__all:hover { text-decoration: underline; }
+  /* Desktop shows one row (columns_desktop); the extra picks fill a 3rd row on phones. */
+  @media screen and (min-width: 990px) { .ue-top__mobile-only { display: none; } }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "UE Top sellers",
+  "tag": "div",
+  "class": "section",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Small label", "default": "Loved by our customers" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Top Sellers ⭐" },
+    { "type": "text", "id": "link_label", "label": "Link label", "default": "Shop all →" },
+    { "type": "url", "id": "link", "label": "Link" },
+    { "type": "range", "id": "limit", "label": "Products to show (mobile)", "min": 2, "max": 12, "step": 1, "default": 6 },
+    { "type": "range", "id": "columns_desktop", "label": "Products per row (desktop)", "min": 3, "max": 5, "step": 1, "default": 4 },
+    { "type": "select", "id": "quick_add", "label": "Quick add button", "default": "standard", "options": [
+      { "value": "none", "label": "None" },
+      { "value": "standard", "label": "Standard" }
+    ] },
+    { "type": "color", "id": "background", "label": "Background", "default": "#ffffff" }
+  ],
+  "blocks": [
+    {
+      "type": "product",
+      "name": "Product",
+      "settings": [
+        { "type": "product", "id": "product", "label": "Product" }
+      ]
+    }
+  ],
+  "presets": [
+    { "name": "UE Top sellers" }
+  ]
+}
+{% endschema %}

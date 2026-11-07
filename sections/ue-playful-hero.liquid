@@ -49,7 +49,7 @@
           <a href="{{ section.settings.button_1_link | default: routes.all_products_collection_url }}" class="ue-btn ue-btn--primary">{{ section.settings.button_1_label }}</a>
         {%- endif -%}
         {%- if section.settings.button_2_label != blank -%}
-          <a href="{{ section.settings.button_2_link | default: '#' }}" class="ue-btn ue-btn--secondary">{{ section.settings.button_2_label }}</a>
+          <a href="{{ section.settings.button_2_link | default: routes.all_products_collection_url }}" class="ue-btn ue-btn--secondary">{{ section.settings.button_2_label }}</a>
         {%- endif -%}
       </div>
 
@@ -77,6 +77,16 @@
                 endif
               -%}
               {{ block.settings.image | image_url: width: 700 | image_tag: loading: loading, widths: '300, 500, 700', sizes: '(min-width: 990px) 20vw, 35vw', class: 'ue-hero__img', alt: block.settings.image.alt }}
+            {%- elsif block.settings.asset != blank -%}
+              <img
+                src="{{ block.settings.asset | asset_url }}"
+                alt="{{ block.settings.alt | escape }}"
+                width="800"
+                height="1200"
+                class="ue-hero__img"
+                {% if forloop.index > 2 %}loading="lazy"{% else %}fetchpriority="high"{% endif %}
+                decoding="async"
+              >
             {%- else -%}
               {{ 'product-' | append: forloop.index | placeholder_svg_tag: 'ue-hero__img ue-hero__img--placeholder' }}
             {%- endif -%}
@@ -156,9 +166,9 @@
     { "type": "richtext", "id": "text", "label": "Description", "default": "<p>Colourful tumblers, cute kids' bottles, cosy mugs and home décor — premium everyday essentials that are fun to give and lovely to use.</p>" },
     { "type": "header", "content": "Buttons" },
     { "type": "text", "id": "button_1_label", "label": "Button 1 label", "default": "Shop bestsellers →" },
-    { "type": "url", "id": "button_1_link", "label": "Button 1 link" },
+    { "type": "text", "id": "button_1_link", "label": "Button 1 link", "default": "#top-sellers", "info": "A page address like /collections/all, or #top-sellers / #budget to jump down the homepage." },
     { "type": "text", "id": "button_2_label", "label": "Button 2 label", "default": "Gifts by budget 🎁" },
-    { "type": "url", "id": "button_2_link", "label": "Button 2 link" },
+    { "type": "text", "id": "button_2_link", "label": "Button 2 link", "default": "#budget" },
     { "type": "header", "content": "Trust points" },
     { "type": "text", "id": "trust_1", "label": "Point 1", "default": "🚚 Free delivery" },
     { "type": "text", "id": "trust_2", "label": "Point 2", "default": "↩️ 7-day easy returns" },
@@ -175,6 +185,8 @@
       "limit": 5,
       "settings": [
         { "type": "image_picker", "id": "image", "label": "Image", "info": "Transparent PNG/WebP cut-outs look best (around 800×1200)." },
+        { "type": "text", "id": "asset", "label": "Built-in image file (used when no image is picked)", "info": "A file name from the theme's assets folder, e.g. ue-cutout-tumbler-pink.webp" },
+        { "type": "text", "id": "alt", "label": "Image description (for accessibility)" },
         { "type": "color", "id": "backdrop", "label": "Pastel backdrop", "default": "#fde2e4" },
         { "type": "range", "id": "tilt", "label": "Tilt", "min": -10, "max": 10, "step": 1, "unit": "°", "default": 0 },
         { "type": "text", "id": "sticker", "label": "Sticker text (optional)", "info": "e.g. New!, Kids' fav 🐰, Bestseller ★" },
