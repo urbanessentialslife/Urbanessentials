@@ -43,32 +43,52 @@ body {
   font-size: 1.7rem;
 }
 
-/* ── Header wordmark (used while no logo image is uploaded) ── */
-.header__heading-link .h2 {
-  display: block;
+/* ── Header logo lockup (snippets/ue-logo-lockup.liquid) ──
+   UE monogram + URBAN ESSENTIALS + LIFESTYLE I TRAVEL I HOME,
+   in Deep Espresso on Warm Ivory, as on the original site. */
+.ue-lockup {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.4rem;
+  color: #241a16;
+  text-decoration: none;
+}
+.ue-lockup__mark {
+  width: 4.6rem;
+  height: auto;
+  flex-shrink: 0;
+  color: #241a16;
+}
+.ue-lockup__text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  line-height: 1;
+}
+.ue-lockup__name {
   font-family: 'Cormorant Garamond', Georgia, serif;
-  font-size: 2.2rem;
-  font-weight: 500;
-  letter-spacing: 0.12em;
+  font-size: 2.5rem;
+  font-weight: 400;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  line-height: 1.1;
-  color: var(--ue-ink);
+  color: #241a16;
+  white-space: nowrap;
 }
-.header__heading-link .h2::after {
-  content: 'Lifestyle  |  Travel  |  Home';
-  display: block;
-  margin-top: 0.3rem;
+.ue-lockup__tag {
   font-family: var(--font-body-family);
-  font-size: 0.9rem;
-  font-weight: 600;
-  letter-spacing: 0.34em;
-  color: var(--ue-muted);
-  white-space: pre;
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.38em;
+  text-transform: uppercase;
+  color: #8a7d74;
+  white-space: nowrap;
 }
+.header__heading-link:hover .ue-lockup__name { color: #241a16; }
 @media screen and (max-width: 749px) {
-  /* Keep "URBAN ESSENTIALS" on one line between the mobile icons */
-  .header__heading-link .h2 { font-size: 1.45rem; letter-spacing: 0.06em; white-space: nowrap; }
-  .header__heading-link .h2::after { font-size: 0.65rem; letter-spacing: 0.2em; }
+  .ue-lockup { gap: 0.8rem; }
+  .ue-lockup__mark { width: 3rem; }
+  .ue-lockup__name { font-size: 1.55rem; letter-spacing: 0.04em; }
+  .ue-lockup__tag { font-size: 0.62rem; letter-spacing: 0.24em; }
 }
 
 /* ── Navigation: uppercase, letter-spaced, gold hover ── */
@@ -212,3 +232,7 @@ h1, h2, .h0, .h1, .h2 {
 .collection__view-all .button {
   border-radius: 999px;
 }
+
+/* Product cards stay white on the Warm Ivory background */
+.card-wrapper .card--card,
+.card-wrapper .card--standard .card__inner { background: #fff; }

@@ -1,0 +1,159 @@
+{% comment %}
+  Urban Essentials — Boutique hero
+  Full-width photo of the boutique, dark-graded, with the brand promise
+  ("Thoughtful gifts, made memorable."), two buttons, one-tap category pills
+  and a trust bar. Recreates the homepage hero of the former Hydrogen site.
+  The image falls back to the boutique photos bundled in /assets.
+{% endcomment %}
+
+{%- style -%}
+  #ue-bhero-{{ section.id }} { --ue-bh-accent: {{ section.settings.accent }}; }
+{%- endstyle -%}
+
+<section id="ue-bhero-{{ section.id }}" class="ue-bhero" aria-label="{{ section.settings.heading_1 | escape }}">
+  <picture class="ue-bhero__media">
+    {%- if section.settings.image_mobile != blank -%}
+      <source media="(max-width: 749px)" srcset="{{ section.settings.image_mobile | image_url: width: 900 }}">
+    {%- else -%}
+      <source media="(max-width: 749px)" srcset="{{ 'ue-hero-boutique-mobile.webp' | asset_url }}">
+    {%- endif -%}
+    {%- if section.settings.image != blank -%}
+      {{ section.settings.image | image_url: width: 2400 | image_tag: loading: 'eager', fetchpriority: 'high', widths: '1000, 1600, 2400', sizes: '100vw', class: 'ue-bhero__img', alt: section.settings.image.alt }}
+    {%- else -%}
+      <img src="{{ 'ue-hero-boutique-desktop.webp' | asset_url }}" alt="Inside the Urban Essentials boutique — marble shelves of curated tumblers, ceramics and home décor" width="1920" height="1080" fetchpriority="high" class="ue-bhero__img">
+    {%- endif -%}
+  </picture>
+  <div class="ue-bhero__shade ue-bhero__shade--bottom" aria-hidden="true"></div>
+  <div class="ue-bhero__shade ue-bhero__shade--side" aria-hidden="true"></div>
+
+  <div class="ue-bhero__inner page-width">
+    <div class="ue-bhero__copy">
+      <h1 class="ue-bhero__title">
+        {%- if section.settings.eyebrow != blank -%}<span class="ue-bhero__eyebrow">{{ section.settings.eyebrow }}</span>{%- endif -%}
+        <span class="ue-bhero__line1">{{ section.settings.heading_1 }}</span>
+        {%- if section.settings.heading_2 != blank -%}<span class="ue-bhero__line2">{{ section.settings.heading_2 }}</span>{%- endif -%}
+      </h1>
+
+      {%- if section.settings.text != blank -%}
+        <div class="ue-bhero__text">{{ section.settings.text }}</div>
+      {%- endif -%}
+
+      <div class="ue-bhero__buttons">
+        {%- if section.settings.button_1_label != blank -%}
+          <a class="ue-bhero__btn ue-bhero__btn--gold" href="{{ section.settings.button_1_link | default: '#top-sellers' }}">{{ section.settings.button_1_label }}</a>
+        {%- endif -%}
+        {%- if section.settings.button_2_label != blank -%}
+          <a class="ue-bhero__btn ue-bhero__btn--ghost" href="{{ section.settings.button_2_link | default: routes.all_products_collection_url }}">{{ section.settings.button_2_label }}</a>
+        {%- endif -%}
+      </div>
+
+      {%- if section.settings.show_categories -%}
+        <nav class="ue-bhero__pills" aria-label="Shop by category">
+          {%- assign shown = 0 -%}
+          {%- for c in collections -%}
+            {%- if c.handle == 'all' or c.handle == 'frontpage' or c.all_products_count == 0 -%}{%- continue -%}{%- endif -%}
+            <a class="ue-bhero__pill" href="{{ c.url }}">{{ c.title }}</a>
+            {%- assign shown = shown | plus: 1 -%}
+            {%- if shown >= section.settings.categories_count -%}{%- break -%}{%- endif -%}
+          {%- endfor -%}
+        </nav>
+      {%- endif -%}
+    </div>
+
+    <ul class="ue-bhero__trust">
+      <li>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12"/></svg>
+        <span>{{ section.settings.trust_1 }}</span>
+      </li>
+      <li>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3"/></svg>
+        <span>{{ section.settings.trust_2 }}</span>
+      </li>
+      <li>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"/></svg>
+        <span>{{ section.settings.trust_3 }}</span>
+      </li>
+      <li>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21 11.25v8.25a1.5 1.5 0 01-1.5 1.5H5.25a1.5 1.5 0 01-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 109.375 7.5H12m0-2.625V7.5m0-2.625A2.625 2.625 0 1114.625 7.5H12m0 0V21m-8.625-9.75h18c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125h-18c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z"/></svg>
+        <span>{{ section.settings.trust_4 }}</span>
+      </li>
+    </ul>
+  </div>
+</section>
+
+{% stylesheet %}
+  .ue-bhero { position: relative; display: flex; align-items: flex-end; min-height: calc(100svh - 10rem); overflow: hidden; background: #1a1411; color: #fdfaf5; }
+  @media screen and (min-width: 990px) { .ue-bhero { min-height: 82vh; } }
+  .ue-bhero__media, .ue-bhero__img { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .ue-bhero__img { object-fit: cover; animation: ue-bhero-zoom 2.6s ease-out both; }
+  @keyframes ue-bhero-zoom { from { transform: scale(1.06); } to { transform: scale(1); } }
+  @media (prefers-reduced-motion: reduce) { .ue-bhero__img { animation: none; } }
+  .ue-bhero__shade { position: absolute; inset: 0; pointer-events: none; }
+  .ue-bhero__shade--bottom { background: linear-gradient(to top, #120d0b 0%, rgba(18,13,11,.6) 45%, rgba(18,13,11,.05) 100%); }
+  .ue-bhero__shade--side { display: none; background: linear-gradient(to right, rgba(18,13,11,.78) 0%, rgba(18,13,11,.25) 50%, transparent 75%); }
+  @media screen and (min-width: 750px) { .ue-bhero__shade--side { display: block; } }
+
+  .ue-bhero__inner { position: relative; z-index: 1; width: 100%; padding-top: 8rem; padding-bottom: 3rem; }
+  @media screen and (min-width: 750px) { .ue-bhero__inner { padding-bottom: 4rem; } }
+  .ue-bhero__copy { max-width: 64rem; text-align: center; margin: 0 auto; }
+  @media screen and (min-width: 750px) { .ue-bhero__copy { text-align: left; margin: 0; } }
+
+  .ue-bhero__title { margin: 0; font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 500; color: #fdfaf5; }
+  .ue-bhero__eyebrow { display: block; margin-bottom: 1.6rem; font-family: var(--font-body-family); font-size: 1.05rem; font-weight: 600; letter-spacing: .32em; text-transform: uppercase; color: var(--ue-bh-accent); }
+  @media screen and (min-width: 750px) { .ue-bhero__eyebrow { font-size: 1.2rem; } }
+  .ue-bhero__line1, .ue-bhero__line2 { display: block; font-size: clamp(3.8rem, 7.4vw, 8rem); line-height: 1.02; letter-spacing: -.01em; }
+  .ue-bhero__line2 { font-style: italic; color: var(--ue-bh-accent); }
+
+  .ue-bhero__text { margin: 2rem auto 0; max-width: 54rem; font-size: 1.45rem; line-height: 1.6; font-weight: 300; color: rgba(253,250,245,.86); }
+  .ue-bhero__text p { margin: 0; }
+  @media screen and (min-width: 750px) { .ue-bhero__text { margin-left: 0; font-size: 1.75rem; } }
+
+  .ue-bhero__buttons { margin-top: 2.8rem; display: flex; flex-direction: column; gap: 1.2rem; }
+  @media screen and (min-width: 750px) { .ue-bhero__buttons { flex-direction: row; } }
+  .ue-bhero__btn { display: inline-flex; align-items: center; justify-content: center; gap: .6rem; padding: 1.5rem 3rem; border-radius: 999px; font-family: var(--font-body-family); font-size: 1.2rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; text-decoration: none; transition: background .2s, color .2s, transform .2s; }
+  @media screen and (min-width: 750px) { .ue-bhero__btn { font-size: 1.3rem; padding: 1.6rem 3.4rem; } }
+  .ue-bhero__btn--gold { background: var(--ue-bh-accent); color: #241a16; box-shadow: 0 10px 30px rgba(223,192,138,.25); }
+  .ue-bhero__btn--gold:hover { background: #f0d6a6; transform: translateY(-1px); }
+  .ue-bhero__btn--ghost { border: 1px solid rgba(253,250,245,.55); background: rgba(255,255,255,.06); color: #fdfaf5; backdrop-filter: blur(4px); }
+  .ue-bhero__btn--ghost:hover { background: rgba(255,255,255,.16); }
+
+  .ue-bhero__pills { margin: 2.4rem -1.5rem 0; padding: 0 1.5rem; display: flex; gap: .8rem; overflow-x: auto; scrollbar-width: none; }
+  .ue-bhero__pills::-webkit-scrollbar { display: none; }
+  @media screen and (min-width: 750px) { .ue-bhero__pills { margin: 2.6rem 0 0; padding: 0; flex-wrap: wrap; } }
+  .ue-bhero__pill { flex-shrink: 0; padding: .8rem 1.6rem; border-radius: 999px; border: 1px solid rgba(255,255,255,.22); background: rgba(0,0,0,.28); backdrop-filter: blur(4px); color: rgba(253,250,245,.92); font-size: 1.2rem; font-weight: 500; text-decoration: none; white-space: nowrap; transition: border-color .2s, color .2s; }
+  .ue-bhero__pill:hover { border-color: var(--ue-bh-accent); color: var(--ue-bh-accent); }
+
+  .ue-bhero__trust { list-style: none; margin: 3.2rem 0 0; padding: 1.4rem 1.6rem; display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.2rem 1.6rem; border-radius: 1.6rem; border: 1px solid rgba(255,255,255,.1); background: rgba(0,0,0,.3); backdrop-filter: blur(10px); }
+  @media screen and (min-width: 990px) { .ue-bhero__trust { grid-template-columns: repeat(4, 1fr); margin-top: 4.4rem; padding: 1.6rem 2.4rem; } }
+  .ue-bhero__trust li { display: flex; align-items: center; gap: 1rem; font-size: 1.15rem; color: rgba(253,250,245,.9); }
+  @media screen and (min-width: 750px) { .ue-bhero__trust li { font-size: 1.4rem; } }
+  .ue-bhero__trust svg { width: 1.8rem; height: 1.8rem; flex-shrink: 0; color: var(--ue-bh-accent); }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "UE Boutique hero",
+  "tag": "div",
+  "class": "section",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Image (desktop)", "info": "Defaults to the boutique photo." },
+    { "type": "image_picker", "id": "image_mobile", "label": "Image (mobile, optional)" },
+    { "type": "text", "id": "eyebrow", "label": "Small label", "default": "Premium tumblers · Bottles · Home décor" },
+    { "type": "text", "id": "heading_1", "label": "Heading line 1", "default": "Thoughtful gifts," },
+    { "type": "text", "id": "heading_2", "label": "Heading line 2 (gold italic)", "default": "made memorable." },
+    { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Everyday essentials crafted to be used daily and gifted with pride — insulated tumblers, water bottles, mugs and décor, delivered free across India.</p>" },
+    { "type": "text", "id": "button_1_label", "label": "Gold button label", "default": "Shop bestsellers ↓" },
+    { "type": "text", "id": "button_1_link", "label": "Gold button link", "default": "#top-sellers", "info": "e.g. #top-sellers or /collections/all" },
+    { "type": "text", "id": "button_2_label", "label": "Outline button label", "default": "Explore all gifts" },
+    { "type": "text", "id": "button_2_link", "label": "Outline button link", "default": "/collections/all" },
+    { "type": "checkbox", "id": "show_categories", "label": "Show category pills", "default": true },
+    { "type": "range", "id": "categories_count", "label": "Number of category pills", "min": 2, "max": 10, "step": 1, "default": 6 },
+    { "type": "text", "id": "trust_1", "label": "Trust point 1", "default": "Free delivery across India" },
+    { "type": "text", "id": "trust_2", "label": "Trust point 2", "default": "7-day easy returns" },
+    { "type": "text", "id": "trust_3", "label": "Trust point 3", "default": "Secure checkout" },
+    { "type": "text", "id": "trust_4", "label": "Trust point 4", "default": "Personalised gifting" },
+    { "type": "color", "id": "accent", "label": "Gold accent", "default": "#dfc08a" }
+  ],
+  "presets": [{ "name": "UE Boutique hero" }]
+}
+{% endschema %}

@@ -1,87 +1,23 @@
 {
   "sections": {
     "hero": {
-      "type": "ue-playful-hero",
-      "blocks": {
-        "cutout-1": {
-          "type": "product_image",
-          "settings": {
-            "asset": "ue-cutout-tumbler-pink.webp",
-            "alt": "Pink everyday tumbler",
-            "backdrop": "#fde2e4",
-            "tilt": -4,
-            "sticker": "New!",
-            "sticker_style": "coral"
-          }
-        },
-        "cutout-2": {
-          "type": "product_image",
-          "settings": {
-            "asset": "ue-cutout-bottle-bunny.webp",
-            "alt": "Bunny kids water bottle",
-            "backdrop": "#fff1c1",
-            "tilt": 6,
-            "sticker": "Kids' fav 🐰",
-            "sticker_style": "white"
-          }
-        },
-        "cutout-3": {
-          "type": "product_image",
-          "settings": {
-            "asset": "ue-cutout-tumbler-blue.webp",
-            "alt": "Blue everyday tumbler",
-            "backdrop": "#dcefff",
-            "tilt": 5,
-            "sticker": "Bestseller ★",
-            "sticker_style": "dark"
-          }
-        },
-        "cutout-4": {
-          "type": "product_image",
-          "settings": {
-            "asset": "ue-cutout-bottle-elephant.webp",
-            "alt": "Elephant kids water bottle",
-            "backdrop": "#e9e3ff",
-            "tilt": -6,
-            "sticker": "",
-            "sticker_style": "coral"
-          }
-        },
-        "cutout-5": {
-          "type": "product_image",
-          "settings": {
-            "asset": "ue-cutout-coffee-cup.webp",
-            "alt": "Sage and coral coffee cup",
-            "backdrop": "#d8f3e8",
-            "tilt": 3,
-            "sticker": "",
-            "sticker_style": "coral"
-          }
-        }
-      },
-      "block_order": [
-        "cutout-1",
-        "cutout-2",
-        "cutout-3",
-        "cutout-4",
-        "cutout-5"
-      ],
+      "type": "ue-boutique-hero",
       "settings": {
-        "eyebrow": "✿ The gifting edit · free delivery across India",
-        "heading_start": "Gifts that make them",
-        "heading_highlight": "smile",
-        "heading_end": "✨",
-        "text": "<p>Colourful tumblers, cute kids' bottles, cosy mugs and home décor — premium everyday essentials that are fun to give and lovely to use.</p>",
-        "button_1_label": "Shop bestsellers →",
+        "eyebrow": "Premium tumblers · Bottles · Home décor",
+        "heading_1": "Thoughtful gifts,",
+        "heading_2": "made memorable.",
+        "text": "<p>Everyday essentials crafted to be used daily and gifted with pride — insulated tumblers, water bottles, mugs and décor, delivered free across India.</p>",
+        "button_1_label": "Shop bestsellers ↓",
         "button_1_link": "#top-sellers",
-        "button_2_label": "Gifts by budget 🎁",
-        "button_2_link": "#budget",
-        "trust_1": "🚚 Free delivery",
-        "trust_2": "↩️ 7-day easy returns",
-        "trust_3": "✍️ Personalise select gifts",
-        "background": "#fff8f1",
-        "accent": "#ff6f61",
-        "text_color": "#2b2220"
+        "button_2_label": "Explore all gifts",
+        "button_2_link": "/collections/all",
+        "show_categories": true,
+        "categories_count": 6,
+        "trust_1": "Free delivery across India",
+        "trust_2": "7-day easy returns",
+        "trust_3": "Secure checkout",
+        "trust_4": "Personalised gifting",
+        "accent": "#dfc08a"
       }
     },
     "ribbon": {
