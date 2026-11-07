@@ -9,7 +9,7 @@
           "type": "text",
           "settings": {
             "heading": "Urban Essentials",
-            "subtext": "<p>Thoughtful gifts. Made memorable. Premium tumblers, bottles, mugs and home décor — delivered free across India.</p>"
+            "subtext": "<p>Premium tumblers, bottles, mugs and home décor for everyday living — delivered free across India.</p>"
           }
         },
         "shop": {
@@ -35,7 +35,7 @@
       "settings": {
         "color_scheme": "scheme-2",
         "newsletter_enable": true,
-        "newsletter_heading": "Join the Urban Essentials circle — new arrivals & gifting ideas",
+        "newsletter_heading": "Join the Urban Essentials circle — new arrivals & exclusive offers",
         "enable_follow_on_shop": true,
         "show_social": true,
         "enable_country_selector": false,

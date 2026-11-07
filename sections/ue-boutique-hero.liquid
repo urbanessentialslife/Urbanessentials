@@ -177,6 +177,26 @@
   }
   @keyframes ue-card-in { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
   @media (prefers-reduced-motion: reduce) { .ue-bhero__card, .ue-bhero--photo .ue-bhero__img, .ue-bhero__scroll { animation: none; } }
+
+  /* Compact version (client): small text block sitting at the very bottom */
+  .ue-bhero.ue-bhero--photo .ue-bhero__inner { padding-bottom: 1.4rem; }
+  @media screen and (max-width: 749px) { .ue-bhero.ue-bhero--photo { min-height: calc(100svh - 13rem); height: calc(100svh - 13rem); } }
+  .ue-bhero.ue-bhero--photo .ue-bhero__shade--bottom { background: linear-gradient(to top, rgba(18,13,11,.88) 0%, rgba(18,13,11,.55) 20%, rgba(18,13,11,0) 40%); }
+  .ue-bhero--photo .ue-bhero__card-eyebrow { font-size: .8rem; letter-spacing: .28em; margin-bottom: .4rem; gap: .8rem; }
+  .ue-bhero--photo .ue-bhero__card-eyebrow::before, .ue-bhero--photo .ue-bhero__card-eyebrow::after { width: 1.6rem; }
+  .ue-bhero--photo .ue-bhero__card-title { font-size: 2.2rem; margin-bottom: 1rem; white-space: nowrap; }
+  .ue-bhero--photo .ue-bhero__card-title em { display: inline; }
+  .ue-bhero--photo .ue-bhero__card .ue-bhero__buttons { gap: .6rem; max-width: 32rem; margin: 0 auto; }
+  .ue-bhero--photo .ue-bhero__card .ue-bhero__btn { padding: .9rem .6rem; font-size: .85rem; letter-spacing: .1em; box-shadow: none; }
+  .ue-bhero--photo .ue-bhero__scroll { margin-top: .6rem; width: 2.4rem; height: 2.4rem; }
+  .ue-bhero--photo .ue-bhero__scroll svg { width: 1.2rem; height: 1.2rem; }
+  @media screen and (min-width: 750px) {
+    .ue-bhero.ue-bhero--photo .ue-bhero__inner { padding-bottom: 2rem; }
+    .ue-bhero--photo .ue-bhero__card-eyebrow { font-size: .95rem; }
+    .ue-bhero--photo .ue-bhero__card-title { font-size: 3.2rem; margin-bottom: 1.4rem; }
+    .ue-bhero--photo .ue-bhero__card .ue-bhero__buttons { max-width: none; }
+    .ue-bhero--photo .ue-bhero__card .ue-bhero__btn { flex: 0 1 auto; padding: 1.1rem 2.4rem; font-size: 1rem; letter-spacing: .16em; }
+  }
 {% endstylesheet %}
 
 {% schema %}
@@ -186,8 +206,8 @@
   "class": "section",
   "settings": [
     { "type": "text", "id": "card_eyebrow", "label": "Welcome card: small line", "default": "Welcome to Urban Essentials" },
-    { "type": "text", "id": "card_title", "label": "Welcome card: heading", "default": "Gifts that feel" },
-    { "type": "text", "id": "card_title_accent", "label": "Welcome card: gold italic words", "default": "truly special" },
+    { "type": "text", "id": "card_title", "label": "Welcome card: heading", "default": "Made for" },
+    { "type": "text", "id": "card_title_accent", "label": "Welcome card: gold italic words", "default": "everyday living" },
     { "type": "checkbox", "id": "show_text", "label": "Show heading & text on photo", "default": true },
     { "type": "checkbox", "id": "show_trust", "label": "Show trust bar", "default": true },
     { "type": "image_picker", "id": "image", "label": "Image (desktop)", "info": "Defaults to the boutique photo." },
@@ -198,7 +218,7 @@
     { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Everyday essentials crafted to be used daily and gifted with pride — insulated tumblers, water bottles, mugs and décor, delivered free across India.</p>" },
     { "type": "text", "id": "button_1_label", "label": "Gold button label", "default": "Shop bestsellers ↓" },
     { "type": "text", "id": "button_1_link", "label": "Gold button link", "default": "#top-sellers", "info": "e.g. #top-sellers or /collections/all" },
-    { "type": "text", "id": "button_2_label", "label": "Outline button label", "default": "Explore all gifts" },
+    { "type": "text", "id": "button_2_label", "label": "Outline button label", "default": "Explore products" },
     { "type": "text", "id": "button_2_link", "label": "Outline button link", "default": "/collections/all" },
     { "type": "checkbox", "id": "show_categories", "label": "Show category pills", "default": true },
     { "type": "range", "id": "categories_count", "label": "Number of category pills", "min": 2, "max": 10, "step": 1, "default": 6 },
