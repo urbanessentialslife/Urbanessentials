@@ -151,8 +151,7 @@
             "amount": "₹999",
             "min_price": 0,
             "max_price": 999,
-            "emoji": "🎈",
-            "color": "#d8f3e8"
+            "color": "#EDE4D6"
           }
         },
         "budget-2": {
@@ -162,8 +161,7 @@
             "amount": "₹1,499",
             "min_price": 0,
             "max_price": 1499,
-            "emoji": "🎀",
-            "color": "#fde2e4"
+            "color": "#DFCDB4"
           }
         },
         "budget-3": {
@@ -173,8 +171,7 @@
             "amount": "₹1,999",
             "min_price": 0,
             "max_price": 1999,
-            "emoji": "🎁",
-            "color": "#fff1c1"
+            "color": "#C9A97C"
           }
         },
         "budget-4": {
@@ -184,8 +181,7 @@
             "amount": "₹2,000+",
             "min_price": 2000,
             "max_price": 0,
-            "emoji": "💎",
-            "color": "#e9e3ff"
+            "color": "#241A16"
           }
         }
       },
@@ -199,7 +195,7 @@
         "heading": "Shop by",
         "heading_accent": "Budget",
         "subheading": "Tap a budget and we'll show you everything that fits.",
-        "background": "#fff8f1"
+        "background": "#f4f0e8"
       }
     },
     "featured_gifts": {

@@ -40,10 +40,12 @@
           endif
         -%}
         <li {{ block.shopify_attributes }}>
-          <a class="ue-budget__tile" href="{{ href }}" style="background: {{ block.settings.color }};">
-            <span class="ue-budget__emoji" aria-hidden="true">{{ block.settings.emoji }}</span>
+          {%- assign tile_brightness = block.settings.color | color_brightness -%}
+          <a class="ue-budget__tile{% if tile_brightness < 110 %} ue-budget__tile--dark{% endif %}" href="{{ href }}" style="background: {{ block.settings.color }};">
+            {%- if block.settings.emoji != blank -%}<span class="ue-budget__emoji" aria-hidden="true">{{ block.settings.emoji }}</span>{%- endif -%}
             <span class="ue-budget__label">{{ block.settings.label }}</span>
             <span class="ue-budget__amount ue-font-playful">{{ block.settings.amount }}</span>
+            <span class="ue-budget__arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 6l6 6-6 6"/></svg></span>
           </a>
         </li>
       {%- endfor -%}
@@ -68,11 +70,24 @@
   .ue-budget__tile:hover .ue-budget__emoji { transform: rotate(12deg); }
   .ue-budget__label { position: relative; font-size: 1.2rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; opacity: .7; }
   .ue-budget__amount { position: relative; font-size: clamp(2.8rem, 4vw, 4rem); font-weight: 600; }
+  /* Brand palette tiles: sand -> latte -> caramel -> espresso (premium) */
+  .ue-budget__tile { border: 1px solid rgba(36,26,22,.08); color: #241a16; box-shadow: 0 6px 18px rgba(36,26,22,.06); }
+  .ue-budget__tile::after { content: ""; position: absolute; inset: .6rem; border: 1px solid rgba(255,255,255,.45); border-radius: 1.9rem; pointer-events: none; }
+  .ue-budget__tile--dark { color: #f4f0e8; }
+  .ue-budget__tile--dark::after { border-color: rgba(223,192,138,.35); }
+  .ue-budget__tile--dark .ue-budget__label { color: #dfc08a; opacity: 1; }
+  .ue-budget__label { letter-spacing: .22em; font-size: 1.05rem; }
+  .ue-budget__amount { font-size: 3.2rem; }
+  @media screen and (min-width: 750px) { .ue-budget__amount { font-size: 4rem; } }
+  .ue-budget__arrow { position: absolute; right: 1.4rem; bottom: 1.4rem; width: 3.2rem; height: 3.2rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,.55); color: #241a16; transition: transform .25s; }
+  .ue-budget__tile--dark .ue-budget__arrow { background: #dfc08a; color: #241a16; }
+  .ue-budget__arrow svg { width: 1.4rem; height: 1.4rem; }
+  .ue-budget__tile:hover .ue-budget__arrow { transform: translateX(3px); }
 {% endstylesheet %}
 
 {% schema %}
 {
-  "name": "UE Gifts by budget",
+  "name": "UE Shop by budget",
   "tag": "div",
   "class": "section",
   "settings": [
@@ -91,14 +106,14 @@
         { "type": "number", "id": "min_price", "label": "Minimum price (₹, 0 = none)", "default": 0 },
         { "type": "number", "id": "max_price", "label": "Maximum price (₹, 0 = none)", "default": 999 },
         { "type": "collection", "id": "collection", "label": "Collection (optional)", "info": "Defaults to all products." },
-        { "type": "text", "id": "emoji", "label": "Emoji", "default": "🎈" },
+        { "type": "text", "id": "emoji", "label": "Emoji (optional)" },
         { "type": "color", "id": "color", "label": "Tile colour", "default": "#d8f3e8" }
       ]
     }
   ],
   "presets": [
     {
-      "name": "UE Gifts by budget",
+      "name": "UE Shop by budget",
       "blocks": [
         { "type": "budget", "settings": { "label": "Under", "amount": "₹999", "min_price": 0, "max_price": 999, "emoji": "🎈", "color": "#d8f3e8" } },
         { "type": "budget", "settings": { "label": "Under", "amount": "₹1,499", "min_price": 0, "max_price": 1499, "emoji": "🎀", "color": "#fde2e4" } },
