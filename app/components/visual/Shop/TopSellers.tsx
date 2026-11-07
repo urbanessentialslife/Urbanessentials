@@ -1,13 +1,13 @@
-import { formatAmount } from '~/lib/money';
-import React, { useEffect, useRef } from 'react';
-import { Link } from 'react-router';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Image } from '@shopify/hydrogen';
-import type { ShowcaseProduct } from '~/data/showcaseProducts';
-import { useShowcaseCart } from '~/context/ShowcaseCartContext';
-import { useAddToCartFeedback } from '~/hooks/useAddToCartFeedback';
-import { LogoMark } from '../Common/Logo';
+import {formatAmount} from '~/lib/money';
+import React, {useEffect, useRef} from 'react';
+import {Link} from 'react-router';
+import {gsap} from 'gsap';
+import {ScrollTrigger} from 'gsap/ScrollTrigger';
+import {Image} from '@shopify/hydrogen';
+import type {ShowcaseProduct} from '~/data/showcaseProducts';
+import {useShowcaseCart} from '~/context/ShowcaseCartContext';
+import {useAddToCartFeedback} from '~/hooks/useAddToCartFeedback';
+import {LogoMark} from '../Common/Logo';
 
 interface TopSellersProps {
   products: ShowcaseProduct[];
@@ -21,7 +21,7 @@ interface TopSellersProps {
  * ProductDiscoveryGrid further down the page: no filter tabs, since its job
  * is "these are proven favorites," not "browse the whole catalog."
  */
-export function TopSellers({ products, limit = 4 }: TopSellersProps) {
+export function TopSellers({products, limit = 4}: TopSellersProps) {
   // A brand-new store has no sales history, so Shopify's BEST_SELLING sort
   // falls back to its default catalog order — which can surface an
   // out-of-stock product as a "top seller." Never feature something a
@@ -34,52 +34,71 @@ export function TopSellers({ products, limit = 4 }: TopSellersProps) {
   // on every product). If nothing's tagged yet, fall back to leading with
   // tumblers — the store's flagship category — rather than an arbitrary
   // catalog order.
-  const isFeatured = (p: ShowcaseProduct) => (p.tags ?? []).some((t) => t.toLowerCase() === 'featured');
+  const isFeatured = (p: ShowcaseProduct) =>
+    (p.tags ?? []).some((t) => t.toLowerCase() === 'featured');
   const hasFeaturedTag = inStock.some(isFeatured);
   // Target handles matching the user's curated Top Sellers (homepage shows
   // the first `limit` = 4 that exist and are in stock):
-  // 1. Marble Finish Dry Fruit Box Set with Tray (4 jars)
+  // 1. Marble Finish Dry Fruit Container Set with Tray
   // 2. Ribbed Water Bottle - Ivory
   // 3. Illustrated Water Bottle - Pastel Designs
   // 4. Stanley Shaker Bottle - Bright Red
   // 5. Gold-Tone Decorative Jar Trio (shows only if one above is missing)
   const TARGET_TOP_HANDLES = [
-    'marble-finish-dry-fruit-box-set-with-tray-4-jars',
+    'marble-finish-dry-fruit-container-set-with-tray',
     'ubran-essential-ribbed-water-bottle-with-carry-handle-ivory',
     'ubran-essential-illustrated-water-bottle-pastel-designs',
     'ubran-essential-water-bottle-with-carry-handle-bright-red',
     'ubran-essential-gold-tone-decorative-jar-trio',
   ];
 
-  const targetMatched = TARGET_TOP_HANDLES
-    .map((handle) => products.find((p) => p.handle === handle))
-    .filter((p): p is ShowcaseProduct => p !== undefined);
+  const targetMatched = TARGET_TOP_HANDLES.map((handle) =>
+    products.find((p) => p.handle === handle),
+  ).filter((p): p is ShowcaseProduct => p !== undefined);
 
   const fallbackItems = hasFeaturedTag
     ? [...inStock].sort((a, b) => Number(isFeatured(b)) - Number(isFeatured(a)))
-    : [...inStock].sort((a, b) => Number(b.category === 'tumbler') - Number(a.category === 'tumbler'));
+    : [...inStock].sort(
+        (a, b) =>
+          Number(b.category === 'tumbler') - Number(a.category === 'tumbler'),
+      );
 
-  const items = targetMatched.length >= 4 ? targetMatched.slice(0, limit) : [...targetMatched, ...fallbackItems.filter(p => !targetMatched.some(t => t.id === p.id))].slice(0, limit);
+  // Pinned products first (in the order above), then top up with other
+  // in-stock products until `limit` is reached — so the rail is always full
+  // (6 on mobile) even when only some pinned handles exist or are in stock.
+  const pinnedInStock = targetMatched.filter((p) =>
+    p.variants.some((v) => v.inStock),
+  );
+  const items = [
+    ...pinnedInStock,
+    ...fallbackItems.filter((p) => !pinnedInStock.some((t) => t.id === p.id)),
+  ].slice(0, limit);
   const railRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (typeof window === 'undefined' || !railRef.current) return;
     gsap.registerPlugin(ScrollTrigger);
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const prefersReducedMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)',
+    ).matches;
     const cards = railRef.current.children;
     if (prefersReducedMotion || cards.length === 0) return;
 
     const ctx = gsap.context(() => {
       gsap.fromTo(
         cards,
-        { opacity: 0, y: 40 },
+        {opacity: 0, y: 40},
         {
           opacity: 1,
           y: 0,
           duration: 0.7,
           stagger: 0.08,
           ease: 'power3.out',
-          scrollTrigger: { trigger: railRef.current, start: 'top 85%', once: true },
+          scrollTrigger: {
+            trigger: railRef.current,
+            start: 'top 85%',
+            once: true,
+          },
         },
       );
     }, railRef);
@@ -90,7 +109,10 @@ export function TopSellers({ products, limit = 4 }: TopSellersProps) {
   if (items.length === 0) return null;
 
   return (
-    <section id="top-sellers" className="relative pt-16 sm:pt-28 pb-16 sm:pb-24 px-3.5 sm:px-6 md:px-12 bg-white text-[#241a16] font-sans">
+    <section
+      id="top-sellers"
+      className="relative pt-16 sm:pt-28 pb-16 sm:pb-24 px-3.5 sm:px-6 md:px-12 bg-white text-[#241a16] font-sans"
+    >
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 sm:gap-5 mb-8 sm:mb-10 pb-5 sm:pb-6 border-b border-[#c9c2b8]">
           <div>
@@ -110,13 +132,26 @@ export function TopSellers({ products, limit = 4 }: TopSellersProps) {
             className="group inline-flex items-center gap-2 self-start md:self-auto text-xs uppercase tracking-widest font-medium text-[#241a16] hover:text-[#b89b6a] transition-colors"
           >
             View all
-            <svg className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 12h14m-6-6l6 6-6 6" />
+            <svg
+              className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M5 12h14m-6-6l6 6-6 6"
+              />
             </svg>
           </Link>
         </div>
 
-        <div ref={railRef} className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-6 md:gap-8">
+        <div
+          ref={railRef}
+          className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-6 md:gap-8"
+        >
           {items.map((product, index) => (
             <TopSellerCard
               key={product.id}
@@ -142,21 +177,27 @@ function TopSellerCard({
   rank: number;
   className?: string;
 }) {
-  const { addItem } = useShowcaseCart();
-  const defaultVariant = product.variants.find((v) => v.id === product.defaultVariantId) || product.variants[0];
-  const { state: addState, trigger: handleQuickAdd } = useAddToCartFeedback(
+  const {addItem} = useShowcaseCart();
+  const defaultVariant =
+    product.variants.find((v) => v.id === product.defaultVariantId) ||
+    product.variants[0];
+  const {state: addState, trigger: handleQuickAdd} = useAddToCartFeedback(
     () => addItem(product, product.defaultVariantId, 1),
-    { addedDurationMs: 2000 },
+    {addedDurationMs: 2000},
   );
   const isAdded = addState === 'added';
   const imageSrc = defaultVariant?.image || product.image;
-  const hasDiscount = Boolean(product.originalPrice && product.originalPrice > product.price);
+  const hasDiscount = Boolean(
+    product.originalPrice && product.originalPrice > product.price,
+  );
   const discountPercent = hasDiscount
     ? Math.round((1 - product.price / (product.originalPrice as number)) * 100)
     : 0;
 
   return (
-    <div className={`group relative flex flex-col rounded-2xl sm:rounded-3xl bg-white border border-[#c9c2b8] overflow-hidden shadow-[0_4px_16px_rgba(40,30,20,0.04)] hover:shadow-[0_14px_32px_rgba(40,30,20,0.1)] transition-shadow duration-300 ${className ?? ''}`}>
+    <div
+      className={`group relative flex flex-col rounded-2xl sm:rounded-3xl bg-white border border-[#c9c2b8] overflow-hidden shadow-[0_4px_16px_rgba(40,30,20,0.04)] hover:shadow-[0_14px_32px_rgba(40,30,20,0.1)] transition-shadow duration-300 ${className ?? ''}`}
+    >
       <Link
         to={`/products/${product.handle}`}
         prefetch="intent"
@@ -195,16 +236,21 @@ function TopSellerCard({
               {product.title}
             </Link>
             <div className="flex items-center justify-between gap-2">
-            <span className="flex items-baseline gap-1.5 sm:gap-2 flex-wrap min-w-0">
-              <span className="text-[15px] sm:text-xl font-serif font-bold text-[#241a16]">
-                {product.currencySymbol}{formatAmount(product.price, product.currencySymbol)}
-              </span>
-              {hasDiscount && (
-                <span className="text-xs sm:text-base font-serif font-medium text-[#a69686] line-through">
-                  {product.currencySymbol}{formatAmount((product.originalPrice as number), product.currencySymbol)}
+              <span className="flex items-baseline gap-1.5 sm:gap-2 flex-wrap min-w-0">
+                <span className="text-[15px] sm:text-xl font-serif font-bold text-[#241a16]">
+                  {product.currencySymbol}
+                  {formatAmount(product.price, product.currencySymbol)}
                 </span>
-              )}
-            </span>
+                {hasDiscount && (
+                  <span className="text-xs sm:text-base font-serif font-medium text-[#a69686] line-through">
+                    {product.currencySymbol}
+                    {formatAmount(
+                      product.originalPrice as number,
+                      product.currencySymbol,
+                    )}
+                  </span>
+                )}
+              </span>
               {/* Mobile: compact round cart button beside the price, so a
                   card is ~30% shorter and 6 products fit on one phone screen.
                   The full-width button below takes over from sm: up. */}
@@ -214,16 +260,40 @@ function TopSellerCard({
                 disabled={!defaultVariant?.inStock || addState !== 'idle'}
                 aria-label={`Add ${product.title} to cart`}
                 className={`sm:hidden shrink-0 w-8 h-8 rounded-full flex items-center justify-center shadow-xs cursor-pointer disabled:cursor-not-allowed disabled:opacity-40 transition-colors ${
-                  isAdded ? 'bg-emerald-600 text-white' : 'bg-[#241a16] text-[#f4f0e8]'
+                  isAdded
+                    ? 'bg-emerald-600 text-white'
+                    : 'bg-[#241a16] text-[#f4f0e8]'
                 }`}
               >
                 {isAdded ? (
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M5 13l4 4L19 7"
+                    />
                   </svg>
                 ) : (
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.6" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007z" />
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="1.6"
+                      d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007z"
+                    />
                   </svg>
                 )}
               </button>
@@ -235,13 +305,25 @@ function TopSellerCard({
           onClick={handleQuickAdd}
           disabled={!defaultVariant?.inStock || addState !== 'idle'}
           className={`hidden sm:flex w-full py-2 px-2.5 sm:py-2.5 sm:px-4 rounded-full text-[10px] sm:text-xs uppercase tracking-wider sm:tracking-widest font-medium transition-all duration-200 items-center justify-center space-x-1 sm:space-x-1.5 cursor-pointer shadow-xs disabled:cursor-not-allowed disabled:opacity-50 ${
-            isAdded ? 'bg-emerald-600 text-white' : 'bg-[#241a16] hover:bg-[#3a2c24] text-[#f4f0e8]'
+            isAdded
+              ? 'bg-emerald-600 text-white'
+              : 'bg-[#241a16] hover:bg-[#3a2c24] text-[#f4f0e8]'
           }`}
         >
           {isAdded ? (
             <>
-              <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+              <svg
+                className="w-3 h-3 sm:w-3.5 sm:h-3.5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M5 13l4 4L19 7"
+                />
               </svg>
               <span>Added</span>
             </>
