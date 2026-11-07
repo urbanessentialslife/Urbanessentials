@@ -89,9 +89,11 @@
   @keyframes ue-bhero-zoom { from { transform: scale(1.06); } to { transform: scale(1); } }
   @media (prefers-reduced-motion: reduce) { .ue-bhero__img { animation: none; } }
   .ue-bhero__shade { position: absolute; inset: 0; pointer-events: none; }
-  .ue-bhero__shade--bottom { background: linear-gradient(to top, #120d0b 0%, rgba(18,13,11,.6) 45%, rgba(18,13,11,.05) 100%); }
-  .ue-bhero__shade--side { display: none; background: linear-gradient(to right, rgba(18,13,11,.78) 0%, rgba(18,13,11,.25) 50%, transparent 75%); }
-  @media screen and (min-width: 750px) { .ue-bhero__shade--side { display: block; } }
+  /* Dawn hides empty divs (div:empty), so force the shades to show */
+  .ue-bhero .ue-bhero__shade--bottom { display: block; background: linear-gradient(to top, #120d0b 0%, rgba(18,13,11,.72) 40%, rgba(18,13,11,.55) 70%, rgba(18,13,11,.3) 100%); }
+  @media screen and (min-width: 750px) { .ue-bhero .ue-bhero__shade--bottom { background: linear-gradient(to top, #120d0b 0%, rgba(18,13,11,.6) 45%, rgba(18,13,11,.15) 100%); } }
+  .ue-bhero .ue-bhero__shade--side { display: none; background: linear-gradient(to right, rgba(18,13,11,.78) 0%, rgba(18,13,11,.25) 50%, transparent 75%); }
+  @media screen and (min-width: 750px) { .ue-bhero .ue-bhero__shade--side { display: block; } }
 
   .ue-bhero__inner { position: relative; z-index: 1; width: 100%; padding-top: 8rem; padding-bottom: 3rem; }
   @media screen and (min-width: 750px) { .ue-bhero__inner { padding-bottom: 4rem; } }

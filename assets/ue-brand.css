@@ -236,3 +236,15 @@ h1, h2, .h0, .h1, .h2 {
 /* Product cards stay white on the Warm Ivory background */
 .card-wrapper .card--card,
 .card-wrapper .card--standard .card__inner { background: #fff; }
+
+/* Mobile header fit: smaller logo lockup so the cart button never gets cut off */
+@media screen and (max-width: 749px) {
+  .header { padding-left: 1rem; padding-right: 1rem; }
+  .ue-lockup { gap: .7rem; }
+  .ue-lockup__mark { width: 2.6rem; }
+  .ue-lockup__name { font-size: 1.35rem; letter-spacing: .03em; }
+  .ue-lockup__tag { font-size: .55rem; letter-spacing: .22em; }
+}
+@media screen and (max-width: 399px) {
+  .header__icons .header__icon--account { display: none !important; }
+}
