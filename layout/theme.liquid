@@ -325,6 +325,35 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&family=Fredoka:wght@500;600;700&display=swap">
     {{ 'ue-brand.css' | asset_url | stylesheet_tag }}
     {{ 'ue-mobile-cards.css' | asset_url | stylesheet_tag }}
+    {%- if request.page_type == 'index' -%}
+      {%- comment -%} Brand identity for Google (who "Urban Essentials" India is) {%- endcomment -%}
+      <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "OnlineStore",
+          "@id": "https://urbanessentials.life/#organization",
+          "name": "Urban Essentials",
+          "alternateName": ["Urban Essentials India", "Urban Essentials Life", "urbanessentials.life", "UE Lifestyle Travel Home"],
+          "url": "https://urbanessentials.life/",
+          "logo": "{{ 'ue-hero-storefront-desktop.webp' | asset_url | prepend: 'https:' }}",
+          "image": "{{ 'ue-hero-storefront-desktop.webp' | asset_url | prepend: 'https:' }}",
+          "description": "Urban Essentials is an Indian online store for premium insulated tumblers, Stanley bottles, water bottles, mugs, glassware and home décor. Dispatch in 24 hours with free delivery across India.",
+          "slogan": "Lifestyle | Travel | Home",
+          "areaServed": {"@type": "Country", "name": "India"},
+          "currenciesAccepted": "INR",
+          "paymentAccepted": "UPI, Credit Card, Debit Card, Net Banking, Cash on Delivery"
+        }
+      </script>
+      <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "name": "Urban Essentials",
+          "alternateName": ["Urban Essentials India", "urbanessentials.life"],
+          "url": "https://urbanessentials.life/"
+        }
+      </script>
+    {%- endif -%}
     {%- comment -%} Shiprocket Fastrr 1-click checkout (same as old Hydrogen site) {%- endcomment -%}
     <link rel="stylesheet" href="https://fastrr-boost-ui.pickrr.com/assets/styles/shopify.css">
   </head>
