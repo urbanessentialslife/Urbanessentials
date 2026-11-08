@@ -325,6 +325,8 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&family=Fredoka:wght@500;600;700&display=swap">
     {{ 'ue-brand.css' | asset_url | stylesheet_tag }}
     {{ 'ue-mobile-cards.css' | asset_url | stylesheet_tag }}
+    {%- comment -%} Shiprocket Fastrr 1-click checkout (same as old Hydrogen site) {%- endcomment -%}
+    <link rel="stylesheet" href="https://fastrr-boost-ui.pickrr.com/assets/styles/shopify.css">
   </head>
 
   <body class="gradient{% if settings.animations_hover_elements != 'none' %} animate--hover-{{ settings.animations_hover_elements }}{% endif %}">
@@ -407,5 +409,8 @@
     {%- if settings.cart_type == 'drawer' -%}
       <script src="{{ 'cart-drawer.js' | asset_url }}" defer="defer"></script>
     {%- endif -%}
+    <input type="hidden" value="urban-essentials-jcqspwgr.myshopify.com" id="sellerDomain">
+    <script src="https://fastrr-boost-ui.pickrr.com/assets/js/channels/shopify.js" defer></script>
+    <script src="{{ 'ue-fastrr.js' | asset_url }}" defer></script>
   </body>
 </html>

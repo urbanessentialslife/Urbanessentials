@@ -97,7 +97,17 @@
             {%- render 'loading-spinner' -%}
           </button>
           {%- if show_dynamic_checkout -%}
-            {{ form | payment_button }}
+            {%- comment -%} Urban Essentials: Buy now opens Shiprocket Fastrr 1-click checkout (assets/ue-fastrr.js) {%- endcomment -%}
+            <button
+              type="button"
+              class="button button--full-width button--primary ue-buy-now"
+              data-ue-buy-now
+              data-form="{{ product_form_id }}"
+              {% if product.selected_or_first_available_variant.available == false or quantity_rule_soldout or product.selected_or_first_available_variant == null %}disabled{% endif %}
+            >
+              <span>Buy it now</span>
+              {%- render 'loading-spinner' -%}
+            </button>
           {%- endif -%}
         </div>
       {%- endform -%}
