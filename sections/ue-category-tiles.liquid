@@ -29,14 +29,14 @@
     <ul class="ue-cats__grid">
       {%- if section.blocks.size > 0 -%}
         {%- for block in section.blocks -%}
-          {%- assign c = block.settings.collection -%}
+          {%- assign c = block.settings.collection -%}{%- assign c_alt = block.settings.title | default: c.title | escape -%}
           {%- assign tint_index = forloop.index0 | modulo: 6 -%}{%- assign tint = pastels[tint_index] -%}
           <li {{ block.shopify_attributes }}>
             <a class="ue-cats__tile" href="{% if c != blank %}{{ c.url }}{% else %}#{% endif %}">
               <span class="ue-cats__circle" style="background: {{ tint }};">
                 {%- assign img = block.settings.image | default: c.featured_image -%}
                 {%- if img != blank -%}
-                  {{ img | image_url: width: 400 | image_tag: loading: 'lazy', widths: '200, 300, 400', sizes: '(min-width: 990px) 15vw, 30vw', alt: '' }}
+                  {{ img | image_url: width: 400 | image_tag: loading: 'lazy', widths: '200, 300, 400', sizes: '(min-width: 990px) 15vw, 30vw', alt: c_alt }}
                 {%- else -%}
                   {{ 'collection-' | append: forloop.index | placeholder_svg_tag: 'ue-cats__ph' }}
                 {%- endif -%}
@@ -46,14 +46,14 @@
           </li>
         {%- endfor -%}
       {%- else -%}
-        {%- for c in collections limit: 12 -%}
+        {%- for c in collections limit: 12 -%}{%- assign c_alt = c.title | escape -%}
           {%- if c.handle == 'frontpage' or c.handle == 'all' -%}{%- continue -%}{%- endif -%}
           {%- assign tint_index = forloop.index0 | modulo: 6 -%}{%- assign tint = pastels[tint_index] -%}
           <li>
             <a class="ue-cats__tile" href="{{ c.url }}">
               <span class="ue-cats__circle" style="background: {{ tint }};">
                 {%- if c.featured_image != blank -%}
-                  {{ c.featured_image | image_url: width: 400 | image_tag: loading: 'lazy', widths: '200, 300, 400', sizes: '(min-width: 990px) 15vw, 30vw', alt: '' }}
+                  {{ c.featured_image | image_url: width: 400 | image_tag: loading: 'lazy', widths: '200, 300, 400', sizes: '(min-width: 990px) 15vw, 30vw', alt: c_alt }}
                 {%- endif -%}
               </span>
               <span class="ue-cats__label">{{ c.title }}</span>
