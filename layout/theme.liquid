@@ -7,9 +7,10 @@
     <meta name="theme-color" content="">
     <link rel="canonical" href="{{ canonical_url }}">
 
-    {%- if settings.favicon != blank -%}
-      <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
-    {%- endif -%}
+    {%- comment -%} UE logo favicon (same icon as the old Hydrogen site) {%- endcomment -%}
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ 'ue-favicon-32.png' | asset_url }}">
+    <link rel="icon" type="image/png" sizes="192x192" href="{{ 'ue-icon-192.png' | asset_url }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ 'ue-apple-touch-icon.png' | asset_url }}">
 
     {%- unless settings.type_header_font.system? and settings.type_body_font.system? -%}
       <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
