@@ -283,23 +283,12 @@
             "max_price": 1999,
             "color": "#C9A97C"
           }
-        },
-        "budget-4": {
-          "type": "budget",
-          "settings": {
-            "label": "Premium",
-            "amount": "₹2,000+",
-            "min_price": 2000,
-            "max_price": 0,
-            "color": "#241A16"
-          }
         }
       },
       "block_order": [
         "budget-1",
         "budget-2",
-        "budget-3",
-        "budget-4"
+        "budget-3"
       ],
       "settings": {
         "heading": "Shop by",
