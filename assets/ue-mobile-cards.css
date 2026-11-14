@@ -32,3 +32,13 @@
   .product-grid .price .price-item { font-size: 1.9rem; }
   .product-grid .price s.price-item--regular { font-size: 1.5rem; }
 }
+
+/* Mobile product photo viewer: show the whole photo fitted to the screen (Dawn shows it 1100px wide = stuck zoomed in) */
+@media screen and (max-width: 749px) {
+  .product-media-modal__dialog { height: 100dvh; }
+  .product-media-modal__content { height: 100dvh; max-height: 100dvh; overflow: hidden; display: flex; align-items: center; justify-content: center; padding: 0; }
+  .product-media-modal__content > img.active,
+  .product-media-modal__content > .active { width: 100% !important; max-width: 100% !important; height: auto !important; max-height: 100dvh; object-fit: contain; margin: 0 auto; }
+  .product-media-modal__toggle { width: 4.4rem; height: 4.4rem; top: 1.6rem; right: 1.6rem; z-index: 3; background: rgba(255,255,255,.95); color: #241a16; box-shadow: 0 4px 14px rgba(0,0,0,.15); }
+  .product-media-modal__toggle .icon { width: 1.8rem; height: 1.8rem; }
+}

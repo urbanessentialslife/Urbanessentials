@@ -55,3 +55,18 @@
     </div>
   </div>
 </product-modal>
+
+<script>
+  // Mobile: tapping the enlarged photo closes the viewer and returns to the product details.
+  (function () {
+    var modal = document.getElementById('ProductModal-{{ section.id }}');
+    if (!modal) return;
+    modal.querySelector('.product-media-modal__content').addEventListener('click', function (e) {
+      if (window.innerWidth >= 750) return;
+      if (e.target.tagName === 'IMG' || e.target === e.currentTarget) {
+        var btn = document.getElementById('ModalClose-{{ section.id }}');
+        if (btn) btn.click();
+      }
+    });
+  })();
+</script>
