@@ -261,7 +261,8 @@
             "amount": "₹999",
             "min_price": 0,
             "max_price": 999,
-            "color": "#EDE4D6"
+            "color": "#F7F2E8",
+            "note": "Everyday picks"
           }
         },
         "budget-2": {
@@ -271,7 +272,8 @@
             "amount": "₹1,499",
             "min_price": 0,
             "max_price": 1499,
-            "color": "#DFCDB4"
+            "color": "#EFE6D4",
+            "note": "Most loved"
           }
         },
         "budget-3": {
@@ -281,7 +283,8 @@
             "amount": "₹1,999",
             "min_price": 0,
             "max_price": 1999,
-            "color": "#C9A97C"
+            "color": "#E6D7BC",
+            "note": "Premium picks"
           }
         },
         "budget-all": {
@@ -291,7 +294,8 @@
             "amount": "Shop all",
             "min_price": 0,
             "max_price": 0,
-            "color": "#241A16"
+            "color": "#D4B47E",
+            "note": "Across India"
           }
         }
       },
@@ -305,7 +309,7 @@
         "heading": "Shop by",
         "heading_accent": "Budget",
         "subheading": "Tap a budget and we'll show you everything that fits.",
-        "background": "#f4f0e8"
+        "background": "#14110F"
       }
     },
     "featured_gifts": {

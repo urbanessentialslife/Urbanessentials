@@ -16,7 +16,8 @@
 {%- endstyle -%}
 
 <span id="budget" class="ue-anchor" aria-hidden="true"></span>
-<section id="ue-budget-{{ section.id }}" class="ue-budget" aria-labelledby="ue-budget-heading-{{ section.id }}">
+{%- assign ue_bg_brightness = section.settings.background | color_brightness -%}
+<section id="ue-budget-{{ section.id }}" class="ue-budget{% if ue_bg_brightness < 110 %} ue-budget--dark{% endif %}" aria-labelledby="ue-budget-heading-{{ section.id }}">
   <div class="page-width">
     <h2 id="ue-budget-heading-{{ section.id }}" class="ue-budget__title ue-heading">{{ section.settings.heading }}{% if section.settings.heading_accent != blank %} <em>{{ section.settings.heading_accent }}</em>{% endif %}</h2>
     {%- if section.settings.subheading != blank -%}
@@ -39,13 +40,14 @@
             assign href = base | append: '?filter.v.price.gte=' | append: block.settings.min_price
           endif
         -%}
-        <li {{ block.shopify_attributes }}>
+        <li class="ue-budget__item" {{ block.shopify_attributes }}>
           {%- assign tile_brightness = block.settings.color | color_brightness -%}
-          <a class="ue-budget__tile{% if tile_brightness < 110 %} ue-budget__tile--dark{% endif %}" href="{{ href }}" style="background: {{ block.settings.color }};">
-            {%- if block.settings.emoji != blank -%}<span class="ue-budget__emoji" aria-hidden="true">{{ block.settings.emoji }}</span>{%- endif -%}
+          <a class="ue-budget__tag{% if tile_brightness < 110 %} ue-budget__tag--dark{% endif %}" href="{{ href }}" style="--tile: {{ block.settings.color }};">
+            <span class="ue-budget__eyelet" aria-hidden="true"></span>
             <span class="ue-budget__label">{{ block.settings.label }}</span>
             <span class="ue-budget__amount ue-font-playful">{{ block.settings.amount }}</span>
-            <span class="ue-budget__arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+            {%- if block.settings.note != blank -%}<span class="ue-budget__note">{{ block.settings.note }}</span>{%- endif -%}
+            <span class="ue-budget__cta">Shop now <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 6l6 6-6 6"/></svg></span>
           </a>
         </li>
       {%- endfor -%}
@@ -56,34 +58,68 @@
 {% stylesheet %}
   .ue-anchor { display: block; position: relative; top: -8rem; visibility: hidden; }
   .ue-font-playful { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600; letter-spacing: 0; }
-  .ue-budget { background: var(--ue-budget-bg); padding: 4rem 0; }
+  .ue-budget { background: var(--ue-budget-bg); padding: 4rem 0 4.4rem; overflow: hidden; }
   @media screen and (min-width: 750px) { .ue-budget { padding: 6rem 0; } }
   .ue-budget__title { margin: 0 0 .6rem; font-size: clamp(2.4rem, 4vw, 3.8rem); font-weight: 600; }
-  .ue-budget__sub { margin: 0 0 2.8rem; font-size: 1.4rem; opacity: .75; }
-  .ue-budget__grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.2rem; }
-  @media screen and (min-width: 990px) { .ue-budget__grid { grid-template-columns: repeat(4, 1fr); gap: 2rem; } }
-  .ue-budget__tile { position: relative; display: flex; flex-direction: column; justify-content: space-between; height: 13rem; padding: 2rem; border-radius: 2.4rem; overflow: hidden; text-decoration: none; color: #2b2220; transition: transform .25s, box-shadow .25s; }
-  @media screen and (min-width: 750px) { .ue-budget__tile { height: 16rem; } }
-  .ue-budget__tile:hover { transform: translateY(-4px); box-shadow: 0 16px 32px rgba(43,34,32,.12); }
-  .ue-budget__emoji { position: absolute; right: -1rem; bottom: -1.4rem; font-size: 6.4rem; line-height: 1; transition: transform .3s; }
-  @media screen and (min-width: 750px) { .ue-budget__emoji { font-size: 7.6rem; } }
-  .ue-budget__tile:hover .ue-budget__emoji { transform: rotate(12deg); }
-  .ue-budget__label { position: relative; font-size: 1.2rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; opacity: .7; }
-  .ue-budget__amount { position: relative; font-size: clamp(2.8rem, 4vw, 4rem); font-weight: 600; }
-  /* Brand palette tiles: sand -> latte -> caramel -> espresso (premium) */
-  .ue-budget__tile { border: 1px solid rgba(36,26,22,.08); color: #241a16; box-shadow: 0 6px 18px rgba(36,26,22,.06); }
-  .ue-budget__tile::after { content: ""; position: absolute; inset: .6rem; border: 1px solid rgba(255,255,255,.45); border-radius: 1.9rem; pointer-events: none; }
-  .ue-budget__tile--dark { color: #f4f0e8; }
-  .ue-budget__tile--dark::after { border-color: rgba(223,192,138,.35); }
-  .ue-budget__tile--dark .ue-budget__label { color: #dfc08a; opacity: 1; }
-  .ue-budget__label { letter-spacing: .22em; font-size: 1.05rem; }
-  .ue-budget__amount { font-size: 3.2rem; }
-  @media screen and (min-width: 750px) { .ue-budget__amount { font-size: 4rem; } }
-  .ue-budget__arrow { position: absolute; right: 1.4rem; bottom: 1.4rem; width: 3.2rem; height: 3.2rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,.55); color: #241a16; transition: transform .25s; }
-  .ue-budget__tile--dark .ue-budget__arrow { background: #dfc08a; color: #241a16; }
-  .ue-budget__arrow svg { width: 1.4rem; height: 1.4rem; }
-  .ue-budget__amount { padding-right: 3.8rem; line-height: 1.05; }
-  .ue-budget__tile:hover .ue-budget__arrow { transform: translateX(3px); }
+  .ue-budget__sub { margin: 0 0 1.6rem; font-size: 1.4rem; opacity: .75; }
+
+  /* Hanging price tags on a line */
+  .ue-budget__grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, 1fr); column-gap: 1.4rem; row-gap: 1rem; }
+  @media screen and (min-width: 990px) { .ue-budget__grid { grid-template-columns: repeat(4, 1fr); column-gap: 2.4rem; } }
+  .ue-budget__item { position: relative; padding-top: 4.2rem; filter: drop-shadow(0 10px 12px rgba(36,26,22,.13)); transition: filter .3s; }
+  .ue-budget__item:hover { filter: drop-shadow(0 16px 20px rgba(36,26,22,.2)); }
+  .ue-budget__item::before { content: ""; position: absolute; left: 0; right: 0; top: 1.2rem; border-top: 1.5px solid rgba(36,26,22,.25); }
+  .ue-budget__item::after { content: ""; position: absolute; left: 50%; top: 1.2rem; width: 1.5px; height: 3.9rem; background: rgba(36,26,22,.45); transform: translateX(-50%); }
+  @media screen and (min-width: 990px) { .ue-budget__item::before { left: -1.2rem; right: -1.2rem; } }
+
+  .ue-budget__tag { position: relative; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 3.6rem 1.2rem 1.8rem; text-decoration: none; color: #241a16; background: var(--tile);
+    clip-path: polygon(26% 0, 74% 0, 100% 15%, 100% 100%, 0 100%, 0 15%);
+    transform-origin: 50% -3rem; animation: ue-tag-sway 6s ease-in-out infinite; }
+  .ue-budget__item:nth-child(2n) .ue-budget__tag { animation-delay: -1.5s; animation-duration: 7s; }
+  .ue-budget__item:nth-child(3n) .ue-budget__tag { animation-delay: -3s; }
+  .ue-budget__tag:hover { animation: ue-tag-swing .9s ease-in-out; }
+  @keyframes ue-tag-sway { 0%,100% { transform: rotate(-1.6deg); } 50% { transform: rotate(1.6deg); } }
+  @keyframes ue-tag-swing { 0% { transform: rotate(0); } 25% { transform: rotate(5deg); } 55% { transform: rotate(-3.5deg); } 80% { transform: rotate(1.5deg); } 100% { transform: rotate(0); } }
+  @media (prefers-reduced-motion: reduce) { .ue-budget__tag, .ue-budget__tag:hover { animation: none; } }
+
+  /* Inner stitched border + eyelet */
+  .ue-budget__tag::before { content: ""; position: absolute; inset: .7rem; border: 1px dashed rgba(36,26,22,.28); clip-path: polygon(26% 0, 74% 0, 100% 15%, 100% 100%, 0 100%, 0 15%); pointer-events: none; }
+  .ue-budget__eyelet { position: absolute; top: 1.3rem; left: 50%; width: 1.4rem; height: 1.4rem; margin-left: -.7rem; border-radius: 50%; background: var(--ue-budget-bg); box-shadow: inset 0 1px 3px rgba(0,0,0,.3), 0 0 0 3px rgba(255,255,255,.55); }
+
+  .ue-budget__label { font-size: 1rem; font-weight: 700; text-transform: uppercase; letter-spacing: .26em; opacity: .7; }
+  .ue-budget__amount { font-size: 3.4rem; line-height: 1; margin: .5rem 0 .4rem; }
+  .ue-budget__note { font-size: 1.15rem; letter-spacing: .04em; opacity: .75; }
+  .ue-budget__cta { display: inline-flex; align-items: center; gap: .5rem; margin-top: 1.4rem; padding: .7rem 1.4rem; border-radius: 99rem; background: #241a16; color: #f4f0e8; font-size: 1.1rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; transition: gap .25s; }
+  .ue-budget__cta svg { width: 1.3rem; height: 1.3rem; }
+  .ue-budget__tag:hover .ue-budget__cta { gap: .9rem; }
+  @media screen and (min-width: 750px) {
+    .ue-budget__tag { padding: 4.2rem 2rem 2.4rem; }
+    .ue-budget__amount { font-size: 4.6rem; }
+    .ue-budget__label { font-size: 1.1rem; }
+    .ue-budget__note { font-size: 1.3rem; }
+    .ue-budget__cta { font-size: 1.2rem; padding: .9rem 1.8rem; }
+  }
+
+  /* Dark premium tag */
+  .ue-budget__tag--dark { color: #f4f0e8; }
+  .ue-budget__tag--dark::before { border-color: rgba(223,192,138,.45); }
+  .ue-budget__tag--dark .ue-budget__label { color: #dfc08a; opacity: 1; }
+  .ue-budget__tag--dark .ue-budget__eyelet { box-shadow: inset 0 1px 3px rgba(0,0,0,.5), 0 0 0 3px #dfc08a; }
+  .ue-budget__tag--dark .ue-budget__cta { background: #dfc08a; color: #241a16; }
+
+  /* Dark (black) section: ivory tags, gold accents, light strings */
+  .ue-budget--dark { background: radial-gradient(ellipse at 50% 0%, rgba(223,192,138,.10), transparent 60%), var(--ue-budget-bg); color: #f4eee2; }
+  .ue-budget--dark .ue-budget__title { color: #f4eee2; }
+  .ue-budget--dark .ue-budget__title em { color: #dfc08a; }
+  .ue-budget--dark .ue-budget__sub { color: rgba(244,238,226,.7); opacity: 1; }
+  .ue-budget--dark .ue-budget__item::before { border-top-color: rgba(223,192,138,.45); }
+  .ue-budget--dark .ue-budget__item::after { background: rgba(223,192,138,.75); }
+  .ue-budget--dark .ue-budget__item { filter: drop-shadow(0 12px 18px rgba(0,0,0,.55)); }
+  .ue-budget--dark .ue-budget__item:hover { filter: drop-shadow(0 14px 26px rgba(223,192,138,.22)); }
+  .ue-budget--dark .ue-budget__tag::before { border-color: rgba(150,115,60,.45); }
+  .ue-budget--dark .ue-budget__eyelet { box-shadow: inset 0 1px 3px rgba(0,0,0,.6), 0 0 0 3px #c9a66b; }
+  .ue-budget--dark .ue-budget__label { color: #8a6a3a; opacity: 1; }
+  .ue-budget--dark .ue-budget__cta { background: #14110f; color: #f4eee2; }
 {% endstylesheet %}
 
 {% schema %}
@@ -107,6 +143,7 @@
         { "type": "number", "id": "min_price", "label": "Minimum price (₹, 0 = none)", "default": 0 },
         { "type": "number", "id": "max_price", "label": "Maximum price (₹, 0 = none)", "default": 999 },
         { "type": "collection", "id": "collection", "label": "Collection (optional)", "info": "Defaults to all products." },
+        { "type": "text", "id": "note", "label": "Small line under the price (optional)" },
         { "type": "text", "id": "emoji", "label": "Emoji (optional)" },
         { "type": "color", "id": "color", "label": "Tile colour", "default": "#d8f3e8" }
       ]
