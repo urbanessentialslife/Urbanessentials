@@ -76,23 +76,129 @@
     "categories": {
       "type": "ue-category-tiles",
       "blocks": {
-        "cat-01": { "type": "collection", "settings": { "collection": "urban-essentials-water-bottle", "title": "Urban Essentials Water Bottle" } },
-        "cat-02": { "type": "collection", "settings": { "collection": "stanley-travel-mug", "title": "Stanley Travel Mug" } },
-        "cat-03": { "type": "collection", "settings": { "collection": "crockery", "title": "Crockery" } },
-        "cat-04": { "type": "collection", "settings": { "collection": "thrmal-flask", "title": "Thermal Flask" } },
-        "cat-05": { "type": "collection", "settings": { "collection": "stanley-gym-shaker", "title": "Stanley Gym Shaker" } },
-        "cat-06": { "type": "collection", "settings": { "collection": "stanley", "title": "Kids Sipper" } },
-        "cat-07": { "type": "collection", "settings": { "collection": "girlish-eassentials", "title": "Girlish Essentials" } },
-        "cat-08": { "type": "collection", "settings": { "collection": "zest-water-bottle", "title": "Zest Water Bottle" } },
-        "cat-09": { "type": "collection", "settings": { "collection": "couple-mug", "title": "Couple Mug" } },
-        "cat-10": { "type": "collection", "settings": { "collection": "heritage-flask", "title": "Heritage Flask" } },
-        "cat-11": { "type": "collection", "settings": { "collection": "motif-waterbottles", "title": "Motif Water Bottle" } },
-        "cat-12": { "type": "collection", "settings": { "collection": "insulated-tumbler-bottle", "title": "Tall Travel Mug" } },
-        "cat-13": { "type": "collection", "settings": { "collection": "clear-waterbottles", "title": "Clear Water Bottle" } },
-        "cat-14": { "type": "collection", "settings": { "collection": "table-lamp", "title": "Table Lamp" } },
-        "cat-15": { "type": "collection", "settings": { "collection": "small-designer-flask", "title": "Small Designer Flask" } }
+        "cat-01": {
+          "type": "collection",
+          "settings": {
+            "collection": "urban-essentials-water-bottle",
+            "title": "Urban Essentials Water Bottle"
+          }
+        },
+        "cat-02": {
+          "type": "collection",
+          "settings": {
+            "collection": "stanley-travel-mug",
+            "title": "Stanley Travel Mug"
+          }
+        },
+        "cat-03": {
+          "type": "collection",
+          "settings": {
+            "collection": "crockery",
+            "title": "Crockery"
+          }
+        },
+        "cat-04": {
+          "type": "collection",
+          "settings": {
+            "collection": "thrmal-flask",
+            "title": "Thermal Flask"
+          }
+        },
+        "cat-05": {
+          "type": "collection",
+          "settings": {
+            "collection": "stanley-gym-shaker",
+            "title": "Stanley Gym Shaker"
+          }
+        },
+        "cat-06": {
+          "type": "collection",
+          "settings": {
+            "collection": "stanley",
+            "title": "Kids Sipper"
+          }
+        },
+        "cat-07": {
+          "type": "collection",
+          "settings": {
+            "collection": "girlish-eassentials",
+            "title": "Girlish Essentials"
+          }
+        },
+        "cat-08": {
+          "type": "collection",
+          "settings": {
+            "collection": "zest-water-bottle",
+            "title": "Zest Water Bottle"
+          }
+        },
+        "cat-09": {
+          "type": "collection",
+          "settings": {
+            "collection": "couple-mug",
+            "title": "Couple Mug"
+          }
+        },
+        "cat-10": {
+          "type": "collection",
+          "settings": {
+            "collection": "heritage-flask",
+            "title": "Heritage Flask"
+          }
+        },
+        "cat-11": {
+          "type": "collection",
+          "settings": {
+            "collection": "motif-waterbottles",
+            "title": "Motif Water Bottle"
+          }
+        },
+        "cat-12": {
+          "type": "collection",
+          "settings": {
+            "collection": "insulated-tumbler-bottle",
+            "title": "Tall Travel Mug"
+          }
+        },
+        "cat-13": {
+          "type": "collection",
+          "settings": {
+            "collection": "clear-waterbottles",
+            "title": "Clear Water Bottle"
+          }
+        },
+        "cat-14": {
+          "type": "collection",
+          "settings": {
+            "collection": "table-lamp",
+            "title": "Table Lamp"
+          }
+        },
+        "cat-15": {
+          "type": "collection",
+          "settings": {
+            "collection": "small-designer-flask",
+            "title": "Small Designer Flask"
+          }
+        }
       },
-      "block_order": ["cat-01", "cat-02", "cat-03", "cat-04", "cat-05", "cat-06", "cat-07", "cat-08", "cat-09", "cat-10", "cat-11", "cat-12", "cat-13", "cat-14", "cat-15"],
+      "block_order": [
+        "cat-01",
+        "cat-02",
+        "cat-03",
+        "cat-04",
+        "cat-05",
+        "cat-06",
+        "cat-07",
+        "cat-08",
+        "cat-09",
+        "cat-10",
+        "cat-11",
+        "cat-12",
+        "cat-13",
+        "cat-14",
+        "cat-15"
+      ],
       "settings": {
         "heading": "Explore by",
         "heading_accent": "Collection",
@@ -106,54 +212,40 @@
         "pick-1": {
           "type": "product",
           "settings": {
-            "product": "marble-finish-dry-fruit-container-set-with-tray"
+            "product": "ribbed-ombre-tumbler-with-handle-and-straw-lime-green"
+          }
+        },
+        "pick-2": {
+          "type": "product",
+          "settings": {
+            "product": "ribbed-ombre-tumbler-with-handle-pink"
           }
         },
         "pick-3": {
           "type": "product",
           "settings": {
-            "product": "ubran-essential-gold-tone-decorative-jar-trio"
+            "product": "chrome-ombre-tumbler-with-handle-and-straw-black"
           }
         },
         "pick-4": {
           "type": "product",
           "settings": {
-            "product": "ubran-essential-water-bottle-with-carry-handle-blush-pink"
-          }
-        },
-        "pick-5": {
-          "type": "product",
-          "settings": {
-            "product": "ubran-essential-water-bottle-with-carry-handle-bright-red"
-          }
-        },
-        "pick-6": {
-          "type": "product",
-          "settings": {
-            "product": "ubran-essential-illustrated-water-bottle-pastel-designs"
-          }
-        },
-        "pick-7": {
-          "type": "product",
-          "settings": {
-            "product": "ubran-essential-ribbed-water-bottle-with-carry-handle-ivory"
+            "product": "chrome-ombre-tumbler-with-handle-and-straw-pink"
           }
         }
       },
       "block_order": [
         "pick-1",
+        "pick-2",
         "pick-3",
-        "pick-4",
-        "pick-5",
-        "pick-6",
-        "pick-7"
+        "pick-4"
       ],
       "settings": {
         "eyebrow": "Loved by our customers",
         "heading": "Our",
         "heading_accent": "Top Sellers",
         "link_label": "Shop all →",
-        "limit": 6,
+        "limit": 4,
         "columns_desktop": 4,
         "quick_add": "standard",
         "background": "#f4f0e8"
@@ -247,10 +339,38 @@
     "why_us": {
       "type": "ue-why-us",
       "blocks": {
-        "reason-1": { "type": "reason", "settings": { "icon": "check", "title": "Original design", "text": "Food-grade steel & borosilicate" } },
-        "reason-2": { "type": "reason", "settings": { "icon": "clock", "title": "Fast dispatch", "text": "Ships within 24 business hours" } },
-        "reason-3": { "type": "reason", "settings": { "icon": "truck", "title": "Free delivery", "text": "On every order across India" } },
-        "reason-4": { "type": "reason", "settings": { "icon": "shield", "title": "Verified safe checkout", "text": "UPI, Cards & Netbanking via Fastrr" } }
+        "reason-1": {
+          "type": "reason",
+          "settings": {
+            "icon": "check",
+            "title": "Original design",
+            "text": "Food-grade steel & borosilicate"
+          }
+        },
+        "reason-2": {
+          "type": "reason",
+          "settings": {
+            "icon": "clock",
+            "title": "Fast dispatch",
+            "text": "Ships within 24 business hours"
+          }
+        },
+        "reason-3": {
+          "type": "reason",
+          "settings": {
+            "icon": "truck",
+            "title": "Free delivery",
+            "text": "On every order across India"
+          }
+        },
+        "reason-4": {
+          "type": "reason",
+          "settings": {
+            "icon": "shield",
+            "title": "Verified safe checkout",
+            "text": "UPI, Cards & Netbanking via Fastrr"
+          }
+        }
       },
       "block_order": [
         "reason-3",
