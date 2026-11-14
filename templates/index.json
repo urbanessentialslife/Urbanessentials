@@ -75,6 +75,24 @@
     },
     "categories": {
       "type": "ue-category-tiles",
+      "blocks": {
+        "cat-01": { "type": "collection", "settings": { "collection": "urban-essentials-water-bottle", "title": "Urban Essentials Water Bottle" } },
+        "cat-02": { "type": "collection", "settings": { "collection": "stanley-travel-mug", "title": "Stanley Travel Mug" } },
+        "cat-03": { "type": "collection", "settings": { "collection": "crockery", "title": "Crockery" } },
+        "cat-04": { "type": "collection", "settings": { "collection": "thrmal-flask", "title": "Thermal Flask" } },
+        "cat-05": { "type": "collection", "settings": { "collection": "stanley-gym-shaker", "title": "Stanley Gym Shaker" } },
+        "cat-06": { "type": "collection", "settings": { "collection": "stanley", "title": "Kids Sipper" } },
+        "cat-07": { "type": "collection", "settings": { "collection": "girlish-eassentials", "title": "Girlish Essentials" } },
+        "cat-08": { "type": "collection", "settings": { "collection": "zest-water-bottle", "title": "Zest Water Bottle" } },
+        "cat-09": { "type": "collection", "settings": { "collection": "couple-mug", "title": "Couple Mug" } },
+        "cat-10": { "type": "collection", "settings": { "collection": "heritage-flask", "title": "Heritage Flask" } },
+        "cat-11": { "type": "collection", "settings": { "collection": "motif-waterbottles", "title": "Motif Water Bottle" } },
+        "cat-12": { "type": "collection", "settings": { "collection": "insulated-tumbler-bottle", "title": "Tall Travel Mug" } },
+        "cat-13": { "type": "collection", "settings": { "collection": "clear-waterbottles", "title": "Clear Water Bottle" } },
+        "cat-14": { "type": "collection", "settings": { "collection": "table-lamp", "title": "Table Lamp" } },
+        "cat-15": { "type": "collection", "settings": { "collection": "small-designer-flask", "title": "Small Designer Flask" } }
+      },
+      "block_order": ["cat-01", "cat-02", "cat-03", "cat-04", "cat-05", "cat-06", "cat-07", "cat-08", "cat-09", "cat-10", "cat-11", "cat-12", "cat-13", "cat-14", "cat-15"],
       "settings": {
         "heading": "Explore by",
         "heading_accent": "Collection",
