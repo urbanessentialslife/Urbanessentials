@@ -57,11 +57,37 @@
 </product-modal>
 
 <script>
-  // Mobile: tapping the enlarged photo closes the viewer and returns to the product details.
+  // Mobile: swipe between all photos, show "2 / 5" counter, tap a photo to close.
   (function () {
     var modal = document.getElementById('ProductModal-{{ section.id }}');
     if (!modal) return;
-    modal.querySelector('.product-media-modal__content').addEventListener('click', function (e) {
+    var box = modal.querySelector('.product-media-modal__content');
+    var count = document.createElement('div');
+    count.className = 'ue-zoom-count';
+    modal.querySelector('.product-media-modal__dialog').appendChild(count);
+    function slides() {
+      return Array.prototype.filter.call(box.children, function (el) { return el.offsetWidth > 0; });
+    }
+    function update() {
+      var s = slides();
+      if (s.length < 2) { count.style.display = 'none'; return; }
+      var idx = Math.round(box.scrollLeft / box.clientWidth);
+      count.style.display = '';
+      count.textContent = Math.min(idx + 1, s.length) + ' / ' + s.length;
+    }
+    function goToActive() {
+      if (window.innerWidth >= 750) return;
+      var s = slides();
+      var active = box.querySelector('.active');
+      var idx = Math.max(0, s.indexOf(active));
+      box.scrollLeft = idx * box.clientWidth;
+      update();
+    }
+    new MutationObserver(function () {
+      if (modal.hasAttribute('open')) setTimeout(goToActive, 30);
+    }).observe(modal, { attributes: true, attributeFilter: ['open'] });
+    box.addEventListener('scroll', update, { passive: true });
+    box.addEventListener('click', function (e) {
       if (window.innerWidth >= 750) return;
       if (e.target.tagName === 'IMG' || e.target === e.currentTarget) {
         var btn = document.getElementById('ModalClose-{{ section.id }}');

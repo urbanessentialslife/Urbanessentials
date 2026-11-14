@@ -33,12 +33,15 @@
   .product-grid .price s.price-item--regular { font-size: 1.5rem; }
 }
 
-/* Mobile product photo viewer: show the whole photo fitted to the screen (Dawn shows it 1100px wide = stuck zoomed in) */
+/* Mobile product photo viewer: whole photo fitted to screen, swipe between photos */
 @media screen and (max-width: 749px) {
   .product-media-modal__dialog { height: 100dvh; }
-  .product-media-modal__content { height: 100dvh; max-height: 100dvh; overflow: hidden; display: flex; align-items: center; justify-content: center; padding: 0; }
-  .product-media-modal__content > img.active,
-  .product-media-modal__content > .active { width: 100% !important; max-width: 100% !important; height: auto !important; max-height: 100dvh; object-fit: contain; margin: 0 auto; }
-  .product-media-modal__toggle { width: 4.4rem; height: 4.4rem; top: 1.6rem; right: 1.6rem; z-index: 3; background: rgba(255,255,255,.95); color: #241a16; box-shadow: 0 4px 14px rgba(0,0,0,.15); }
-  .product-media-modal__toggle .icon { width: 1.8rem; height: 1.8rem; }
+  .product-media-modal__content { height: 100dvh; max-height: 100dvh; padding: 0; display: flex; align-items: center; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+  .product-media-modal__content::-webkit-scrollbar { display: none; }
+  .product-media-modal__content > img { display: block !important; flex: 0 0 100%; width: 100% !important; max-width: 100% !important; height: 100dvh !important; max-height: 100dvh; object-fit: contain; margin: 0 !important; scroll-snap-align: center; scroll-snap-stop: always; }
+  .product-media-modal__content > .active:not(img) { flex: 0 0 100%; width: 100% !important; margin: auto 0 !important; scroll-snap-align: center; }
+  .product-media-modal__toggle { box-sizing: border-box; width: 4.4rem !important; height: 4.4rem !important; min-width: 4.4rem; min-height: 4.4rem; aspect-ratio: 1 / 1; padding: 0 !important; flex: none; border-radius: 50% !important; top: 1.6rem; right: 1.6rem; z-index: 3; background: rgba(255,255,255,.95); color: #241a16; box-shadow: 0 4px 14px rgba(0,0,0,.15); }
+  .product-media-modal__toggle .icon, .product-media-modal__toggle svg { width: 1.6rem; height: 1.6rem; }
+  .ue-zoom-count { position: fixed; left: 50%; bottom: 2.4rem; transform: translateX(-50%); z-index: 3; padding: .6rem 1.4rem; border-radius: 99rem; background: rgba(36,26,22,.75); color: #fff; font-size: 1.3rem; letter-spacing: .05em; pointer-events: none; }
 }
+@media screen and (min-width: 750px) { .ue-zoom-count { display: none; } }
